@@ -1,23 +1,24 @@
-from model.cargo import Cargo
+from model.log_atualizacao import LogAtualizacao
 from model.dao.base_dao import Base_DAO
 
-class Cargo_DAO(Base_DAO):
+class LogAtualizacao_DAO(Base_DAO):
     def get_all(self):
-        sql = """select ID_cargo, cargo from cargo"""
+        sql = """select data from log"""
+
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql)
-        cargos = []
-        for (id, cargo) in cursor:
-            cargos.append(Cargo(id, cargo))
+        logs = []
+        for (data,) in cursor:
+            logs.append(LogAtualizacao(data))
         cursor.close()
         conn.close()
-        return cargos
+        return logs
     
-    def get_by_id(self):
+    def save(self):
         pass
 
-    def save(self):
+    def get_by_id(self):
         pass
 
     def delete(self):

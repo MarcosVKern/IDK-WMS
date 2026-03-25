@@ -1,51 +1,51 @@
-from model.produto import Produto
+from model.tipo_movimento import TipoMovimento
 from model.dao.base_dao import Base_DAO
 
-class Produto_DAO(Base_DAO):
-    def save(self, produto:Produto):
-        sql = """insert into (nome, descricao, imagem) values (%s, %s, %s)"""
+class TipoMovimento_DAO(Base_DAO):
+    def save(self, tipo_movimento: TipoMovimento):
+        sql = "insert into tipo_movimento (tipoMovimento) values (%s)"
 
-        values = (produto._nome, produto._descricao, produto._imagem)
+        values = (tipo_movimento._tipo)
 
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql, values)
-        produto._id = cursor.lastrowid
+        tipo_movimento._id = cursor.lastrowid
         conn.commit()
         cursor.close()
         conn.close()
-        return produto
+        return tipo_movimento
     
     def get_all(self):
-        sql = """select ID_produto, nome, descricao, imagem from produto"""
+        sql = "select ID_tipo, tipoMovimento from tipo_movimento"
 
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql)
-        produtos = []
-        for (id, nome, descricao, imagem) in cursor:
-            produtos.append(Produto(id, nome, descricao, imagem))
+        tipos_movimento = []
+        for (id, tipo) in cursor:
+            tipos_movimento.append(TipoMovimento(id, tipo))
         cursor.close()
         conn.close()
-        return produtos
+        return tipos_movimento
     
     def get_by_id(self, id):
-        sql = """select nome, descricao, imagem from produto where ID_produto = %s"""
+        sql = "select tipoMovimento from tipo_movimento where ID_tipo = %s"
 
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
-        produto = None
+        tipo_movimento = None
         if row:
-            id, nome, descricao, imagem = row
-            produto = Produto(id, nome, descricao, imagem)
+            id, tipo = row
+            tipo_movimento = TipoMovimento(id, tipo)
         cursor.close()
         conn.close()
-        return produto
+        return tipo_movimento
     
     def delete(self, id):
-        sql = """delete from produto where ID_produto = %s"""
+        sql = "delete from tipo_movimento where ID_tipo = %s"
 
         conn = self._get_connection()
         cursor = conn.cursor()
@@ -56,10 +56,10 @@ class Produto_DAO(Base_DAO):
         conn.close()
         return affected_rows > 0
     
-    def update(self, produto:Produto):
-        sql = """update produto set nome = %s, descricao = %s, imagem = %s where ID_produto = %s"""
+    def update(self, tipo_movimento: TipoMovimento):
+        sql = "update tipo_movimento set tipoMovimento = %s where ID_tipo = %s"
 
-        values = (produto._nome, produto._descricao, produto._imagem, produto._id)
+        values = (tipo_movimento._tipo, tipo_movimento._id)
 
         conn = self._get_connection()
         cursor = conn.cursor()

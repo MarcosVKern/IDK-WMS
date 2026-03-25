@@ -17,7 +17,7 @@ class Armazem_DAO(Base_DAO):
         return armazem
     
     def get_all(self):
-        sql = """select id, cep, bairro, cidade, uf, pais, nome from armazem"""
+        sql = """select ID_armazem, cep, bairro, cidade, uf, pais, nome from armazem"""
 
         conn = self._get_connection()
         cursor = conn.cursor()
@@ -30,7 +30,7 @@ class Armazem_DAO(Base_DAO):
         return armazens
     
     def get_by_id(self, id):
-        sql = """select cep, bairro, cidade, uf, pais, nome from armazem where id = %s"""
+        sql = """select cep, bairro, cidade, uf, pais, nome from armazem where ID_armazem = %s"""
 
         conn = self._get_connection()
         cursor = conn.cursor()
@@ -45,7 +45,7 @@ class Armazem_DAO(Base_DAO):
         return armazem
     
     def delete(self, id):
-        sql = """delete from armazem where id = %s"""
+        sql = """delete from armazem where ID_armazem = %s"""
 
         conn = self._get_connection()
         cursor = conn.cursor()
@@ -57,7 +57,7 @@ class Armazem_DAO(Base_DAO):
         return affected_rows > 0
     
     def update(self, armazem:Armazem):
-        sql = """update armazem set cep = %s, bairro = %s, cidade = %s, uf = %s, pais = %s, nome = %s where id = %s"""
+        sql = """update armazem set cep = %s, bairro = %s, cidade = %s, uf = %s, pais = %s, nome = %s where ID_armazem = %s"""
 
         values = (armazem._cep, armazem._bairro, armazem._cidade, armazem._uf, armazem._pais, armazem._nome, armazem._id)
 
