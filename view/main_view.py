@@ -23,7 +23,8 @@ class Main_View:
         botoes = [
             ("Produtos", self._abrir_produto),
             ("Armazéns", self._abrir_armazem),
-            ("Funcionários", self._abrir_funcionario)
+            ("Funcionários", self._abrir_funcionario),
+            ("Cargos", self._abrir_cargo)
         ]
 
         for texto, func in botoes:
@@ -40,6 +41,10 @@ class Main_View:
     def _abrir_funcionario(self):
         if self.controller:
             self.controller.exibir_funcionario()
+
+    def _abrir_cargo(self):
+        if self.controller:
+            self.controller.exibir_cargo()
 
     def run(self):
         self.root.mainloop()
