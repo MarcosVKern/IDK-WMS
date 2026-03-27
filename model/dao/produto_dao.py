@@ -3,7 +3,7 @@ from model.dao.base_dao import Base_DAO
 
 class Produto_DAO(Base_DAO):
     def save(self, produto:Produto):
-        sql = """insert into (nome, descricao, imagem) values (%s, %s, %s)"""
+        sql = """insert into produto(nome, descricao, imagem) values (%s, %s, %s)"""
 
         values = (produto._nome, produto._descricao, produto._imagem)
 
@@ -30,7 +30,7 @@ class Produto_DAO(Base_DAO):
         return produtos
     
     def get_by_id(self, id):
-        sql = """select nome, descricao, imagem from produto where ID_produto = %s"""
+        sql = """select ID_produto, nome, descricao, imagem from produto where ID_produto = %s"""
 
         conn = self._get_connection()
         cursor = conn.cursor()
