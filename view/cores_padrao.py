@@ -8,6 +8,8 @@ class Cores_Padrao:
     COR_BOTAO_ATUALIZAR = "#2196F3"
     COR_BOTAO_DELETAR = "#f44336"
     COR_BOTAO_LIMPAR = "#9C27B0"
+    COR_BOTAO_ATIVAR = "#4CAF50"
+    COR_BOTAO_BLOQUEAR = "#f44336"
 
     #Cores para o menu
     COR_BOTAO_MENU = "#ddbef1"
