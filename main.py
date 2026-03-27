@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 import os
-from view.main_view import Main_view
+from view.main_view import Main_View
 from control.main_controller import Main_Controller
 
 db_config = {
@@ -11,7 +11,7 @@ db_config = {
 }
 
 def main():
-    view_principal = Main_view()
+    view_principal = Main_View()
     controller_principal = Main_Controller(view_principal, db_config)
     view_principal.controller = controller_principal
     view_principal.run()

@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
+from view.cores_padrao import Cores_Padrao
 
 class Produto_View():
     def __init__(self):
@@ -25,7 +26,7 @@ class Produto_View():
         frame_form.configure(width=900)
 
         tk.Label(frame_form, text="ID:").grid(row=0, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10, bg="#f0f0f0").grid(row=1, column=0, padx=5, pady=5,sticky="w")
+        tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10, bg=Cores_Padrao.COR_FUNDO).grid(row=1, column=0, padx=5, pady=5,sticky="w")
 
         tk.Label(frame_form, text="Nome:").grid(row=2, column=0, sticky="w")
         tk.Entry(frame_form, textvariable=self.var_nome, width=30).grid(row=3, column=0, pady=5)
@@ -39,10 +40,10 @@ class Produto_View():
         frame_botoes = tk.Frame(self.root, pady=10)
         frame_botoes.pack()
 
-        tk.Button(frame_botoes, text="Adicionar Produto", command=self._acao_adicionar, bg="#4CAF50", width=15).pack(side=tk.LEFT, padx=5)
-        tk.Button(frame_botoes, text="Atualizar Produto", command=self._acao_atualizar, bg="#2196F3", width=15).pack(side=tk.LEFT, padx=5)
-        tk.Button(frame_botoes, text="Deletar Produto", command=self._acao_deletar, bg="#f44336", width=15).pack(side=tk.LEFT, padx=5)
-        tk.Button(frame_botoes, text="Limpar", command=self._limpar_campos, bg="#9C27B0", width=15).pack(side=tk.LEFT, padx=5)
+        tk.Button(frame_botoes, text="Adicionar Produto", command=self._acao_adicionar, bg=Cores_Padrao.COR_BOTAO_SALVAR, width=15).pack(side=tk.LEFT, padx=5)
+        tk.Button(frame_botoes, text="Atualizar Produto", command=self._acao_atualizar, bg=Cores_Padrao.COR_BOTAO_ATUALIZAR, width=15).pack(side=tk.LEFT, padx=5)
+        tk.Button(frame_botoes, text="Deletar Produto", command=self._acao_deletar, bg=Cores_Padrao.COR_BOTAO_DELETAR, width=15).pack(side=tk.LEFT, padx=5)
+        tk.Button(frame_botoes, text="Limpar", command=self._limpar_campos, bg=Cores_Padrao.COR_BOTAO_LIMPAR, width=15).pack(side=tk.LEFT, padx=5)
 
         frame_tabela = tk.Frame(self.root, padx=20, pady=10)
         frame_tabela.pack(expand=True, fill="both")
