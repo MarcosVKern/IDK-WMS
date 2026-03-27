@@ -1,5 +1,5 @@
 class Funcionario():
-    def __init__(self, id, cep, bairro, cidade, uf, pais, nome, cargo, senha, email, situacao):
+    def __init__(self, id, cep, bairro, cidade, uf, pais, nome, cargo, email, senha, situacao):
         self._id = id
         self._cep = cep
         self._bairro = bairro
