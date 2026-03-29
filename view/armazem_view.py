@@ -82,6 +82,12 @@ class Armazem_View():
 
         self.tree.pack(side="left", expand=True, fill="both")
         self.tree.bind("<<TreeviewSelect>>", self._ao_selecionar_tabela)
+        
+        # Configurar efeito zebrado
+        self.tree.tag_configure('evenrow', background=Cores_Padrao.COR_ZEBRADO_PAR)
+        self.tree.tag_configure('oddrow', background=Cores_Padrao.COR_ZEBRADO_IMPAR)
+        self.tree.tag_configure('evenrow', background=Cores_Padrao.COR_ZEBRADO_PAR)
+        self.tree.tag_configure('oddrow', background=Cores_Padrao.COR_ZEBRADO_IMPAR)
 
     def run(self):
         self.root.after(200, self._acao_listar)
@@ -116,8 +122,9 @@ class Armazem_View():
 
     def show_armazens(self, lista):
         for i in self.tree.get_children(): self.tree.delete(i)
-        for a in lista:
-            self.tree.insert("", "end", values=(a._id, a._cep, a._bairro, a._cidade, a._uf, a._pais, a._nome))
+        for idx, a in enumerate(lista):
+            tag = 'evenrow' if idx % 2 == 0 else 'oddrow'
+            self.tree.insert("", "end", values=(a._id, a._cep, a._bairro, a._cidade, a._uf, a._pais, a._nome), tags=(tag,))
 
     def _acao_atualizar(self):
         self.controller.update_armazem()

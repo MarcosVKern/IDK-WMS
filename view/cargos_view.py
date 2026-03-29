@@ -58,6 +58,10 @@ class Cargo_View():
 
         self.tree.pack(side="left", expand=True, fill="both")
         self.tree.bind("<<TreeviewSelect>>", self._ao_selecionar_tabela)
+        
+        # Configurar efeito zebrado
+        self.tree.tag_configure('evenrow', background=Cores_Padrao.COR_ZEBRADO_PAR)
+        self.tree.tag_configure('oddrow', background=Cores_Padrao.COR_ZEBRADO_IMPAR)
 
     def run(self):
         self.root.after(200, self._acao_listar)
@@ -87,8 +91,9 @@ class Cargo_View():
 
     def show_cargos(self, lista):
         for i in self.tree.get_children(): self.tree.delete(i)
-        for c in lista:
-            self.tree.insert("", "end", values=(c._id, c._cargo))
+        for idx, c in enumerate(lista):
+            tag = 'evenrow' if idx % 2 == 0 else 'oddrow'
+            self.tree.insert("", "end", values=(c._id, c._cargo), tags=(tag,))
 
     def preencher_combo_cargo(self, lista):
         self.combo_cargo['values'] = [c._cargo for c in lista]

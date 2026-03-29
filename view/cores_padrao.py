@@ -10,6 +10,8 @@ class Cores_Padrao:
     COR_BOTAO_LIMPAR = "#CB71DB" #"#9C27B0"
     COR_BOTAO_ATIVAR = "#A4E4A7" #"#4CAF50"
     COR_BOTAO_BLOQUEAR = "#f88a83" #"#f44336"
+    COR_ZEBRADO_PAR = "#E0F7FA"
+    COR_ZEBRADO_IMPAR = "#B2EBF2"
 
     #Cores para o menu
     COR_BOTAO_MENU = "#ddbef1"

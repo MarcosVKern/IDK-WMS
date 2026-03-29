@@ -67,6 +67,10 @@ class Produto_View():
 
         self.tree.pack(side="left", expand=True, fill="both")
         self.tree.bind("<<TreeviewSelect>>", self._ao_selecionar_tabela)
+        
+        # Configurar efeito zebrado
+        self.tree.tag_configure('evenrow', background=Cores_Padrao.COR_ZEBRADO_PAR)
+        self.tree.tag_configure('oddrow', background=Cores_Padrao.COR_ZEBRADO_IMPAR)
 
     def display(self):
         """Exibir quando embutido em um frame"""
@@ -99,8 +103,9 @@ class Produto_View():
 
     def show_produtos(self, lista):
         for i in self.tree.get_children(): self.tree.delete(i)
-        for p in lista:
-            self.tree.insert("", "end", values=(p._id, p._nome, p._descricao, p._imagem))
+        for idx, p in enumerate(lista):
+            tag = 'evenrow' if idx % 2 == 0 else 'oddrow'
+            self.tree.insert("", "end", values=(p._id, p._nome, p._descricao, p._imagem), tags=(tag,))
 
     def _acao_atualizar(self):
         self.controller.update_produto()

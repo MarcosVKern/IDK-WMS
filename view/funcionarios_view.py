@@ -110,6 +110,10 @@ class Funcionario_View():
         vsb.pack(side="right", fill="y")
         hsb.pack(side="bottom", fill="x")
 
+        # Configurar efeito zebrado
+        self.tree.tag_configure('evenrow', background=Cores_Padrao.COR_ZEBRADO_PAR)
+        self.tree.tag_configure('oddrow', background=Cores_Padrao.COR_ZEBRADO_IMPAR)
+
         self.tree.pack(side="left", expand=True, fill="both")
         self.tree.bind("<<TreeviewSelect>>", self._ao_selecionar_tabela)
 
@@ -150,9 +154,10 @@ class Funcionario_View():
 
     def show_funcionarios(self, lista):
         for i in self.tree.get_children(): self.tree.delete(i)
-        for f in lista:
+        for idx, f in enumerate(lista):
+            tag = 'evenrow' if idx % 2 == 0 else 'oddrow'
             senha_oculta = "*" * len(f._senha)
-            self.tree.insert("", "end", values=(f._id, f._cep, f._bairro, f._cidade, f._uf, f._pais, f._nome, f._cargo, f._email, senha_oculta, f._situacao))
+            self.tree.insert("", "end", values=(f._id, f._cep, f._bairro, f._cidade, f._uf, f._pais, f._nome, f._cargo, f._email, senha_oculta, f._situacao), tags=(tag,))
 
     def _acao_atualizar(self):
         self.controller.update_funcionario()
