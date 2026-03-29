@@ -24,7 +24,7 @@ class Main_View:
 
         self.right_panel_label = ctk.CTkLabel(
             self.right_panel,
-            text="Login",
+            text="",
             font=("Arial", 14, "bold"),
             text_color="#000000",
             anchor="w"
@@ -54,6 +54,7 @@ class Main_View:
             botoes = [
                 ("Produtos", self._show_produto),
                 ("Armazéns", self._show_armazem),
+                ("Unidades de Armazenamento", self._show_unidade_armazenamento),
                 ("Funcionários", self._show_funcionario),
                 ("Sair", self._logout),
                 #("Cargos", self._show_cargo)
@@ -253,6 +254,10 @@ class Main_View:
     def _show_armazem(self):
         if self.controller:
             self.controller.exibir_armazem(self.right_panel_content)
+
+    def _show_unidade_armazenamento(self):
+        if self.controller:
+            self.controller.exibir_unidade_armazenamento(self.right_panel_content)
 
     def _show_funcionario(self):
         if self.controller:

@@ -3,14 +3,13 @@ from model.dao.base_dao import Base_DAO
 
 class UnidadeArmazenamento_DAO(Base_DAO):
     def save(self, unidade: UnidadeArmazenamento):
-        sql = """insert into unidade_armazenamento (unidade, armazem) VALUES (%s, %s)"""
+        sql = """insert into unidade_armazenamento (ID_unidade, unidade, armazem) VALUES (%s, %s, %s)"""
 
-        values = (unidade._unidade, unidade._armazem)
-        
+        values = (unidade._id, unidade._unidade, unidade._armazem)
+
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql, values)
-        unidade._id = cursor.lastrowid
         conn.commit()
         cursor.close()
         conn.close()
@@ -26,7 +25,7 @@ class UnidadeArmazenamento_DAO(Base_DAO):
         cursor.execute(sql)
         unidades = []
         for (ID_unidade, unidade, armazem) in cursor:
-            unidades.append(UnidadeArmazenamento(unidade, armazem, ID_unidade))
+            unidades.append(UnidadeArmazenamento(ID_unidade, unidade, armazem))
         cursor.close()
         conn.close()
         return unidades
@@ -40,8 +39,8 @@ class UnidadeArmazenamento_DAO(Base_DAO):
         row = cursor.fetchone()
         unidade = None
         if row:
-            unidade, armazem = row
-            unidade = UnidadeArmazenamento(unidade, armazem, id)
+            unidade_code, armazem = row
+            unidade = UnidadeArmazenamento(id, unidade_code, armazem)
         cursor.close()
         conn.close()
         return unidade
@@ -59,15 +58,4 @@ class UnidadeArmazenamento_DAO(Base_DAO):
         return affected_rows > 0
     
     def update(self, unidade: UnidadeArmazenamento):
-        sql = """update unidade_armazenamento set unidade = %s, armazem = %s where ID_unidade = %s"""
-
-        values = (unidade._unidade, unidade._armazem, unidade._id)
-
-        conn = self._get_connection()
-        cursor = conn.cursor()
-        cursor.execute(sql, values)
-        conn.commit()
-        affected_rows = cursor.rowcount
-        cursor.close()
-        conn.close()
-        return affected_rows > 0
+        pass
