@@ -3,12 +3,19 @@ from tkinter import messagebox, ttk
 from view.cores_padrao import Cores_Padrao
 
 class Cargo_View():
-    def __init__(self):
+    def __init__(self, parent=None):
         self.controller = None
-        self.root = tk.Toplevel()
-        self.root.title("Gerenciamento de Cargos")
-        self.root.geometry("1280x720")
-        self.root.state('zoomed')
+        self.parent = parent
+        
+        if parent is None:
+            self.root = tk.Toplevel()
+            self.root.title("Gerenciamento de Cargos")
+            self.root.geometry("1280x720")
+            self.root.state('zoomed')
+            self.is_embedded = False
+        else:
+            self.root = tk.Frame(parent, bg=Cores_Padrao.COR_FUNDO)
+            self.is_embedded = True
 
         self.var_id = tk.StringVar()
         self.var_cargo = tk.StringVar()
@@ -36,7 +43,7 @@ class Cargo_View():
         #tk.Button(frame_botoes, text="Adicionar Cargo", command=self._acao_adicionar, bg=Cores_Padrao.COR_BOTAO_SALVAR, width=15).pack(side=tk.LEFT, padx=5)
         #tk.Button(frame_botoes, text="Atualizar Cargo", command=self._acao_atualizar, bg=Cores_Padrao.COR_BOTAO_ATUALIZAR, width=15).pack(side=tk.LEFT, padx=5)
         #tk.Button(frame_botoes, text="Deletar Cargo", command=self._acao_deletar, bg=Cores_Padrao.COR_BOTAO_DELETAR, width=15).pack(side=tk.LEFT, padx=5)
-        tk.Button(frame_botoes, text="Limpar", command=self._limpar_campos, bg=Cores_Padrao.COR_BOTAO_LIMPAR, width=15).pack(side=tk.LEFT, padx=5)
+        #tk.Button(frame_botoes, text="Limpar", command=self._limpar_campos, bg=Cores_Padrao.COR_BOTAO_LIMPAR, width=15).pack(side=tk.LEFT, padx=5)
 
         frame_tabela = tk.Frame(self.root, padx=20, pady=10)
         frame_tabela.pack(expand=True, fill="both")
@@ -56,6 +63,11 @@ class Cargo_View():
         self.root.after(200, self._acao_listar)
         self.root.grab_set()
         self.root.mainloop()
+
+    def display(self):
+        """Exibir quando embutido em um frame"""
+        self.root.pack(fill="both", expand=True)
+        self.root.after(200, self._acao_listar)
 
     def get_cargo_data(self, cargo_existente=None):
         try:

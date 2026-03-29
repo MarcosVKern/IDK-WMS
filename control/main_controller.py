@@ -17,27 +17,47 @@ class Main_Controller:
         self.main_view = main_view
         self.db_config = db_config
 
-    def exibir_produto(self):
+    def exibir_produto(self, parent_frame=None):
         dao = Produto_DAO(self.db_config)
-        view = Produto_View()
+        view = Produto_View(parent=parent_frame)
         control = Produto_Controller(dao, view)
-        view.run()
+        if parent_frame:
+            view.display()
+        else:
+            view.run()
     
-    def exibir_armazem(self):
+    def exibir_armazem(self, parent_frame=None):
         dao = Armazem_DAO(self.db_config)
-        view = Armazem_View()
+        view = Armazem_View(parent=parent_frame)
         control = Armazem_Controller(dao, view)
-        view.run()
+        if parent_frame:
+            view.display()
+        else:
+            view.run()
 
-    def exibir_funcionario(self):
+    def exibir_funcionario(self, parent_frame=None):
         dao = Funcionario_DAO(self.db_config)
-        view = Funcionario_View()
+        view = Funcionario_View(parent=parent_frame)
         control = Funcionario_Controller(dao, view)
-        view.run()
+        if parent_frame:
+            view.display()
+        else:
+            view.run()
 
-    def exibir_cargo(self):
+    def exibir_cargo(self, parent_frame=None):
         dao = Cargo_DAO(self.db_config)
-        view = Cargo_View()
+        view = Cargo_View(parent=parent_frame)
         control = Cargo_Controller(dao, view)
         control.list_related_cargo()
-        view.run()
+        if parent_frame:
+            view.display()
+        else:
+            view.run()
+
+    def login(self, email, senha):
+        dao = Funcionario_DAO(self.db_config)
+        funcionario = dao.login(senha, email)
+        if funcionario:
+            funcionario_completo = dao.get_by_id(funcionario._id)
+            return funcionario_completo
+        return None
