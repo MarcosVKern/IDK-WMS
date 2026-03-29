@@ -1,7 +1,7 @@
 import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
 
-ctk.set_appearance_mode("light")
+ctk.set_appearance_mode("system")
 ctk.set_default_color_theme("blue")
 
 
@@ -9,7 +9,7 @@ class Main_View:
     def __init__(self):
         self.controller = None
         self.root = ctk.CTk()
-        self.root.title("Sistema WMS")
+        self.root.title("Sistema IDK WMS")
         self.root.geometry("1600x800")
         self.root.state('zoomed')
         
@@ -113,13 +113,35 @@ class Main_View:
         self.login_email_var = ctk.StringVar()
         self.login_password_var = ctk.StringVar()
 
-        ctk.CTkLabel(frame, text="Email:", font=("Arial", 12), text_color="#FFFFFF").pack(anchor="w", padx=20)
-        ctk.CTkEntry(frame, textvariable=self.login_email_var, width=320).pack(padx=20, pady=5)
+        ctk.CTkLabel(frame, text="Email", font=("Arial", 12), text_color="#FFFFFF").pack(anchor="center", pady=(5, 0))
+        ctk.CTkEntry(
+            frame,
+            textvariable=self.login_email_var,
+            width=360,
+            height=50,
+            corner_radius=0,
+            placeholder_text="Digite seu email"
+        ).pack(pady=5)
 
-        ctk.CTkLabel(frame, text="Senha:", font=("Arial", 12), text_color="#FFFFFF").pack(anchor="w", padx=20)
-        ctk.CTkEntry(frame, textvariable=self.login_password_var, width=320, show="*").pack(padx=20, pady=5)
+        ctk.CTkLabel(frame, text="Senha", font=("Arial", 12), text_color="#FFFFFF").pack(anchor="center", pady=(10, 0))
+        ctk.CTkEntry(
+            frame,
+            textvariable=self.login_password_var,
+            width=360,
+            height=50,
+            corner_radius=0,
+            placeholder_text="Digite sua senha",
+            show="*"
+        ).pack(pady=5)
 
-        ctk.CTkButton(frame, text="Entrar", command=self._attempt_login, width=120).pack(pady=20)
+        ctk.CTkButton(
+            frame,
+            text="Entrar",
+            command=self._attempt_login,
+            width=360,
+            height=50,
+            corner_radius=0
+        ).pack(pady=20)
 
         self.login_error_label = ctk.CTkLabel(frame, text="", font=("Arial", 12, "bold"), text_color="#FF5555")
         self.login_error_label.pack(pady=(5, 0))
@@ -212,14 +234,14 @@ class Main_View:
             frame,
             text=f"Bem-vindo, {nome_usuario}",
             font=("Arial", 28, "bold"),
-            text_color="#FFFFFF"
+            text_color=Cores_Padrao.COR_TEXTO
         ).pack(pady=20)
 
         ctk.CTkLabel(
             frame,
             text="Selecione uma opção no menu lateral",
             font=("Arial", 14),
-            text_color="#FFFFFF"
+            text_color=Cores_Padrao.COR_TEXTO
         ).pack(pady=10)
 
         self.current_frame = frame
