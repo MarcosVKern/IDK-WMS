@@ -2,14 +2,17 @@ from model.dao.produto_dao import Produto_DAO
 from model.dao.armazem_dao import Armazem_DAO
 from model.dao.funcionario_dao import Funcionario_DAO
 from model.dao.cargo_dao import Cargo_DAO
+from model.dao.unidade_armazenamento_dao import UnidadeArmazenamento_DAO
 from view.cargos_view import Cargo_View
 from view.produto_view import Produto_View
 from view.armazem_view import Armazem_View
 from view.funcionarios_view import Funcionario_View
+from view.unidade_armazenamento_view import UnidadeArmazenamento_View
 from view.cargos_view import Cargo_View
 from control.produto_controller import Produto_Controller
 from control.armazem_controller import Armazem_Controller
 from control.funcionarios_controller import Funcionario_Controller
+from control.unidade_armazenamento_controller import UnidadeArmazenamento_Controller
 from control.cargos_controller import Cargo_Controller
 
 class Main_Controller:
@@ -49,6 +52,16 @@ class Main_Controller:
         view = Cargo_View(parent=parent_frame)
         control = Cargo_Controller(dao, view)
         control.list_related_cargo()
+        if parent_frame:
+            view.display()
+        else:
+            view.run()
+
+    def exibir_unidade_armazenamento(self, parent_frame=None):
+        dao = UnidadeArmazenamento_DAO(self.db_config)
+        armazem_dao = Armazem_DAO(self.db_config)
+        view = UnidadeArmazenamento_View(parent=parent_frame)
+        control = UnidadeArmazenamento_Controller(dao, armazem_dao, view)
         if parent_frame:
             view.display()
         else:
