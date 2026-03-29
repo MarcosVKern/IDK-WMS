@@ -3,12 +3,19 @@ from tkinter import messagebox, ttk
 from view.cores_padrao import Cores_Padrao
 
 class Armazem_View():
-    def __init__(self):
+    def __init__(self, parent=None):
         self.controller = None
-        self.root = tk.Toplevel()
-        self.root.title("Gerenciamento de Armazéns")
-        self.root.geometry("1280x720")
-        self.root.state('zoomed')
+        self.parent = parent
+        
+        if parent is None:
+            self.root = tk.Toplevel()
+            self.root.title("Gerenciamento de Armazéns")
+            self.root.geometry("1280x720")
+            self.root.state('zoomed')
+            self.is_embedded = False
+        else:
+            self.root = tk.Frame(parent, bg=Cores_Padrao.COR_FUNDO)
+            self.is_embedded = True
 
         self.var_id = tk.StringVar()
         self.var_cep = tk.StringVar()
@@ -21,35 +28,35 @@ class Armazem_View():
         self._setup_ui()
 
     def _setup_ui(self):
-        tk.Label(self.root, text="GERENCIAMENTO DE ARMAZÉNS", font=("Arial", 16, "bold"), pady=10).pack()
+        tk.Label(self.root, text="GERENCIAMENTO DE ARMAZÉNS", font=("Arial", 16, "bold"), pady=10, bg=Cores_Padrao.COR_FUNDO).pack()
 
-        frame_form = tk.LabelFrame(self.root, text="Detalhes do Armazém", padx=10, pady=10)
+        frame_form = tk.LabelFrame(self.root, text="Detalhes do Armazém", padx=10, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_form.pack(padx=20, pady=5, fill='x')
         frame_form.pack_propagate(False)    
         frame_form.configure(width=900)
 
-        tk.Label(frame_form, text="ID:").grid(row=0, column=0, sticky="w")
+        tk.Label(frame_form, text="ID:", bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=0, sticky="w")
         tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10, bg=Cores_Padrao.COR_FUNDO).grid(row=1, column=0, padx=5, pady=5,sticky="w")
 
-        tk.Label(frame_form, text="CEP:").grid(row=2, column=0, sticky="w")
+        tk.Label(frame_form, text="CEP:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=0, sticky="w")
         tk.Entry(frame_form, textvariable=self.var_cep, width=30).grid(row=3, column=0, pady=5)
 
-        tk.Label(frame_form, text="Bairro:").grid(row=4, column=0, sticky="w")
+        tk.Label(frame_form, text="Bairro:", bg=Cores_Padrao.COR_FUNDO).grid(row=4, column=0, sticky="w")
         tk.Entry(frame_form, textvariable=self.var_bairro, width=30).grid(row=5, column=0, pady=5)
 
-        tk.Label(frame_form, text="Cidade:").grid(row=6, column=0, sticky="w")
+        tk.Label(frame_form, text="Cidade:", bg=Cores_Padrao.COR_FUNDO).grid(row=6, column=0, sticky="w")
         tk.Entry(frame_form, textvariable=self.var_cidade, width=30).grid(row=7, column=0, pady=5)
 
-        tk.Label(frame_form, text="UF:").grid(row=0, column=1, sticky="w")
+        tk.Label(frame_form, text="UF:", bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=1, sticky="w")
         tk.Entry(frame_form, textvariable=self.var_uf, width=30).grid(row=1, column=1, pady=5)
 
-        tk.Label(frame_form, text="País:").grid(row=2, column=1, sticky="w")
+        tk.Label(frame_form, text="País:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=1, sticky="w")
         tk.Entry(frame_form, textvariable=self.var_pais, width=30).grid(row=3, column=1, pady=5)
 
-        tk.Label(frame_form, text="Nome:").grid(row=4, column=1, sticky="w")
+        tk.Label(frame_form, text="Nome:", bg=Cores_Padrao.COR_FUNDO).grid(row=4, column=1, sticky="w")
         tk.Entry(frame_form, textvariable=self.var_nome, width=30).grid(row=5, column=1, pady=5)
 
-        frame_botoes = tk.Frame(self.root, pady=10)
+        frame_botoes = tk.Frame(self.root, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_botoes.pack()
 
         tk.Button(frame_botoes, text="Adicionar Armazém", command=self._acao_adicionar, bg=Cores_Padrao.COR_BOTAO_SALVAR, width=15).pack(side=tk.LEFT, padx=5)
@@ -57,7 +64,7 @@ class Armazem_View():
         tk.Button(frame_botoes, text="Deletar Armazém", command=self._acao_deletar, bg=Cores_Padrao.COR_BOTAO_DELETAR, width=15).pack(side=tk.LEFT, padx=5)
         tk.Button(frame_botoes, text="Limpar", command=self._limpar_campos, bg=Cores_Padrao.COR_BOTAO_LIMPAR, width=15).pack(side=tk.LEFT, padx=5)
 
-        frame_tabela = tk.Frame(self.root, padx=20, pady=10)
+        frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_tabela.pack(expand=True, fill="both")
 
         self.colunas = ("id", "cep", "bairro", "cidade", "uf", "pais", "nome")
@@ -80,6 +87,11 @@ class Armazem_View():
         self.root.after(200, self._acao_listar)
         self.root.grab_set()
         self.root.mainloop()
+
+    def display(self):
+        """Exibir quando embutido em um frame"""
+        self.root.pack(fill="both", expand=True)
+        self.root.after(200, self._acao_listar)
 
     def get_armazem_data(self, armazem_existente=None):
         try:

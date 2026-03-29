@@ -3,12 +3,19 @@ from tkinter import messagebox, ttk
 from view.cores_padrao import Cores_Padrao
 
 class Funcionario_View():
-    def __init__(self):
+    def __init__(self, parent=None):
         self.controller = None
-        self.root = tk.Toplevel()
-        self.root.title("Gerenciamento de Funcionarios")
-        self.root.geometry("1280x720")
-        self.root.state('zoomed')
+        self.parent = parent
+        
+        if parent is None:
+            self.root = tk.Toplevel()
+            self.root.title("Gerenciamento de Funcionarios")
+            self.root.geometry("1280x720")
+            self.root.state('zoomed')
+            self.is_embedded = False
+        else:
+            self.root = tk.Frame(parent, bg=Cores_Padrao.COR_FUNDO)
+            self.is_embedded = True
 
         self.var_id = tk.StringVar()
         self.var_cep = tk.StringVar()
@@ -110,6 +117,11 @@ class Funcionario_View():
         self.root.after(200, self._acao_listar)
         self.root.grab_set()
         self.root.mainloop()
+
+    def display(self):
+        """Exibir quando embutido em um frame"""
+        self.root.pack(fill="both", expand=True)
+        self.root.after(200, self._acao_listar)
 
     def get_funcionario_data(self, funcionario_existente=None):
         try:

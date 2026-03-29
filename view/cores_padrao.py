@@ -2,7 +2,7 @@
 
 class Cores_Padrao:
     #Você pode adicionar mais cores ou categorias conforme necessário
-    COR_FUNDO = "#f0f0f0"
+    COR_FUNDO = "#CBE7FF"
     COR_TEXTO = "#000000"
     COR_BOTAO_SALVAR = "#4CAF50"
     COR_BOTAO_ATUALIZAR = "#2196F3"
