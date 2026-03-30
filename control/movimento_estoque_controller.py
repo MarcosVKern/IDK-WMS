@@ -123,13 +123,16 @@ class MovimentoEstoque_Controller:
         except Exception as e:
             self.view.show_error(f"Erro ao criar movimento: {str(e)}")
 
-    def update_movimento(self):
+    def update_movimento(self, id_movimento=None):
         try:
             if self.funcionario_logado and self.funcionario_logado._cargo not in [1, 2, 3]:
                 self.view.show_error("Você não tem permissão para atualizar movimentos!")
                 return
 
-            id_movimento = self.view.get_id()
+            # Se não fornecido, tenta obter da view principal
+            if id_movimento is None:
+                id_movimento = self.view.get_id()
+            
             if not id_movimento:
                 self.view.show_error("Selecione um movimento para atualizar!")
                 return
@@ -139,8 +142,13 @@ class MovimentoEstoque_Controller:
                 self.view.show_error(f"Movimento com id {id_movimento} não encontrado!")
                 return
 
-            dados = self.view.get_movimento_data()
-            novo_status = dados.get('status', '')
+            # Se id_movimento foi fornecido, significa que veio da view de detalhes
+            # Nesse caso, não há dados para atualizar da view de detalhes
+            if id_movimento is not None and hasattr(self.view, 'get_movimento_data'):
+                dados = self.view.get_movimento_data()
+                novo_status = dados.get('status', '') if dados else ''
+            else:
+                novo_status = ''
             
             if novo_status:
                 movimento_existente._status = novo_status
@@ -151,13 +159,16 @@ class MovimentoEstoque_Controller:
         except Exception as e:
             self.view.show_error(f"Erro ao atualizar movimento: {str(e)}")
 
-    def cancela_movimento(self):
+    def cancela_movimento(self, id_movimento=None):
         try:
             if self.funcionario_logado and self.funcionario_logado._cargo not in [1, 2, 3]:
                 self.view.show_error("Você não tem permissão para cancelar movimentos!")
                 return
 
-            id_movimento = self.view.get_id()
+            # Se não fornecido, tenta obter da view principal
+            if id_movimento is None:
+                id_movimento = self.view.get_id()
+            
             if self.dao.cancela_movimento(id_movimento):
                 self.view.show_message(f"Movimento {id_movimento} cancelado com sucesso!")
             else:
@@ -238,7 +249,7 @@ class MovimentoEstoque_Controller:
                 produtos_movimento = []
             
             # Criar e exibir a view de detalhes
-            view_detalhe = MovimentoEstoque_Detalhe_View(movimento, tipo_movimento, unidade_origem, unidade_destino, funcionario, produtos_movimento)
+            view_detalhe = MovimentoEstoque_Detalhe_View(movimento, tipo_movimento, unidade_origem, unidade_destino, funcionario, produtos_movimento, controller=self)
             view_detalhe.show()
             
         except Exception as e:

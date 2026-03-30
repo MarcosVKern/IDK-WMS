@@ -4,13 +4,14 @@ from view.cores_padrao import Cores_Padrao
 
 
 class MovimentoEstoque_Detalhe_View:
-    def __init__(self, movimento, tipo_movimento=None, unidade_origem=None, unidade_destino=None, funcionario=None, produtos_movimento=None, parent=None):
+    def __init__(self, movimento, tipo_movimento=None, unidade_origem=None, unidade_destino=None, funcionario=None, produtos_movimento=None, controller=None, parent=None):
         self.movimento = movimento
         self.tipo_movimento = tipo_movimento
         self.unidade_origem = unidade_origem
         self.unidade_destino = unidade_destino
         self.funcionario = funcionario
         self.produtos_movimento = produtos_movimento or []
+        self.controller = controller
         self.parent = parent
         
         if parent is None:
@@ -111,15 +112,33 @@ class MovimentoEstoque_Detalhe_View:
         self._popular_produtos()
         
         frame_botoes = tk.Frame(self.root, bg=Cores_Padrao.COR_FUNDO)
-        frame_botoes.pack(pady=10, fill="x")
+        frame_botoes.pack(pady=10, fill="x", padx=15)
         
+        # Botões alinhados à esquerda (Fechar)
         tk.Button(
             frame_botoes,
             text="Fechar",
             command=self._fechar,
             bg=Cores_Padrao.COR_BOTAO_ATUALIZAR,
-            width=15
+            width=12
         ).pack(side=tk.LEFT, padx=5)
+        
+        # Botões alinhados à direita (Atualizar e Cancelar)
+        tk.Button(
+            frame_botoes,
+            text="Atualizar",
+            command=self._atualizar_movimento,
+            bg=Cores_Padrao.COR_BOTAO_ATUALIZAR,
+            width=12
+        ).pack(side=tk.RIGHT, padx=5)
+        
+        tk.Button(
+            frame_botoes,
+            text="Cancelar",
+            command=self._cancelar_movimento,
+            bg=Cores_Padrao.COR_BOTAO_DELETAR,
+            width=12
+        ).pack(side=tk.RIGHT, padx=5)
         
         if isinstance(self.root, tk.Toplevel):
             self.root.protocol("WM_DELETE_WINDOW", self._fechar)
@@ -136,6 +155,27 @@ class MovimentoEstoque_Detalhe_View:
                 produto.get('nome', ''),
                 produto.get('quantidade', '')
             ), tags=(tag,))
+    
+    def _atualizar_movimento(self):
+        """Atualiza o status do movimento"""
+        if self.controller:
+            try:
+                self.controller.update_movimento(self.movimento._id_movimento)
+                self._fechar()
+            except Exception as e:
+                from tkinter import messagebox
+                messagebox.showerror("Erro", f"Erro ao atualizar movimento: {str(e)}")
+    
+    def _cancelar_movimento(self):
+        """Cancela o movimento"""
+        if self.controller:
+            try:
+                from tkinter import messagebox
+                if messagebox.askyesno("Confirmação", "Tem certeza que deseja cancelar este movimento?"):
+                    self.controller.cancela_movimento(self.movimento._id_movimento)
+                    self._fechar()
+            except Exception as e:
+                messagebox.showerror("Erro", f"Erro ao cancelar movimento: {str(e)}")
     
     def _fechar(self):
         """Fecha a janela de detalhes"""

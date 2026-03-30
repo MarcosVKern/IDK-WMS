@@ -61,20 +61,11 @@ class MovimentoEstoque_View():
 
         tk.Label(frame_form, text="Status:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=1, sticky="w")
         self.combo_status = ttk.Combobox(frame_form, textvariable=self.var_status, width=27, state="readonly")
+        self.combo_status.grid(row=3, column=1, pady=5)
 
-        frame_botoes = tk.Frame(self.root, pady=10, bg=Cores_Padrao.COR_FUNDO)
-        frame_botoes.pack()
-
-        self.btn_adicionar = tk.Button(frame_botoes, text="Criar Movimento", command=self._acao_adicionar, bg=Cores_Padrao.COR_BOTAO_SALVAR, width=15)
-        self.btn_adicionar.pack(side=tk.LEFT, padx=5)
-        
-        self.btn_atualizar = tk.Button(frame_botoes, text="Atualizar Status", command=self._acao_atualizar, bg=Cores_Padrao.COR_BOTAO_ATUALIZAR, width=15)
-        self.btn_atualizar.pack(side=tk.LEFT, padx=5)
-        
-        self.btn_cancelar = tk.Button(frame_botoes, text="Cancelar", command=self._acao_cancelar, bg=Cores_Padrao.COR_BOTAO_DELETAR, width=15)
-        self.btn_cancelar.pack(side=tk.LEFT, padx=5)
-        
-        tk.Button(frame_botoes, text="Limpar", command=self._limpar_campos, bg=Cores_Padrao.COR_BOTAO_LIMPAR, width=15).pack(side=tk.LEFT, padx=5)
+        # Botão Criar Movimento dentro do frame_form
+        self.btn_adicionar = tk.Button(frame_form, text="Criar Movimento", command=self._acao_adicionar, bg=Cores_Padrao.COR_BOTAO_SALVAR, width=15)
+        self.btn_adicionar.grid(row=8, column=0, columnspan=2, pady=20)
 
         frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_tabela.pack(expand=True, fill="both")
@@ -171,16 +162,6 @@ class MovimentoEstoque_View():
     def _acao_listar(self):
         if self.controller: 
             self.controller.list_movimentos()
-
-    def _acao_atualizar(self):
-        self.controller.update_movimento()
-        self._acao_listar()
-
-    def _acao_cancelar(self):
-        if messagebox.askyesno("Confirmação", "Tem certeza que deseja cancelar este movimento?"):
-            self.controller.cancela_movimento()
-            self._acao_listar()
-            self._limpar_campos()
 
     def show_movimentos(self, lista):
         for i in self.tree.get_children(): 
