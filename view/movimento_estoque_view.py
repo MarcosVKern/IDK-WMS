@@ -118,6 +118,8 @@ class MovimentoEstoque_View():
 
             if tipo_selecionado:
                 tipo_id = tipo_selecionado.split(' - ')[0]
+                if tipo_id == '':
+                    tipo_id = None
             else:
                 tipo_id = None
 
@@ -126,6 +128,8 @@ class MovimentoEstoque_View():
                 origem_id = None
             elif origem_selecionada:
                 origem_id = origem_selecionada.split(' - ')[0]
+                if origem_id == '':
+                    origem_id = None
             else:
                 origem_id = None
 
@@ -134,11 +138,15 @@ class MovimentoEstoque_View():
                 destino_id = None
             elif destino_selecionado:
                 destino_id = destino_selecionado.split(' - ')[0]
+                if destino_id == '':
+                    destino_id = None
             else:
                 destino_id = None
 
             if responsavel_selecionado:
                 responsavel_id = responsavel_selecionado.split(' - ')[0]
+                if responsavel_id == '':
+                    responsavel_id = None
             else:
                 responsavel_id = None
 

@@ -6,17 +6,27 @@ class MovimentoEstoque_DAO(Base_DAO):
         sql = """call sp_criar_movimento(%s, %s, %s, %s)"""
 
         values = (movimento._origem, movimento._destino, movimento._tipoMovimento, movimento._responsavel)
-        print("Valores para salvar movimento:", values)  # Debug: Verificar os valores antes de salvar
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql, values)
 
+        cursor.execute("SELECT LAST_INSERT_ID()")
+        row = cursor.fetchone()
+        if row:
+            movimento._id_movimento = row[0]
+        else:
+            cursor.execute("SELECT MAX(ID_movimento) FROM movimento_estoque")
+            row2 = cursor.fetchone()
+            if row2:
+                movimento._id_movimento = row2[0]
+
         conn.commit()
         cursor.close()
         conn.close()
+        return movimento
     
     def get_all(self):
-        sql = """select me.ID_movimento, me.origem, me.destino, me.dataSaida, me.dataEntrada, me.dataAlteracao, me.status, me.tipoMovimento, me.responsavel 
+        sql = """select me.ID_movimento, me.origem, me.destino, me.dataSaida, me.dataEntrada, me.dataAlteracao, me.status, tm.tipoMovimento as tipoMovimento, f.nome as responsavel 
                 from movimento_estoque me
                 left join unidade_armazenamento ua on me.origem = ua.ID_unidade
                 left join unidade_armazenamento ua2 on me.destino = ua2.ID_unidade

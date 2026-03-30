@@ -1,18 +1,26 @@
 from model.movimento_estoque import MovimentoEstoque
+from model.produto_movimento import ProdutoMovimento
+from model.dao.produto_movimento_dao import ProdutoMovimento_DAO
+from view.movimento_estoque_produtos_view import MovimentoEstoqueProdutos_View
 
 class MovimentoEstoque_Controller:
-    def __init__(self, dao, tipo_movimento_dao, unidade_dao, funcionario_dao, view, funcionario_logado=None):
+    def __init__(self, dao, tipo_movimento_dao, unidade_dao, funcionario_dao, view,
+                 produto_dao=None, estoque_dao=None, produto_movimento_dao=None, funcionario_logado=None):
         self.dao = dao
         self.tipo_movimento_dao = tipo_movimento_dao
         self.unidade_dao = unidade_dao
         self.funcionario_dao = funcionario_dao
+        self.produto_dao = produto_dao
+        self.estoque_dao = estoque_dao
+        if produto_movimento_dao is None:
+            raise ValueError("ProdutoMovimento_DAO deve ser fornecido")
+        self.produto_movimento_dao = produto_movimento_dao
         self.view = view
         self.funcionario_logado = funcionario_logado
         self.view.controller = self
 
     def add_movimento(self):
         try:
-            # Validar permissão: apenas cargos 1, 2, 3 podem criar
             if self.funcionario_logado and self.funcionario_logado._cargo not in [1, 2, 3]:
                 self.view.show_error("Você não tem permissão para criar movimentos de estoque!")
                 return
@@ -22,7 +30,6 @@ class MovimentoEstoque_Controller:
                 self.view.show_error("Erro ao obter dados do formulário!")
                 return
 
-            # Validar campos obrigatórios
             if not dados['tipo_movimento']:
                 self.view.show_error("Tipo de Movimento é obrigatório!")
                 return
@@ -31,7 +38,6 @@ class MovimentoEstoque_Controller:
                 self.view.show_error("Funcionário Responsável é obrigatório!")
                 return
 
-            # Validar campos conforme tipo de movimento
             try:
                 tipo_id = int(dados['tipo_movimento'])
                 tipo = self._obter_tipo_movimento(tipo_id)
@@ -63,6 +69,21 @@ class MovimentoEstoque_Controller:
                     self.view.show_error("Origem e Destino não podem ser iguais!")
                     return
 
+            # Seleção de produtos para o movimento
+            produtos_selecionados = self._abrir_selecao_produtos(tipo_nome, dados.get('origem'), dados.get('destino'))
+            if produtos_selecionados is None:
+                self.view.show_message("Criação de movimento cancelada (sem seleção de produtos).")
+                return
+            if not produtos_selecionados:
+                self.view.show_error("Nenhum produto selecionado para o movimento.")
+                return
+
+            try:
+                responsavel_id = int(dados['responsavel'])
+            except (ValueError, TypeError):
+                self.view.show_error("Funcionário responsável inválido!")
+                return
+
             movimento_novo = MovimentoEstoque(
                 id_movimento=None,
                 origem=dados['origem'] if dados['origem'] else None,
@@ -71,17 +92,38 @@ class MovimentoEstoque_Controller:
                 dataEntrada=None,
                 dataAlteracao=None,
                 status="Pendente",
-                tipoMovimento=int(dados['tipo_movimento']),
-                responsavel=int(dados['responsavel'])
+                tipoMovimento=tipo_id,
+                responsavel=responsavel_id
             )
             movimento_salvo = self.dao.save(movimento_novo)
-            self.view.show_message(f"Movimento criado com sucesso! ID: {movimento_salvo._id_movimento}")
+
+            # gravar produto_movimento e atualizar estoque
+            for item in produtos_selecionados:
+                produto_mov = ProdutoMovimento(item['quantidade'], movimento_salvo._id_movimento, item['produto'])
+                self.produto_movimento_dao.save(produto_mov)
+
+                if "saída" in tipo_nome or "saida" in tipo_nome or "interno" in tipo_nome:
+                    origem = dados['origem']
+                    estoque_origem = self.estoque_dao.get_by_id(item['produto'], origem)
+                    quantidade_origem = estoque_origem._quantidade if estoque_origem else 0
+                    novo_valor_origem = quantidade_origem - item['quantidade']
+                    if novo_valor_origem < 0:
+                        novo_valor_origem = 0
+                    self.estoque_dao.upsert(item['produto'], origem, novo_valor_origem)
+
+                if "entrada" in tipo_nome or "interno" in tipo_nome:
+                    destino = dados.get('destino')
+                    estoque_destino = self.estoque_dao.get_by_id(item['produto'], destino)
+                    quantidade_destino = estoque_destino._quantidade if estoque_destino else 0
+                    novo_valor_destino = quantidade_destino + item['quantidade']
+                    self.estoque_dao.upsert(item['produto'], destino, novo_valor_destino)
+
+            self.view.show_message(f"Movimento criado com sucesso com {len(produtos_selecionados)} produtos!")
         except Exception as e:
             self.view.show_error(f"Erro ao criar movimento: {str(e)}")
 
     def update_movimento(self):
         try:
-            # Validar permissão
             if self.funcionario_logado and self.funcionario_logado._cargo not in [1, 2, 3]:
                 self.view.show_error("Você não tem permissão para atualizar movimentos!")
                 return
@@ -169,6 +211,28 @@ class MovimentoEstoque_Controller:
             return self.tipo_movimento_dao.get_by_id(tipo_id)
         except:
             return None
+
+    def _abrir_selecao_produtos(self, tipo_nome, origem, destino):
+        if "saída" in tipo_nome or "saida" in tipo_nome or "interno" in tipo_nome:
+            if not origem:
+                self.view.show_error("Origem não informada para seleção de produtos")
+                return None
+            produtos_disponiveis = self.estoque_dao.get_by_unidade(origem)
+        elif "entrada" in tipo_nome:
+            produtos_disponiveis = []
+            for p in self.produto_dao.get_all():
+                produtos_disponiveis.append({'id': p._id, 'nome': p._nome, 'quantidade': 0})
+        else:
+            produtos_disponiveis = []
+
+        if not produtos_disponiveis:
+            if "entrada" not in tipo_nome:
+                self.view.show_error("Não há produtos disponíveis para selecionar nessa unidade de origem")
+                return []
+
+        view_produtos = MovimentoEstoqueProdutos_View(tipo_nome.capitalize(), origem, destino, produtos_disponiveis)
+        produtos_escolhidos = view_produtos.show()
+        return produtos_escolhidos
 
     def _obter_funcionarios_ativos(self):
         """Obter apenas funcionários ativos com cargo 4 (operador)"""

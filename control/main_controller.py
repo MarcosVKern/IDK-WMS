@@ -3,8 +3,10 @@ from model.dao.armazem_dao import Armazem_DAO
 from model.dao.funcionario_dao import Funcionario_DAO
 from model.dao.cargo_dao import Cargo_DAO
 from model.dao.unidade_armazenamento_dao import UnidadeArmazenamento_DAO
+from model.dao.estoque_dao import Estoque_DAO
 from model.dao.tipo_movimento_dao import TipoMovimento_DAO
 from model.dao.movimento_estoque_dao import MovimentoEstoque_DAO
+from model.dao.produto_movimento_dao import ProdutoMovimento_DAO
 from view.cargos_view import Cargo_View
 from view.produto_view import Produto_View
 from view.armazem_view import Armazem_View
@@ -76,8 +78,21 @@ class Main_Controller:
         tipo_movimento_dao = TipoMovimento_DAO(self.db_config)
         unidade_dao = UnidadeArmazenamento_DAO(self.db_config)
         funcionario_dao = Funcionario_DAO(self.db_config)
+        produto_dao = Produto_DAO(self.db_config)
+        estoque_dao = Estoque_DAO(self.db_config)
         view = MovimentoEstoque_View(parent=parent_frame, funcionario_logado=funcionario_logado)
-        control = MovimentoEstoque_Controller(movimento_dao, tipo_movimento_dao, unidade_dao, funcionario_dao, view, funcionario_logado)
+        produto_movimento_dao = ProdutoMovimento_DAO(self.db_config)
+        control = MovimentoEstoque_Controller(
+            movimento_dao,
+            tipo_movimento_dao,
+            unidade_dao,
+            funcionario_dao,
+            view,
+            produto_dao=produto_dao,
+            estoque_dao=estoque_dao,
+            produto_movimento_dao=produto_movimento_dao,
+            funcionario_logado=funcionario_logado
+        )
         if parent_frame:
             view.display()
         else:

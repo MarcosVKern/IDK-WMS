@@ -76,3 +76,27 @@ class Estoque_DAO(Base_DAO):
         cursor.close()
         conn.close()
         return affected_rows > 0
+
+    def get_by_unidade(self, id_unidade):
+        sql = """select e.produto, p.nome, e.quantidade from estoque e
+                inner join produto p on e.produto = p.ID_produto
+                where e.UNarmazenamento = %s and e.quantidade > 0"""
+
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(sql, (id_unidade,))
+        produtos = []
+        for (produto, nome, quantidade) in cursor:
+            produtos.append({'id': produto, 'nome': nome, 'quantidade': quantidade})
+        cursor.close()
+        conn.close()
+        return produtos
+
+    def upsert(self, id_produto, id_unidade, quantidade):
+        existe = self.get_by_id(id_produto, id_unidade)
+        if existe:
+            existe._quantidade = quantidade
+            return self.update(existe)
+        else:
+            novo = Estoque(id_produto, id_unidade, quantidade)
+            return self.save(novo)
