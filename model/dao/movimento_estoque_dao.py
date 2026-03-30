@@ -1,3 +1,5 @@
+from datetime import date
+
 from model.movimento_estoque import MovimentoEstoque
 from model.dao.base_dao import Base_DAO
 
@@ -61,24 +63,34 @@ class MovimentoEstoque_DAO(Base_DAO):
         conn.close()
         return movimento
     
-    def delete(self, id):
-        sql = """delete from movimento_estoque where ID_movimento = %s"""
-
-        conn = self._get_connection()
-        cursor = conn.cursor()
-        cursor.execute(sql, (id,))
-        conn.commit()
-        affected_rows = cursor.rowcount
-        cursor.close()
-        conn.close()
-        return affected_rows > 0
+    def delete(self):
+        pass
     
     def update(self, movimento: MovimentoEstoque):
         sql = """update movimento_estoque set origem = %s, destino = %s, dataSaida = %s, dataEntrada = %s, 
                  dataAlteracao = %s, status = %s, tipoMovimento = %s, responsavel = %s where ID_movimento = %s"""
         
+        status = movimento._status
+        if movimento._tipoMovimento == 1:  # Entrada
+            movimento._dataAlteracao = date.today()
+            status = "Efetivado"
+        elif movimento._tipoMovimento == 2: # Saída
+            match status:
+                case "Pendente":
+                    status = "Em separação"
+                case "Em separação":
+                    status = "Despachado"
+        elif movimento._tipoMovimento == 3: # Interno
+            match status:
+                case "Pendente":
+                    status = "Em separação"
+                case "Em separação":
+                    status = "Despachado"
+                case "Despachado":
+                    status = "Efetivado"
+
         values = (movimento._origem, movimento._destino, movimento._dataSaida, movimento._dataEntrada,
-                  movimento._dataAlteracao, movimento._status, movimento._tipoMovimento, movimento._responsavel, movimento._id_movimento)
+                  movimento._dataAlteracao, status, movimento._tipoMovimento, movimento._responsavel, movimento._id_movimento)
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql, values)
@@ -86,3 +98,17 @@ class MovimentoEstoque_DAO(Base_DAO):
         cursor.close()
         conn.close()
         return movimento
+    
+    def cancela_movimento(self, id):
+        sql = """update movimento_estoque set status = 'Cancelado', dataAlteracao = %s where ID_movimento = %s"""
+
+        values = (date.today(), id)
+
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(sql, values)
+        affected_rows = cursor.rowcount
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return affected_rows > 0

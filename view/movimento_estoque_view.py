@@ -71,8 +71,8 @@ class MovimentoEstoque_View():
         self.btn_atualizar = tk.Button(frame_botoes, text="Atualizar Status", command=self._acao_atualizar, bg=Cores_Padrao.COR_BOTAO_ATUALIZAR, width=15)
         self.btn_atualizar.pack(side=tk.LEFT, padx=5)
         
-        self.btn_deletar = tk.Button(frame_botoes, text="Cancelar", command=self._acao_deletar, bg=Cores_Padrao.COR_BOTAO_DELETAR, width=15)
-        self.btn_deletar.pack(side=tk.LEFT, padx=5)
+        self.btn_cancelar = tk.Button(frame_botoes, text="Cancelar", command=self._acao_cancelar, bg=Cores_Padrao.COR_BOTAO_DELETAR, width=15)
+        self.btn_cancelar.pack(side=tk.LEFT, padx=5)
         
         tk.Button(frame_botoes, text="Limpar", command=self._limpar_campos, bg=Cores_Padrao.COR_BOTAO_LIMPAR, width=15).pack(side=tk.LEFT, padx=5)
 
@@ -173,9 +173,9 @@ class MovimentoEstoque_View():
         self.controller.update_movimento()
         self._acao_listar()
 
-    def _acao_deletar(self):
+    def _acao_cancelar(self):
         if messagebox.askyesno("Confirmação", "Tem certeza que deseja cancelar este movimento?"):
-            self.controller.delete_movimento()
+            self.controller.cancela_movimento()
             self._acao_listar()
             self._limpar_campos()
 

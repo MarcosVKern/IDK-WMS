@@ -150,15 +150,14 @@ class MovimentoEstoque_Controller:
         except Exception as e:
             self.view.show_error(f"Erro ao atualizar movimento: {str(e)}")
 
-    def delete_movimento(self):
+    def cancela_movimento(self):
         try:
-            # Validar permissão
             if self.funcionario_logado and self.funcionario_logado._cargo not in [1, 2, 3]:
                 self.view.show_error("Você não tem permissão para cancelar movimentos!")
                 return
 
             id_movimento = self.view.get_id()
-            if self.dao.delete(id_movimento):
+            if self.dao.cancela_movimento(id_movimento):
                 self.view.show_message(f"Movimento {id_movimento} cancelado com sucesso!")
             else:
                 self.view.show_message(f"Movimento com id {id_movimento} não encontrado!")
@@ -173,7 +172,7 @@ class MovimentoEstoque_Controller:
             if self.funcionario_logado and self.funcionario_logado._cargo == 4:
                 movimentos = [
                     m for m in movimentos 
-                    if m._responsavel == self.funcionario_logado._id 
+                    if m._responsavel == self.funcionario_logado._nome
                     and m._status in ["Pendente", "Em Separação"]
                 ]
             
@@ -235,7 +234,6 @@ class MovimentoEstoque_Controller:
         return produtos_escolhidos
 
     def _obter_funcionarios_ativos(self):
-        """Obter apenas funcionários ativos com cargo 4 (operador)"""
         try:
             todos_funcionarios = self.funcionario_dao.get_all()
             return [f for f in todos_funcionarios if f._situacao == "Ativo" and f._cargo == 4]
