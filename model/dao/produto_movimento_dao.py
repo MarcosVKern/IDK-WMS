@@ -71,3 +71,27 @@ class ProdutoMovimento_DAO(Base_DAO):
         cursor.close()
         conn.close()
         return affected_rows > 0
+    
+    def get_by_movimento_id(self, id_movimento):
+        sql = """select
+            p.ID_produto,
+            p.nome,
+            pm.quantidade,
+            pm.movimento
+        from produto_movimento pm
+	        inner join produto p on pm.produto = p.ID_produto
+        where movimento = %s;"""
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(sql, (id_movimento,))
+        produtos = []
+        for (produto_id, nome, quantidade, movimento) in cursor:
+            produtos.append({
+                'produto_id': produto_id,
+                'nome': nome,
+                'quantidade': quantidade,
+                'movimento': movimento
+            })
+        cursor.close()
+        conn.close()
+        return produtos

@@ -2,6 +2,7 @@ from model.movimento_estoque import MovimentoEstoque
 from model.produto_movimento import ProdutoMovimento
 from model.dao.produto_movimento_dao import ProdutoMovimento_DAO
 from view.movimento_estoque_produtos_view import MovimentoEstoqueProdutos_View
+from view.movimento_estoque_detalhe_view import MovimentoEstoque_Detalhe_View
 
 class MovimentoEstoque_Controller:
     def __init__(self, dao, tipo_movimento_dao, unidade_dao, funcionario_dao, view,
@@ -203,6 +204,45 @@ class MovimentoEstoque_Controller:
                 return
         except Exception as e:
             self.view.show_error(f"Erro ao obter movimento: {str(e)}")
+
+    def abrir_detalhe_movimento(self, id_movimento):
+        """Abre uma tela modal com os detalhes do movimento selecionado"""
+        try:
+            # Buscar movimento pelo ID
+            movimento = self.dao.get_by_id(id_movimento)
+            if not movimento:
+                self.view.show_error(f"Movimento com id {id_movimento} não encontrado!")
+                return
+            
+            # Buscar tipo de movimento
+            tipo_movimento = self.tipo_movimento_dao.get_by_id(movimento._tipoMovimento)
+            
+            # Buscar unidade de origem
+            unidade_origem = None
+            if movimento._origem:
+                unidade_origem = self.unidade_dao.get_by_id(movimento._origem)
+            
+            # Buscar unidade de destino
+            unidade_destino = None
+            if movimento._destino:
+                unidade_destino = self.unidade_dao.get_by_id(movimento._destino)
+            
+            # Buscar funcionário responsável
+            funcionario = self.funcionario_dao.get_by_id(movimento._responsavel)
+            
+            # Buscar produtos do movimento usando get_by_movimento_id
+            try:
+                produtos_movimento = self.produto_movimento_dao.get_by_movimento_id(id_movimento)
+            except Exception as e:
+                # Se houver erro ao buscar produtos, continuar sem eles
+                produtos_movimento = []
+            
+            # Criar e exibir a view de detalhes
+            view_detalhe = MovimentoEstoque_Detalhe_View(movimento, tipo_movimento, unidade_origem, unidade_destino, funcionario, produtos_movimento)
+            view_detalhe.show()
+            
+        except Exception as e:
+            self.view.show_error(f"Erro ao abrir detalhes do movimento: {str(e)}")
 
     def _obter_tipo_movimento(self, tipo_id):
         """Obter objeto tipo movimento pelo ID"""

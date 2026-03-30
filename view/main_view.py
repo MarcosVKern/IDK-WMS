@@ -10,8 +10,11 @@ class Main_View:
         self.controller = None
         self.root = ctk.CTk()
         self.root.title("Sistema IDK WMS")
-        self.root.geometry("1600x800")
+        self.root.geometry("1920x1080")
         self.root.state('zoomed')
+        
+        # Maximizar a janela após criar
+        self.root.after(100, self._maximize_window)
         
         self.main_container = ctk.CTkFrame(self.root, fg_color="#1A2B44")
         self.main_container.pack(fill="both", expand=True)
@@ -280,3 +283,19 @@ class Main_View:
 
     def run(self):
         self.root.mainloop()
+    
+    def _maximize_window(self):
+        """Maximiza a janela para ocupar a tela inteira"""
+        try:
+            # Tenta usar a abordagem do Windows
+            self.root.state('zoomed')
+        except:
+            try:
+                # Se falhar, tenta a abordagem genérica
+                self.root.attributes('-zoomed', True)
+            except:
+                # Se ainda falhar, obtém as dimensões da tela e redimensiona
+                self.root.update_idletasks()
+                screen_width = self.root.winfo_screenwidth()
+                screen_height = self.root.winfo_screenheight()
+                self.root.geometry(f"{screen_width}x{screen_height}+0+0")

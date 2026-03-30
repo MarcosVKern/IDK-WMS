@@ -98,6 +98,9 @@ class MovimentoEstoque_View():
         # Configurar efeito zebrado
         self.tree.tag_configure('evenrow', background=Cores_Padrao.COR_ZEBRADO_PAR)
         self.tree.tag_configure('oddrow', background=Cores_Padrao.COR_ZEBRADO_IMPAR)
+        
+        # Inicializar estado dos campos de origem e destino (desabilitados por padrão)
+        self._atualizar_campos_disponibilidade()
 
     def run(self):
         self.root.after(200, self._acao_listar)
@@ -199,24 +202,11 @@ class MovimentoEstoque_View():
         item_sel = self.tree.selection()
         if item_sel:
             v = self.tree.item(item_sel)['values']
-            self.var_id.set(v[0])
+            id_movimento = v[0]
             
-            # Encontrar e setar tipo de movimento
-            for tipo in self.tipos_movimento:
-                if str(tipo._id) == str(v[1]):
-                    self.var_tipo_movimento.set(f"{tipo._id} - {tipo._tipo}")
-                    break
-            
-            self.var_origem.set(v[2])
-            self.var_destino.set(v[3])
-            
-            # Encontrar e setar responsável
-            for func in self.funcionarios:
-                if str(func._id) == str(v[4]):
-                    self.var_responsavel.set(f"{func._id} - {func._nome}")
-                    break
-            
-            self.var_status.set(v[5])
+            # Chamar controller para abrir tela de detalhes
+            if self.controller:
+                self.controller.abrir_detalhe_movimento(id_movimento)
 
     def _ao_mudar_tipo_movimento(self, event=None):
         self._atualizar_campos_disponibilidade()
