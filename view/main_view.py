@@ -55,16 +55,23 @@ class Main_View:
                 ("Produtos", self._show_produto),
                 ("Armazéns", self._show_armazem),
                 ("Unidades de Armazenamento", self._show_unidade_armazenamento),
+                ("Movimentos de Estoque", self._show_movimento_estoque),
                 ("Funcionários", self._show_funcionario),
                 ("Sair", self._logout),
                 #("Cargos", self._show_cargo)
             ]
-        else:
+        elif self.usuario._cargo in [3]: # Logística
             botoes = [
                 ("Produtos", self._show_produto),
-                ("Armazéns", self._show_armazem),
+                ("Unidades de Armazenamento", self._show_unidade_armazenamento),
+                ("Movimentos de Estoque", self._show_movimento_estoque),
                 ("Sair", self._logout),
-                #("Cargos", self._show_cargo)
+            ]
+        else: # Operador e outros
+            botoes = [
+                ("Produtos", self._show_produto),
+                ("Movimentos de Estoque", self._show_movimento_estoque),
+                ("Sair", self._logout),
             ]
 
         
@@ -262,6 +269,10 @@ class Main_View:
     def _show_funcionario(self):
         if self.controller:
             self.controller.exibir_funcionario(self.right_panel_content)
+
+    def _show_movimento_estoque(self):
+        if self.controller:
+            self.controller.exibir_movimento_estoque(self.right_panel_content, self.usuario)
 
     def _show_cargo(self):
         if self.controller:
