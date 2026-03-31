@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
 from view.cores_padrao import Cores_Padrao
+from datetime import date
 
 class MovimentoEstoque_View():
     def __init__(self, parent=None, funcionario_logado=None):
@@ -159,6 +160,22 @@ class MovimentoEstoque_View():
         self.controller.add_movimento()
         self._acao_listar()
 
+    def _formatar_data(self, data):
+        """Formata data para DD/MM/YYYY"""
+        if not data:
+            return "Não definida"
+        if isinstance(data, date):
+            return data.strftime("%d/%m/%Y")
+        try:
+            # Se for string, tentar parsear
+            if isinstance(data, str):
+                # Assumir que vem do banco em YYYY-MM-DD
+                data_obj = date.fromisoformat(data)
+                return data_obj.strftime("%d/%m/%Y")
+            return str(data)
+        except:
+            return str(data)
+
     def _acao_listar(self):
         if self.controller: 
             self.controller.list_movimentos()
@@ -168,7 +185,8 @@ class MovimentoEstoque_View():
             self.tree.delete(i)
         for idx, m in enumerate(lista):
             tag = 'evenrow' if idx % 2 == 0 else 'oddrow'
-            self.tree.insert("", "end", values=(m._id_movimento, m._tipoMovimento, m._origem, m._destino, m._responsavel, m._status, m._dataSaida), tags=(tag,))
+            data_saida_formatted = self._formatar_data(m._dataSaida)
+            self.tree.insert("", "end", values=(m._id_movimento, m._tipoMovimento, m._origem, m._destino, m._responsavel, m._status, data_saida_formatted), tags=(tag,))
 
     def get_id(self):
         val = self.var_id.get()

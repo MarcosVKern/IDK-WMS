@@ -1,6 +1,7 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 from view.cores_padrao import Cores_Padrao
+from datetime import date
 
 
 class MovimentoEstoque_Detalhe_View:
@@ -14,15 +15,39 @@ class MovimentoEstoque_Detalhe_View:
         self.controller = controller
         self.parent = parent
         
+        self.em_confirmacao = False
+        self.checkbox_vars = {}
+        self.btn_atualizar = None
+        self.btn_cancelar = None
+        self.frame_checkboxes = None
+        self.tree_produtos = None
+        
         if parent is None:
             self.root = tk.Toplevel()
             self.root.title(f"Detalhes do Movimento #{movimento._id_movimento}")
-            self.root.geometry("700x700")
+            self.root.geometry("700x800")
             self.root.grab_set()
         else:
             self.root = tk.Frame(parent, bg=Cores_Padrao.COR_FUNDO)
         
         self._setup_ui()
+        self._configurar_estado_botoes()
+    
+    def _formatar_data(self, data):
+        """Formata data para DD/MM/YYYY"""
+        if not data:
+            return "Não definida"
+        if isinstance(data, date):
+            return data.strftime("%d/%m/%Y")
+        try:
+            # Se for string, tentar parsear
+            if isinstance(data, str):
+                # Assumir que vem do banco em YYYY-MM-DD
+                data_obj = date.fromisoformat(data)
+                return data_obj.strftime("%d/%m/%Y")
+            return str(data)
+        except:
+            return str(data)
     
     def _setup_ui(self):
         """Cria a interface do detalhamento"""
@@ -35,7 +60,6 @@ class MovimentoEstoque_Detalhe_View:
             bg=Cores_Padrao.COR_FUNDO
         ).pack(fill="x")
         
-        # Frame principal com scroll
         frame_principal = tk.LabelFrame(
             self.root,
             text="Informações do Movimento",
@@ -43,7 +67,7 @@ class MovimentoEstoque_Detalhe_View:
             pady=15,
             bg=Cores_Padrao.COR_FUNDO
         )
-        frame_principal.pack(padx=15, pady=10, fill="both", expand=True)
+        frame_principal.pack(padx=15, pady=10, fill="both")
         
         tk.Label(frame_principal, text="ID Movimento:", font=("Arial", 10, "bold"), bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=0, sticky="w", pady=5)
         tk.Label(frame_principal, text=str(self.movimento._id_movimento), font=("Arial", 10), bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=1, sticky="w", pady=5, padx=10)
@@ -67,17 +91,17 @@ class MovimentoEstoque_Detalhe_View:
         tk.Label(frame_principal, text="Status:", font=("Arial", 10, "bold"), bg=Cores_Padrao.COR_FUNDO).grid(row=5, column=0, sticky="w", pady=5)
         tk.Label(frame_principal, text=self.movimento._status, font=("Arial", 10), bg=Cores_Padrao.COR_FUNDO).grid(row=5, column=1, sticky="w", pady=5, padx=10)
 
-        data_saida = self.movimento._dataSaida if self.movimento._dataSaida else "Não definida"
+        data_saida_formatted = self._formatar_data(self.movimento._dataSaida)
         tk.Label(frame_principal, text="Data de Saída:", font=("Arial", 10, "bold"), bg=Cores_Padrao.COR_FUNDO).grid(row=6, column=0, sticky="w", pady=5)
-        tk.Label(frame_principal, text=str(data_saida), font=("Arial", 10), bg=Cores_Padrao.COR_FUNDO).grid(row=6, column=1, sticky="w", pady=5, padx=10)
+        tk.Label(frame_principal, text=data_saida_formatted, font=("Arial", 10), bg=Cores_Padrao.COR_FUNDO).grid(row=6, column=1, sticky="w", pady=5, padx=10)
 
-        data_entrada = self.movimento._dataEntrada if self.movimento._dataEntrada else "Não definida"
+        data_entrada_formatted = self._formatar_data(self.movimento._dataEntrada)
         tk.Label(frame_principal, text="Data de Entrada:", font=("Arial", 10, "bold"), bg=Cores_Padrao.COR_FUNDO).grid(row=7, column=0, sticky="w", pady=5)
-        tk.Label(frame_principal, text=str(data_entrada), font=("Arial", 10), bg=Cores_Padrao.COR_FUNDO).grid(row=7, column=1, sticky="w", pady=5, padx=10)
+        tk.Label(frame_principal, text=data_entrada_formatted, font=("Arial", 10), bg=Cores_Padrao.COR_FUNDO).grid(row=7, column=1, sticky="w", pady=5, padx=10)
 
-        data_alteracao = self.movimento._dataAlteracao if self.movimento._dataAlteracao else "Não definida"
+        data_alteracao_formatted = self._formatar_data(self.movimento._dataAlteracao)
         tk.Label(frame_principal, text="Data de Alteração:", font=("Arial", 10, "bold"), bg=Cores_Padrao.COR_FUNDO).grid(row=8, column=0, sticky="w", pady=5)
-        tk.Label(frame_principal, text=str(data_alteracao), font=("Arial", 10), bg=Cores_Padrao.COR_FUNDO).grid(row=8, column=1, sticky="w", pady=5, padx=10)
+        tk.Label(frame_principal, text=data_alteracao_formatted, font=("Arial", 10), bg=Cores_Padrao.COR_FUNDO).grid(row=8, column=1, sticky="w", pady=5, padx=10)
 
         frame_produtos = tk.LabelFrame(
             self.root,
@@ -104,8 +128,7 @@ class MovimentoEstoque_Detalhe_View:
         scrollbar = ttk.Scrollbar(frame_produtos, orient="vertical", command=self.tree_produtos.yview)
         scrollbar.pack(side="right", fill="y")
         self.tree_produtos.config(yscroll=scrollbar.set)
-        
-        # Configurar efeito zebrado
+
         self.tree_produtos.tag_configure('evenrow', background=Cores_Padrao.COR_ZEBRADO_PAR)
         self.tree_produtos.tag_configure('oddrow', background=Cores_Padrao.COR_ZEBRADO_IMPAR)
 
@@ -114,7 +137,6 @@ class MovimentoEstoque_Detalhe_View:
         frame_botoes = tk.Frame(self.root, bg=Cores_Padrao.COR_FUNDO)
         frame_botoes.pack(pady=10, fill="x", padx=15)
         
-        # Botões alinhados à esquerda (Fechar)
         tk.Button(
             frame_botoes,
             text="Fechar",
@@ -122,23 +144,24 @@ class MovimentoEstoque_Detalhe_View:
             bg=Cores_Padrao.COR_BOTAO_ATUALIZAR,
             width=12
         ).pack(side=tk.LEFT, padx=5)
-        
-        # Botões alinhados à direita (Atualizar e Cancelar)
-        tk.Button(
+
+        self.btn_atualizar = tk.Button(
             frame_botoes,
             text="Atualizar",
             command=self._atualizar_movimento,
             bg=Cores_Padrao.COR_BOTAO_ATUALIZAR,
             width=12
-        ).pack(side=tk.RIGHT, padx=5)
+        )
+        self.btn_atualizar.pack(side=tk.RIGHT, padx=5)
         
-        tk.Button(
+        self.btn_cancelar = tk.Button(
             frame_botoes,
             text="Cancelar",
             command=self._cancelar_movimento,
             bg=Cores_Padrao.COR_BOTAO_DELETAR,
             width=12
-        ).pack(side=tk.RIGHT, padx=5)
+        )
+        self.btn_cancelar.pack(side=tk.RIGHT, padx=5)
         
         if isinstance(self.root, tk.Toplevel):
             self.root.protocol("WM_DELETE_WINDOW", self._fechar)
@@ -156,6 +179,50 @@ class MovimentoEstoque_Detalhe_View:
                 produto.get('quantidade', '')
             ), tags=(tag,))
     
+    def _configurar_estado_botoes(self):
+        """Configura o estado dos botões baseado em permissões e status"""
+        tipo_nome = self.tipo_movimento._tipo.lower().strip() if self.tipo_movimento else ""
+        status_atual = self.movimento._status
+        
+        pode_atualizar = self._pode_atualizar()
+        self.btn_atualizar.config(state=tk.NORMAL if pode_atualizar else tk.DISABLED)
+
+        pode_cancelar = self._pode_cancelar()
+        self.btn_cancelar.config(state=tk.NORMAL if pode_cancelar else tk.DISABLED)
+    
+    def _pode_atualizar(self):
+        """Verifica se o movimento pode ser atualizado"""
+        tipo_nome = self.tipo_movimento._tipo.lower().strip() if self.tipo_movimento else ""
+        status_atual = self.movimento._status
+
+        if status_atual == "Cancelado":
+            return False
+
+        if "entrada" in tipo_nome or "entrada" in tipo_nome:
+            if status_atual == "Efetivado":
+                return False
+
+        if ("saída" in tipo_nome or "saida" in tipo_nome or "interno" in tipo_nome):
+            if status_atual == "Despachado" and "saida" in tipo_nome:
+                return False
+            if status_atual == "Efetivado" and "interno" in tipo_nome:
+                return False
+        
+        return True
+    
+    def _pode_cancelar(self):
+        """Verifica se o movimento pode ser cancelado"""
+        tipo_nome = self.tipo_movimento._tipo.lower().strip() if self.tipo_movimento else ""
+        status_atual = self.movimento._status
+
+        if status_atual == "Cancelado":
+            return False
+
+        if "interno" in tipo_nome and status_atual == "Efetivado":
+            return False
+        
+        return True
+    
     def _atualizar_movimento(self):
         """Atualiza o status do movimento"""
         if self.controller:
@@ -163,14 +230,12 @@ class MovimentoEstoque_Detalhe_View:
                 self.controller.update_movimento(self.movimento._id_movimento)
                 self._fechar()
             except Exception as e:
-                from tkinter import messagebox
                 messagebox.showerror("Erro", f"Erro ao atualizar movimento: {str(e)}")
     
     def _cancelar_movimento(self):
         """Cancela o movimento"""
         if self.controller:
             try:
-                from tkinter import messagebox
                 if messagebox.askyesno("Confirmação", "Tem certeza que deseja cancelar este movimento?"):
                     self.controller.cancela_movimento(self.movimento._id_movimento)
                     self._fechar()

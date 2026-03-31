@@ -98,38 +98,18 @@ class MovimentoEstoque_Controller:
             )
             movimento_salvo = self.dao.save(movimento_novo)
 
-            # gravar produto_movimento e atualizar estoque
+            # Gravar produto_movimento (sem atualizar estoque ainda)
             for item in produtos_selecionados:
                 produto_mov = ProdutoMovimento(item['quantidade'], movimento_salvo._id_movimento, item['produto'])
                 self.produto_movimento_dao.save(produto_mov)
-
-                if "saída" in tipo_nome or "saida" in tipo_nome or "interno" in tipo_nome:
-                    origem = dados['origem']
-                    estoque_origem = self.estoque_dao.get_by_id(item['produto'], origem)
-                    quantidade_origem = estoque_origem._quantidade if estoque_origem else 0
-                    novo_valor_origem = quantidade_origem - item['quantidade']
-                    if novo_valor_origem < 0:
-                        novo_valor_origem = 0
-                    self.estoque_dao.upsert(item['produto'], origem, novo_valor_origem)
-
-                if "entrada" in tipo_nome or "interno" in tipo_nome:
-                    destino = dados.get('destino')
-                    estoque_destino = self.estoque_dao.get_by_id(item['produto'], destino)
-                    quantidade_destino = estoque_destino._quantidade if estoque_destino else 0
-                    novo_valor_destino = quantidade_destino + item['quantidade']
-                    self.estoque_dao.upsert(item['produto'], destino, novo_valor_destino)
 
             self.view.show_message(f"Movimento criado com sucesso com {len(produtos_selecionados)} produtos!")
         except Exception as e:
             self.view.show_error(f"Erro ao criar movimento: {str(e)}")
 
     def update_movimento(self, id_movimento=None):
+        """Atualiza o status do movimento conforme regras de negócio"""
         try:
-            if self.funcionario_logado and self.funcionario_logado._cargo not in [1, 2, 3]:
-                self.view.show_error("Você não tem permissão para atualizar movimentos!")
-                return
-
-            # Se não fornecido, tenta obter da view principal
             if id_movimento is None:
                 id_movimento = self.view.get_id()
             
@@ -142,39 +122,192 @@ class MovimentoEstoque_Controller:
                 self.view.show_error(f"Movimento com id {id_movimento} não encontrado!")
                 return
 
-            # Se id_movimento foi fornecido, significa que veio da view de detalhes
-            # Nesse caso, não há dados para atualizar da view de detalhes
-            if id_movimento is not None and hasattr(self.view, 'get_movimento_data'):
-                dados = self.view.get_movimento_data()
-                novo_status = dados.get('status', '') if dados else ''
-            else:
-                novo_status = ''
+            tipo_movimento = self.tipo_movimento_dao.get_by_id(movimento_existente._tipoMovimento)
+            tipo_nome = tipo_movimento._tipo.lower().strip()
+            status_atual = movimento_existente._status
+
+            if ("saída" in tipo_nome or "saida" in tipo_nome or "interno" in tipo_nome) and status_atual == "Em separação":
+                if self.funcionario_logado and self.funcionario_logado._id != movimento_existente._responsavel:
+                    self.view.show_error("Apenas o funcionário responsável pode confirmar o despacho!")
+                    return
             
-            if novo_status:
-                movimento_existente._status = novo_status
-                if self.dao.update(movimento_existente):
-                    self.view.show_message(f"Movimento {id_movimento} atualizado para status '{novo_status}'!")
-                else:
-                    self.view.show_error("Erro ao atualizar movimento!")
+            # Determinar próximo status
+            proximo_status = self._obter_proximo_status(tipo_movimento._id, status_atual)
+            
+            if not proximo_status:
+                self.view.show_error("Este movimento já atingiu seu status final!")
+                return
+            
+            # Se for transição para "Despachado" em Saída ou Interno, mostrar confirmação com checkboxes
+            if proximo_status == "Despachado" and ("saída" in tipo_nome or "saida" in tipo_nome or "interno" in tipo_nome):
+                produtos = self.produto_movimento_dao.get_by_movimento_id(id_movimento)
+                if not self._confirmar_produtos(produtos):
+                    return
+            
+            # Atualizar movimento
+            movimento_existente._status = proximo_status
+            self.dao.update(movimento_existente)
+            
+            # Aplicar lógica de estoque conforme transição
+            self._aplicar_logica_estoque(movimento_existente, tipo_movimento._id, status_atual, proximo_status)
+            
+            self.view.show_message(f"Movimento atualizado para status: {proximo_status}")
+            
         except Exception as e:
             self.view.show_error(f"Erro ao atualizar movimento: {str(e)}")
+    
+    def _obter_proximo_status(self, tipo_id, status_atual):
+        if tipo_id == 1:  # Entrada
+            if status_atual == "Pendente":
+                return "Efetivado"
+        elif tipo_id == 2:  # Saída
+            if status_atual == "Pendente":
+                return "Em separação"
+            elif status_atual == "Em separação":
+                return "Despachado"
+        elif tipo_id == 3:  # Interno
+            if status_atual == "Pendente":
+                return "Em separação"
+            elif status_atual == "Em separação":
+                return "Despachado"
+            elif status_atual == "Despachado":
+                return "Efetivado"
+        
+        return None
+    
+    def _confirmar_produtos(self, produtos):
+        """Mostra diálogo de confirmação com checkboxes para todos os produtos"""
+        from tkinter import messagebox
+        
+        if not produtos:
+            return messagebox.askyesno("Confirmação", "Nenhum produto neste movimento. Deseja continuar?")
+        
+        msg = "Confirmar despacho dos seguintes produtos:\n\n"
+        for p in produtos:
+            msg += f"• {p['nome']} (Qtd: {p['quantidade']})\n"
+        msg += "\nDeseja continuar?"
+        
+        return messagebox.askyesno("Confirmação de Despacho", msg)
+    
+    def _aplicar_logica_estoque(self, movimento, tipo_id, status_anterior, status_novo):
+        """Aplica as mudanças de estoque conforme as regras de negócio"""
+        try:
+            produtos = self.produto_movimento_dao.get_by_movimento_id(movimento._id_movimento)
+            
+            for produto in produtos:
+                id_produto = produto['produto_id']
+                quantidade = produto['quantidade']
+                
+                # Saída: Remove estoque quando passa para "Despachado"
+                if tipo_id == 2 and status_novo == "Despachado":
+                    estoque = self.estoque_dao.get_by_id(id_produto, movimento._origem)
+                    if estoque:
+                        novo_valor = estoque._quantidade - quantidade
+                        if novo_valor < 0:
+                            novo_valor = 0
+                        self.estoque_dao.upsert(id_produto, movimento._origem, novo_valor)
+                
+                # Entrada: Adiciona estoque quando passa para "Efetivado"
+                elif tipo_id == 1 and status_novo == "Efetivado":
+                    estoque = self.estoque_dao.get_by_id(id_produto, movimento._destino)
+                    quantidade_atual = estoque._quantidade if estoque else 0
+                    novo_valor = quantidade_atual + quantidade
+                    self.estoque_dao.upsert(id_produto, movimento._destino, novo_valor)
+                
+                # Interno: Comportamento especial conforme status
+                elif tipo_id == 3:
+                    if status_novo == "Despachado":
+                        # Remove de origem
+                        estoque_origem = self.estoque_dao.get_by_id(id_produto, movimento._origem)
+                        if estoque_origem:
+                            novo_valor = estoque_origem._quantidade - quantidade
+                            if novo_valor < 0:
+                                novo_valor = 0
+                            self.estoque_dao.upsert(id_produto, movimento._origem, novo_valor)
+                    
+                    elif status_novo == "Efetivado":
+                        # Adiciona no destino
+                        estoque_destino = self.estoque_dao.get_by_id(id_produto, movimento._destino)
+                        quantidade_atual = estoque_destino._quantidade if estoque_destino else 0
+                        novo_valor = quantidade_atual + quantidade
+                        self.estoque_dao.upsert(id_produto, movimento._destino, novo_valor)
+        
+        except Exception as e:
+            raise Exception(f"Erro ao aplicar lógica de estoque: {str(e)}")
 
     def cancela_movimento(self, id_movimento=None):
+        """Cancela um movimento conforme regras de negócio"""
         try:
+            # Verificar permissão: apenas cargo 1, 2, 3 (Diretor, Supervisor, Gerenciador)
             if self.funcionario_logado and self.funcionario_logado._cargo not in [1, 2, 3]:
-                self.view.show_error("Você não tem permissão para cancelar movimentos!")
+                self.view.show_error("Apenas supervisor ou diretor podem cancelar movimentos!")
                 return
 
-            # Se não fornecido, tenta obter da view principal
             if id_movimento is None:
                 id_movimento = self.view.get_id()
             
-            if self.dao.cancela_movimento(id_movimento):
-                self.view.show_message(f"Movimento {id_movimento} cancelado com sucesso!")
-            else:
-                self.view.show_message(f"Movimento com id {id_movimento} não encontrado!")
+            if not id_movimento:
+                self.view.show_error("Selecione um movimento para cancelar!")
+                return
+
+            movimento = self.dao.get_by_id(id_movimento)
+            if not movimento:
+                self.view.show_error(f"Movimento com id {id_movimento} não encontrado!")
+                return
+
+            # Verificar se pode cancelar
+            if not self.dao.pode_cancelar(id_movimento):
+                self.view.show_error("Movimentos internos em status 'Efetivado' não podem ser cancelados!")
+                return
+
+            tipo_movimento = self.tipo_movimento_dao.get_by_id(movimento._tipoMovimento)
+            
+            # Reverter estoques conforme regras
+            self._reverter_estoque_cancelamento(movimento, tipo_movimento._id)
+            
+            # Atualizar status para cancelado
+            self.dao.cancela_movimento(id_movimento)
+            
+            self.view.show_message(f"Movimento {id_movimento} cancelado com sucesso!")
+            
         except Exception as e:
             self.view.show_error(f"Erro ao cancelar movimento: {str(e)}")
+    
+    def _reverter_estoque_cancelamento(self, movimento, tipo_id):
+        """Reverte os estoques conforme o tipo e status do movimento cancelado"""
+        try:
+            produtos = self.produto_movimento_dao.get_by_movimento_id(movimento._id_movimento)
+            status = movimento._status
+            
+            for produto in produtos:
+                id_produto = produto['produto_id']
+                quantidade = produto['quantidade']
+                
+                # Entrada - Efetivado: Remove itens do estoque
+                if tipo_id == 1 and status == "Efetivado":
+                    estoque = self.estoque_dao.get_by_id(id_produto, movimento._destino)
+                    if estoque:
+                        novo_valor = estoque._quantidade - quantidade
+                        if novo_valor < 0:
+                            novo_valor = 0
+                        self.estoque_dao.upsert(id_produto, movimento._destino, novo_valor)
+                
+                # Saída - Despachado: Adiciona itens novamente ao estoque
+                elif tipo_id == 2 and status == "Despachado":
+                    estoque = self.estoque_dao.get_by_id(id_produto, movimento._origem)
+                    quantidade_atual = estoque._quantidade if estoque else 0
+                    novo_valor = quantidade_atual + quantidade
+                    self.estoque_dao.upsert(id_produto, movimento._origem, novo_valor)
+                
+                # Interno - Despachado: Adiciona itens ao estoque (origem)
+                elif tipo_id == 3 and status == "Despachado":
+                    estoque = self.estoque_dao.get_by_id(id_produto, movimento._origem)
+                    quantidade_atual = estoque._quantidade if estoque else 0
+                    novo_valor = quantidade_atual + quantidade
+                    self.estoque_dao.upsert(id_produto, movimento._origem, novo_valor)
+        
+        except Exception as e:
+            raise Exception(f"Erro ao reverter estoque: {str(e)}")
 
     def list_movimentos(self):
         try:
@@ -185,12 +318,11 @@ class MovimentoEstoque_Controller:
                 movimentos = [
                     m for m in movimentos 
                     if m._responsavel == self.funcionario_logado._nome
-                    and m._status in ["Pendente", "Em Separação"]
+                    and m._status in ["Pendente", "Em separação", "Despachado"]
                 ]
             
             self.view.show_movimentos(movimentos)
-            
-            # Carregar dados para dropbox
+
             tipos = self.tipo_movimento_dao.get_all()
             unidades = self.unidade_dao.get_all()
             funcionarios = self._obter_funcionarios_ativos()
@@ -198,8 +330,7 @@ class MovimentoEstoque_Controller:
             self.view.set_tipos_movimento(tipos)
             self.view.set_unidades(unidades)
             self.view.set_funcionarios(funcionarios)
-            
-            # Habilitar/desabilitar criação conforme cargo
+
             pode_criar = self.funcionario_logado and self.funcionario_logado._cargo in [1, 2, 3]
             self.view.habilitar_criacao(pode_criar)
             

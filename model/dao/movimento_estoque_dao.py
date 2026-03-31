@@ -71,23 +71,30 @@ class MovimentoEstoque_DAO(Base_DAO):
                  dataAlteracao = %s, status = %s, tipoMovimento = %s, responsavel = %s where ID_movimento = %s"""
         
         status = movimento._status
+        movimento._dataAlteracao = date.today()
+        
         if movimento._tipoMovimento == 1:  # Entrada
-            movimento._dataAlteracao = date.today()
             status = "Efetivado"
+            # Data de entrada quando status for Efetivado
+            movimento._dataEntrada = date.today()
         elif movimento._tipoMovimento == 2: # Saída
-            match status:
-                case "Pendente":
-                    status = "Em separação"
-                case "Em separação":
-                    status = "Despachado"
+            if status == "Pendente":
+                status = "Em separação"
+            elif status == "Em separação":
+                status = "Despachado"
+                # Data de saída quando status for Despachado
+                movimento._dataSaida = date.today()
         elif movimento._tipoMovimento == 3: # Interno
-            match status:
-                case "Pendente":
-                    status = "Em separação"
-                case "Em separação":
-                    status = "Despachado"
-                case "Despachado":
-                    status = "Efetivado"
+            if status == "Pendente":
+                status = "Em separação"
+            elif status == "Em separação":
+                status = "Despachado"
+                # Data de saída quando status for Despachado
+                movimento._dataSaida = date.today()
+            elif status == "Despachado":
+                status = "Efetivado"
+                # Data de entrada quando status for Efetivado
+                movimento._dataEntrada = date.today()
 
         values = (movimento._origem, movimento._destino, movimento._dataSaida, movimento._dataEntrada,
                   movimento._dataAlteracao, status, movimento._tipoMovimento, movimento._responsavel, movimento._id_movimento)
@@ -97,6 +104,7 @@ class MovimentoEstoque_DAO(Base_DAO):
         conn.commit()
         cursor.close()
         conn.close()
+        movimento._status = status
         return movimento
     
     def cancela_movimento(self, id):
@@ -112,3 +120,25 @@ class MovimentoEstoque_DAO(Base_DAO):
         cursor.close()
         conn.close()
         return affected_rows > 0
+    
+    def pode_cancelar(self, id):
+        """Verifica se um movimento pode ser cancelado baseado em suas regras de negócio"""
+        sql = """select tipoMovimento, status from movimento_estoque where ID_movimento = %s"""
+        
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(sql, (id,))
+        row = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        
+        if not row:
+            return False
+        
+        tipo_movimento, status = row
+        
+        # Interno - Efetivado: NÃO PODE cancelar
+        if tipo_movimento == 3 and status == "Efetivado":
+            return False
+        
+        return True
