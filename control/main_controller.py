@@ -46,11 +46,10 @@ class Main_Controller:
         else:
             view.run()
 
-    def exibir_funcionario(self, parent_frame=None, funcionario_logado=None):
+    def exibir_funcionario(self, parent_frame=None):
         dao = Funcionario_DAO(self.db_config)
-        cargo_dao = Cargo_DAO(self.db_config)
-        view = Funcionario_View(parent=parent_frame, funcionario_logado=funcionario_logado)
-        control = Funcionario_Controller(dao, cargo_dao, view, funcionario_logado)
+        view = Funcionario_View(parent=parent_frame)
+        control = Funcionario_Controller(dao, view)
         if parent_frame:
             view.display()
         else:
