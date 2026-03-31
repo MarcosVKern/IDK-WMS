@@ -59,6 +59,7 @@ class Main_View:
                 ("Armazéns", self._show_armazem),
                 ("Unidades de Armazenamento", self._show_unidade_armazenamento),
                 ("Movimentos de Estoque", self._show_movimento_estoque),
+                ("Consultar Estoque", self._show_estoque),
                 ("Funcionários", self._show_funcionario),
                 ("Sair", self._logout),
                 #("Cargos", self._show_cargo)
@@ -68,6 +69,7 @@ class Main_View:
                 ("Produtos", self._show_produto),
                 ("Unidades de Armazenamento", self._show_unidade_armazenamento),
                 ("Movimentos de Estoque", self._show_movimento_estoque),
+                ("Consultar Estoque", self._show_estoque),
                 ("Sair", self._logout),
             ]
         else: # Operador e outros
@@ -271,11 +273,15 @@ class Main_View:
 
     def _show_funcionario(self):
         if self.controller:
-            self.controller.exibir_funcionario(self.right_panel_content)
+            self.controller.exibir_funcionario(self.right_panel_content, self.usuario)
 
     def _show_movimento_estoque(self):
         if self.controller:
             self.controller.exibir_movimento_estoque(self.right_panel_content, self.usuario)
+
+    def _show_estoque(self):
+        if self.controller:
+            self.controller.exibir_estoque(self.right_panel_content)
 
     def _show_cargo(self):
         if self.controller:

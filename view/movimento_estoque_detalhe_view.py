@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, messagebox
+import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
 from datetime import date
 
@@ -138,33 +139,36 @@ class MovimentoEstoque_Detalhe_View:
         frame_botoes = tk.Frame(self.root, bg=Cores_Padrao.COR_FUNDO)
         frame_botoes.pack(pady=10, fill="x", padx=15)
         
-        tk.Button(
+        ctk.CTkButton(
             frame_botoes,
             text="Fechar",
             command=self._fechar,
-            bg=Cores_Padrao.COR_BOTAO_ATUALIZAR,
-            width=12
+            fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR,
+            text_color=Cores_Padrao.COR_TEXTO,
+            width=150
         ).pack(side=tk.LEFT, padx=5)
 
-        self.btn_atualizar = tk.Button(
+        self.btn_atualizar = ctk.CTkButton(
             frame_botoes,
             text="Atualizar",
             command=self._atualizar_movimento,
-            bg=Cores_Padrao.COR_BOTAO_ATUALIZAR,
-            width=12
+            fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR,
+            text_color=Cores_Padrao.COR_TEXTO,
+            width=150
         )
         self.btn_atualizar.pack(side=tk.RIGHT, padx=5)
         
-        self.btn_cancelar = tk.Button(
+        self.btn_cancelar = ctk.CTkButton(
             frame_botoes,
             text="Cancelar",
             command=self._cancelar_movimento,
-            bg=Cores_Padrao.COR_BOTAO_DELETAR,
-            width=12
+            fg_color=Cores_Padrao.COR_BOTAO_DELETAR,
+            text_color=Cores_Padrao.COR_TEXTO,
+            width=150
         )
         self.btn_cancelar.pack(side=tk.RIGHT, padx=5)
         
-        if isinstance(self.root, tk.Toplevel):
+        if isinstance(self.root, ctk.CTk):
             self.root.protocol("WM_DELETE_WINDOW", self._fechar)
     
     def _popular_produtos(self):
@@ -186,10 +190,10 @@ class MovimentoEstoque_Detalhe_View:
         status_atual = self.movimento._status
         
         pode_atualizar = self._pode_atualizar()
-        self.btn_atualizar.config(state=tk.NORMAL if pode_atualizar else tk.DISABLED)
+        self.btn_atualizar.configure(state="normal" if pode_atualizar else "disabled")
 
         pode_cancelar = self._pode_cancelar()
-        self.btn_cancelar.config(state=tk.NORMAL if pode_cancelar else tk.DISABLED)
+        self.btn_cancelar.configure(state="normal" if pode_cancelar else "disabled")
     
     def _pode_atualizar(self):
         """Verifica se o movimento pode ser atualizado"""
@@ -245,12 +249,12 @@ class MovimentoEstoque_Detalhe_View:
     
     def _fechar(self):
         """Fecha a janela de detalhes"""
-        if isinstance(self.root, tk.Toplevel):
+        if isinstance(self.root, ctk.CTk):
             self.root.destroy()
     
     def show(self):
         """Exibe a janela de forma modal (bloqueante)"""
-        if isinstance(self.root, tk.Toplevel):
+        if isinstance(self.root, ctk.CTk):
             self.root.wait_window(self.root)
     
     def display(self):
