@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
-import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
 
 class Produto_View():
@@ -48,10 +47,10 @@ class Produto_View():
         frame_botoes = tk.Frame(self.root, pady=10, bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None)
         frame_botoes.pack()
 
-        ctk.CTkButton(frame_botoes, text="Adicionar Produto", command=self._acao_adicionar, fg_color=Cores_Padrao.COR_BOTAO_SALVAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Atualizar Produto", command=self._acao_atualizar, fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Deletar Produto", command=self._acao_deletar, fg_color=Cores_Padrao.COR_BOTAO_DELETAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Limpar", command=self._limpar_campos, fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
+        tk.Button(frame_botoes, text="Adicionar Produto", command=self._acao_adicionar, bg=Cores_Padrao.COR_BOTAO_SALVAR, width=15).pack(side=tk.LEFT, padx=5)
+        tk.Button(frame_botoes, text="Atualizar Produto", command=self._acao_atualizar, bg=Cores_Padrao.COR_BOTAO_ATUALIZAR, width=15).pack(side=tk.LEFT, padx=5)
+        tk.Button(frame_botoes, text="Deletar Produto", command=self._acao_deletar, bg=Cores_Padrao.COR_BOTAO_DELETAR, width=15).pack(side=tk.LEFT, padx=5)
+        tk.Button(frame_botoes, text="Limpar", command=self._limpar_campos, bg=Cores_Padrao.COR_BOTAO_LIMPAR, width=15).pack(side=tk.LEFT, padx=5)
 
         frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None)
         frame_tabela.pack(expand=True, fill="both")

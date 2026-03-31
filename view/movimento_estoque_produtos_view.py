@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
-import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
 
 class MovimentoEstoqueProdutos_View:
@@ -41,7 +40,7 @@ class MovimentoEstoqueProdutos_View:
         tk.Label(frame_form, text="Quantidade:", bg=Cores_Padrao.COR_FUNDO).grid(row=1, column=0, sticky="w")
         tk.Entry(frame_form, textvariable=self.var_quantidade, width=20).grid(row=1, column=1, padx=5, pady=5, sticky="w")
 
-        ctk.CTkButton(frame_form, text="Incluir/Atualizar", command=self._incluir_produto, fg_color=Cores_Padrao.COR_BOTAO_SALVAR, text_color=Cores_Padrao.COR_TEXTO, width=150).grid(row=0, column=2, rowspan=2, padx=5)
+        tk.Button(frame_form, text="Incluir/Atualizar", command=self._incluir_produto).grid(row=0, column=2, rowspan=2, padx=5)
 
         cols = ("id", "nome", "qtd_disponivel", "qtd_selecionada")
         self.tree = ttk.Treeview(self.root, columns=cols, show="headings")
@@ -53,14 +52,14 @@ class MovimentoEstoqueProdutos_View:
 
         bot_frame = tk.Frame(self.root, bg=Cores_Padrao.COR_FUNDO)
         bot_frame.pack(pady=10)
-        ctk.CTkButton(bot_frame, text="Remover Selecionado", command=self._remover_produto, fg_color=Cores_Padrao.COR_BOTAO_DELETAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(bot_frame, text="Confirmar", command=self._confirmar, fg_color=Cores_Padrao.COR_BOTAO_SALVAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(bot_frame, text="Cancelar", command=self._cancelar, fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
+        tk.Button(bot_frame, text="Remover Selecionado", command=self._remover_produto).pack(side=tk.LEFT, padx=5)
+        tk.Button(bot_frame, text="Confirmar", command=self._confirmar).pack(side=tk.LEFT, padx=5)
+        tk.Button(bot_frame, text="Cancelar", command=self._cancelar).pack(side=tk.LEFT, padx=5)
 
         self._atualizar_combo_produtos()
         self._refresh_tree()
 
-        if isinstance(self.root, ctk.CTk):
+        if isinstance(self.root, tk.Toplevel):
             self.root.protocol("WM_DELETE_WINDOW", self._cancelar)
 
         self.result = None
@@ -132,15 +131,15 @@ class MovimentoEstoqueProdutos_View:
             messagebox.showerror("Erro", "Selecione ao menos um produto")
             return
         self.result = [{'produto': pid, 'quantidade': qty} for pid, qty in self.selected.items()]
-        if isinstance(self.root, ctk.CTk):
+        if isinstance(self.root, tk.Toplevel):
             self.root.destroy()
 
     def _cancelar(self):
         self.result = None
-        if isinstance(self.root, ctk.CTk):
+        if isinstance(self.root, tk.Toplevel):
             self.root.destroy()
 
     def show(self):
-        if isinstance(self.root, ctk.CTk):
+        if isinstance(self.root, tk.Toplevel):
             self.root.wait_window(self.root)
         return self.result

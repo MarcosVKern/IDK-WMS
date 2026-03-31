@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
-import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
 from datetime import date
 
@@ -66,7 +65,7 @@ class MovimentoEstoque_View():
         self.combo_status.grid(row=3, column=1, pady=5)
 
         # Botão Criar Movimento dentro do frame_form
-        self.btn_adicionar = ctk.CTkButton(frame_form, text="Criar Movimento", command=self._acao_adicionar, fg_color=Cores_Padrao.COR_BOTAO_SALVAR, text_color=Cores_Padrao.COR_TEXTO, width=150)
+        self.btn_adicionar = tk.Button(frame_form, text="Criar Movimento", command=self._acao_adicionar, bg=Cores_Padrao.COR_BOTAO_SALVAR, width=15)
         self.btn_adicionar.grid(row=8, column=0, columnspan=2, pady=20)
 
         frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO)
@@ -255,7 +254,7 @@ class MovimentoEstoque_View():
 
     def habilitar_criacao(self, habilitado):
         state = "normal" if habilitado else "disabled"
-        self.btn_adicionar.configure(state=state)
+        self.btn_adicionar.config(state=state)
         self.combo_tipo.config(state="readonly" if habilitado else "disabled")
 
     def show_message(self, msg): 

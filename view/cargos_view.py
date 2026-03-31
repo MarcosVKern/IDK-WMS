@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
-import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
 
 class Cargo_View():

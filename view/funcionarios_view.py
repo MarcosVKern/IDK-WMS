@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
-import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
 
 class Funcionario_View():
@@ -73,16 +72,16 @@ class Funcionario_View():
         tk.Label(frame_form, text="Situação:", bg=Cores_Padrao.COR_FUNDO).grid(row=10, column=1, sticky="w")
         tk.Entry(frame_form, textvariable=self.var_situacao, state="readonly", width=30).grid(row=11, column=1, pady=5)
 
-        ctk.CTkButton(frame_form, text="Ativar/Inativar", command=self._acao_ativar, fg_color=Cores_Padrao.COR_BOTAO_ATIVAR, text_color=Cores_Padrao.COR_TEXTO, width=150).grid(row=11, column=2, pady=5, sticky="w")
-        ctk.CTkButton(frame_form, text="Bloquear/Desbloquear", command=self._acao_bloquear, fg_color=Cores_Padrao.COR_BOTAO_BLOQUEAR, text_color=Cores_Padrao.COR_TEXTO, width=150).grid(row=11, column=4, pady=5, sticky="w")
+        tk.Button(frame_form, text="Ativar/Inativar", command=self._acao_ativar, bg=Cores_Padrao.COR_BOTAO_ATIVAR, width=25).grid(row=11, column=2, pady=5, sticky="w")
+        tk.Button(frame_form, text="Bloquear/Desbloquear", command=self._acao_bloquear, bg=Cores_Padrao.COR_BOTAO_BLOQUEAR, width=25).grid(row=11, column=4, pady=5, sticky="w")
 
         frame_botoes = tk.Frame(self.root, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_botoes.pack()
 
-        ctk.CTkButton(frame_botoes, text="Adicionar Funcionário", command=self._acao_adicionar, fg_color=Cores_Padrao.COR_BOTAO_SALVAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Atualizar Funcionário", command=self._acao_atualizar, fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Deletar Funcionário", command=self._acao_deletar, fg_color=Cores_Padrao.COR_BOTAO_DELETAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Limpar", command=self._limpar_campos, fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
+        tk.Button(frame_botoes, text="Adicionar Funcionário", command=self._acao_adicionar, bg=Cores_Padrao.COR_BOTAO_SALVAR, width=15).pack(side=tk.LEFT, padx=5)
+        tk.Button(frame_botoes, text="Atualizar Funcionário", command=self._acao_atualizar, bg=Cores_Padrao.COR_BOTAO_ATUALIZAR, width=15).pack(side=tk.LEFT, padx=5)
+        tk.Button(frame_botoes, text="Deletar Funcionário", command=self._acao_deletar, bg=Cores_Padrao.COR_BOTAO_DELETAR, width=15).pack(side=tk.LEFT, padx=5)
+        tk.Button(frame_botoes, text="Limpar", command=self._limpar_campos, bg=Cores_Padrao.COR_BOTAO_LIMPAR, width=15).pack(side=tk.LEFT, padx=5)
 
         frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_tabela.pack(expand=True, fill="both")
