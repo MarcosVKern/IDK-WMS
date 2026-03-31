@@ -1,4 +1,5 @@
 from model.funcionario import Funcionario
+import mysql.connector
 
 class Funcionario_Controller:
     def __init__(self, dao, view):
@@ -61,6 +62,8 @@ class Funcionario_Controller:
                 self.view.show_message(f"Funcionário com id {id_funcionario} deletado com sucesso!")
             else:
                 self.view.show_message(f"Funcionário com id {id_funcionario} não encontrado!")
+        except mysql.connector.IntegrityError:
+            self.view.show_error("Não é possível excluir este funcionário pois ele possui vínculos com outros dados!")
         except Exception as e:
             self.view.show_error(f"Erro ao deletar funcionário: {str(e)}")
 

@@ -305,6 +305,15 @@ class MovimentoEstoque_Controller:
                     quantidade_atual = estoque._quantidade if estoque else 0
                     novo_valor = quantidade_atual + quantidade
                     self.estoque_dao.upsert(id_produto, movimento._origem, novo_valor)
+                
+                # Interno - Efetivado: Remove itens do destino
+                elif tipo_id == 3 and status == "Efetivado":
+                    estoque = self.estoque_dao.get_by_id(id_produto, movimento._destino)
+                    if estoque:
+                        novo_valor = estoque._quantidade - quantidade
+                        if novo_valor < 0:
+                            novo_valor = 0
+                        self.estoque_dao.upsert(id_produto, movimento._destino, novo_valor)
         
         except Exception as e:
             raise Exception(f"Erro ao reverter estoque: {str(e)}")

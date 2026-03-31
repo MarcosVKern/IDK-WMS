@@ -39,23 +39,29 @@ class Armazem_View():
         tk.Label(frame_form, text="ID:", bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=0, sticky="w")
         tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10, bg=Cores_Padrao.COR_FUNDO).grid(row=1, column=0, padx=5, pady=5,sticky="w")
 
-        tk.Label(frame_form, text="CEP:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_cep, width=30).grid(row=3, column=0, pady=5)
+        tk.Label(frame_form, text="Nome:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=0, sticky="w")
+        tk.Entry(frame_form, textvariable=self.var_nome, width=30).grid(row=3, column=0, pady=5)
 
-        tk.Label(frame_form, text="Bairro:", bg=Cores_Padrao.COR_FUNDO).grid(row=4, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_bairro, width=30).grid(row=5, column=0, pady=5)
+        # Endereço fieldset
+        frame_endereco = tk.LabelFrame(self.root, text="Endereço", padx=10, pady=10, bg=Cores_Padrao.COR_FUNDO)
+        frame_endereco.pack(padx=20, pady=5, fill='x')
+        frame_endereco.pack_propagate(False)
+        frame_endereco.configure(width=900)
 
-        tk.Label(frame_form, text="Cidade:", bg=Cores_Padrao.COR_FUNDO).grid(row=6, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_cidade, width=30).grid(row=7, column=0, pady=5)
+        tk.Label(frame_endereco, text="CEP:", bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=0, sticky="w")
+        tk.Entry(frame_endereco, textvariable=self.var_cep, width=30).grid(row=1, column=0, pady=5)
 
-        tk.Label(frame_form, text="UF:", bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=1, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_uf, width=30).grid(row=1, column=1, pady=5)
+        tk.Label(frame_endereco, text="Bairro:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=0, sticky="w")
+        tk.Entry(frame_endereco, textvariable=self.var_bairro, width=30).grid(row=3, column=0, pady=5)
 
-        tk.Label(frame_form, text="País:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=1, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_pais, width=30).grid(row=3, column=1, pady=5)
+        tk.Label(frame_endereco, text="Cidade:", bg=Cores_Padrao.COR_FUNDO).grid(row=4, column=0, sticky="w")
+        tk.Entry(frame_endereco, textvariable=self.var_cidade, width=30).grid(row=5, column=0, pady=5)
 
-        tk.Label(frame_form, text="Nome:", bg=Cores_Padrao.COR_FUNDO).grid(row=4, column=1, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_nome, width=30).grid(row=5, column=1, pady=5)
+        tk.Label(frame_endereco, text="UF:", bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=1, sticky="w")
+        tk.Entry(frame_endereco, textvariable=self.var_uf, width=30).grid(row=1, column=1, pady=5)
+
+        tk.Label(frame_endereco, text="País:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=1, sticky="w")
+        tk.Entry(frame_endereco, textvariable=self.var_pais, width=30).grid(row=3, column=1, pady=5)
 
         frame_botoes = tk.Frame(self.root, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_botoes.pack()

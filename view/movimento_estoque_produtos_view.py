@@ -60,8 +60,7 @@ class MovimentoEstoqueProdutos_View:
         self._atualizar_combo_produtos()
         self._refresh_tree()
 
-        if isinstance(self.root, ctk.CTk):
-            self.root.protocol("WM_DELETE_WINDOW", self._cancelar)
+        self.root.protocol("WM_DELETE_WINDOW", self._cancelar)
 
         self.result = None
 
@@ -132,15 +131,12 @@ class MovimentoEstoqueProdutos_View:
             messagebox.showerror("Erro", "Selecione ao menos um produto")
             return
         self.result = [{'produto': pid, 'quantidade': qty} for pid, qty in self.selected.items()]
-        if isinstance(self.root, ctk.CTk):
-            self.root.destroy()
+        self.root.destroy()
 
     def _cancelar(self):
         self.result = None
-        if isinstance(self.root, ctk.CTk):
-            self.root.destroy()
+        self.root.destroy()
 
     def show(self):
-        if isinstance(self.root, ctk.CTk):
-            self.root.wait_window(self.root)
+        self.root.wait_window(self.root)
         return self.result

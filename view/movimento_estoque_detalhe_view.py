@@ -150,7 +150,7 @@ class MovimentoEstoque_Detalhe_View:
 
         self.btn_atualizar = ctk.CTkButton(
             frame_botoes,
-            text="Atualizar",
+            text="Confirmar",
             command=self._atualizar_movimento,
             fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR,
             text_color=Cores_Padrao.COR_TEXTO,
@@ -168,7 +168,7 @@ class MovimentoEstoque_Detalhe_View:
         )
         self.btn_cancelar.pack(side=tk.RIGHT, padx=5)
         
-        if isinstance(self.root, ctk.CTk):
+        if isinstance(self.root, tk.Toplevel):
             self.root.protocol("WM_DELETE_WINDOW", self._fechar)
     
     def _popular_produtos(self):
@@ -249,12 +249,12 @@ class MovimentoEstoque_Detalhe_View:
     
     def _fechar(self):
         """Fecha a janela de detalhes"""
-        if isinstance(self.root, ctk.CTk):
+        if isinstance(self.root, tk.Toplevel):
             self.root.destroy()
     
     def show(self):
         """Exibe a janela de forma modal (bloqueante)"""
-        if isinstance(self.root, ctk.CTk):
+        if isinstance(self.root, tk.Toplevel):
             self.root.wait_window(self.root)
     
     def display(self):

@@ -27,7 +27,6 @@ class Funcionario_View():
         self.var_nome = tk.StringVar()
         self.var_cargo = tk.StringVar()
         self.var_email = tk.StringVar()
-        self.var_senha = tk.StringVar()
         self.var_situacao = tk.StringVar()
 
         self._setup_ui()
@@ -43,38 +42,41 @@ class Funcionario_View():
         tk.Label(frame_form, text="ID:", bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=0, sticky="w")
         tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10).grid(row=1, column=0, padx=5, pady=5,sticky="w")
 
-        tk.Label(frame_form, text="CEP:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_cep, width=30).grid(row=3, column=0, pady=5)
+        tk.Label(frame_form, text="Nome:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=0, sticky="w")
+        tk.Entry(frame_form, textvariable=self.var_nome, width=30).grid(row=3, column=0, pady=5)
 
-        tk.Label(frame_form, text="Bairro:", bg=Cores_Padrao.COR_FUNDO).grid(row=4, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_bairro, width=30).grid(row=5, column=0, pady=5)
+        tk.Label(frame_form, text="Cargo:", bg=Cores_Padrao.COR_FUNDO).grid(row=4, column=0, sticky="w")
+        tk.Entry(frame_form, textvariable=self.var_cargo, width=30).grid(row=5, column=0, pady=5)
 
-        tk.Label(frame_form, text="Cidade:", bg=Cores_Padrao.COR_FUNDO).grid(row=6, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_cidade, width=30).grid(row=7, column=0, pady=5)
+        tk.Label(frame_form, text="Email:", bg=Cores_Padrao.COR_FUNDO).grid(row=6, column=0, sticky="w")
+        tk.Entry(frame_form, textvariable=self.var_email, width=30).grid(row=7, column=0, pady=5)
 
-        tk.Label(frame_form, text="UF:", bg=Cores_Padrao.COR_FUNDO).grid(row=8, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_uf, width=30).grid(row=9, column=0, pady=5)
+        tk.Label(frame_form, text="Situação:", bg=Cores_Padrao.COR_FUNDO).grid(row=8, column=0, sticky="w")
+        tk.Entry(frame_form, textvariable=self.var_situacao, state="readonly", width=30).grid(row=9, column=0, pady=5)
 
-        tk.Label(frame_form, text="País:", bg=Cores_Padrao.COR_FUNDO).grid(row=10, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_pais, width=30).grid(row=11, column=0, pady=5)
+        ctk.CTkButton(frame_form, text="Ativar/Inativar", command=self._acao_ativar, fg_color=Cores_Padrao.COR_BOTAO_ATIVAR, text_color=Cores_Padrao.COR_TEXTO, width=150).grid(row=9, column=1, pady=5, sticky="w")
+        ctk.CTkButton(frame_form, text="Bloquear/Desbloquear", command=self._acao_bloquear, fg_color=Cores_Padrao.COR_BOTAO_BLOQUEAR, text_color=Cores_Padrao.COR_TEXTO, width=150).grid(row=9, column=2, pady=5, sticky="w")
 
-        tk.Label(frame_form, text="Nome:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=1, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_nome, width=30).grid(row=3, column=1, pady=5)
+        # Endereço fieldset
+        frame_endereco = tk.LabelFrame(self.root, text="Endereço", padx=10, pady=10, bg=Cores_Padrao.COR_FUNDO)
+        frame_endereco.pack(padx=20, pady=5, fill='x')
+        frame_endereco.pack_propagate(False)
+        frame_endereco.configure(width=900)
 
-        tk.Label(frame_form, text="Cargo:", bg=Cores_Padrao.COR_FUNDO).grid(row=4, column=1, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_cargo, width=30).grid(row=5, column=1, pady=5)
+        tk.Label(frame_endereco, text="CEP:", bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=0, sticky="w")
+        tk.Entry(frame_endereco, textvariable=self.var_cep, width=30).grid(row=1, column=0, pady=5)
 
-        tk.Label(frame_form, text="Email:", bg=Cores_Padrao.COR_FUNDO).grid(row=6, column=1, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_email, width=30).grid(row=7, column=1, pady=5)
+        tk.Label(frame_endereco, text="Bairro:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=0, sticky="w")
+        tk.Entry(frame_endereco, textvariable=self.var_bairro, width=30).grid(row=3, column=0, pady=5)
 
-        tk.Label(frame_form, text="Senha:", bg=Cores_Padrao.COR_FUNDO).grid(row=8, column=1, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_senha, state="readonly", width=30, show="*").grid(row=9, column=1, pady=5)
+        tk.Label(frame_endereco, text="Cidade:", bg=Cores_Padrao.COR_FUNDO).grid(row=4, column=0, sticky="w")
+        tk.Entry(frame_endereco, textvariable=self.var_cidade, width=30).grid(row=5, column=0, pady=5)
 
-        tk.Label(frame_form, text="Situação:", bg=Cores_Padrao.COR_FUNDO).grid(row=10, column=1, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_situacao, state="readonly", width=30).grid(row=11, column=1, pady=5)
+        tk.Label(frame_endereco, text="UF:", bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=1, sticky="w")
+        tk.Entry(frame_endereco, textvariable=self.var_uf, width=30).grid(row=1, column=1, pady=5)
 
-        ctk.CTkButton(frame_form, text="Ativar/Inativar", command=self._acao_ativar, fg_color=Cores_Padrao.COR_BOTAO_ATIVAR, text_color=Cores_Padrao.COR_TEXTO, width=150).grid(row=11, column=2, pady=5, sticky="w")
-        ctk.CTkButton(frame_form, text="Bloquear/Desbloquear", command=self._acao_bloquear, fg_color=Cores_Padrao.COR_BOTAO_BLOQUEAR, text_color=Cores_Padrao.COR_TEXTO, width=150).grid(row=11, column=4, pady=5, sticky="w")
+        tk.Label(frame_endereco, text="País:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=1, sticky="w")
+        tk.Entry(frame_endereco, textvariable=self.var_pais, width=30).grid(row=3, column=1, pady=5)
 
         frame_botoes = tk.Frame(self.root, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_botoes.pack()
@@ -87,7 +89,7 @@ class Funcionario_View():
         frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_tabela.pack(expand=True, fill="both")
 
-        self.colunas = ("id", "cep", "bairro", "cidade", "uf", "pais", "nome", "cargo", "email", "senha", "situacao")
+        self.colunas = ("id", "cep", "bairro", "cidade", "uf", "pais", "nome", "cargo", "email", "situacao")
         self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings")
 
         vsb = ttk.Scrollbar(frame_tabela, orient="vertical", command=self.tree.yview)
@@ -103,7 +105,6 @@ class Funcionario_View():
         self.tree.heading("nome", text="Nome")
         self.tree.heading("cargo", text="Cargo")
         self.tree.heading("email", text="Email")
-        self.tree.heading("senha", text="Senha")
         self.tree.heading("situacao", text="Situação")
 
         for col in self.colunas: self.tree.column(col, anchor="center")
@@ -139,7 +140,6 @@ class Funcionario_View():
                 "nome": self.var_nome.get(),
                 "cargo": self.var_cargo.get(),
                 "email": self.var_email.get(),
-                "senha": self.var_senha.get(),
                 "situacao": self.var_situacao.get()
             }
         except Exception as e:
@@ -157,8 +157,7 @@ class Funcionario_View():
         for i in self.tree.get_children(): self.tree.delete(i)
         for idx, f in enumerate(lista):
             tag = 'evenrow' if idx % 2 == 0 else 'oddrow'
-            senha_oculta = "*" * len(f._senha)
-            self.tree.insert("", "end", values=(f._id, f._cep, f._bairro, f._cidade, f._uf, f._pais, f._nome, f._cargo, f._email, senha_oculta, f._situacao), tags=(tag,))
+            self.tree.insert("", "end", values=(f._id, f._cep, f._bairro, f._cidade, f._uf, f._pais, f._nome, f._cargo, f._email, f._situacao), tags=(tag,))
 
     def _acao_atualizar(self):
         self.controller.update_funcionario()
@@ -177,7 +176,7 @@ class Funcionario_View():
     def _limpar_campos(self):
         for val in [self.var_id, self.var_cep, self.var_bairro, self.var_cidade, 
                     self.var_uf, self.var_pais, self.var_nome, self.var_cargo, 
-                    self.var_email, self.var_senha, self.var_situacao]: val.set("")
+                    self.var_email, self.var_situacao]: val.set("")
 
     def _ao_selecionar_tabela(self, event):
         item_sel = self.tree.selection()
@@ -192,8 +191,7 @@ class Funcionario_View():
             self.var_nome.set(v[6])
             self.var_cargo.set(v[7])
             self.var_email.set(v[8])
-            self.var_senha.set(v[9])
-            self.var_situacao.set(v[10])
+            self.var_situacao.set(v[9])
 
     def show_message(self, msg): messagebox.showinfo("Sucesso", msg)
 
