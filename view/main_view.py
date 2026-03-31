@@ -273,7 +273,7 @@ class Main_View:
 
     def _show_funcionario(self):
         if self.controller:
-            self.controller.exibir_funcionario(self.right_panel_content)
+            self.controller.exibir_funcionario(self.right_panel_content, self.usuario)
 
     def _show_movimento_estoque(self):
         if self.controller:
