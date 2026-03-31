@@ -2,16 +2,23 @@
 
 class Cores_Padrao:
     #Você pode adicionar mais cores ou categorias conforme necessário
-    COR_FUNDO = "#CBE7FF"
-    COR_TEXTO = "#000000"
-    COR_BOTAO_SALVAR = "#A4E4A7" #"#4CAF50"
-    COR_BOTAO_ATUALIZAR = "#6BB9FA" #"#2196F3"
-    COR_BOTAO_DELETAR = "#f8877f" #"#f44336"
-    COR_BOTAO_LIMPAR = "#CB71DB" #"#9C27B0"
-    COR_BOTAO_ATIVAR = "#A4E4A7" #"#4CAF50"
-    COR_BOTAO_BLOQUEAR = "#f88a83" #"#f44336"
-    COR_ZEBRADO_PAR = "#E0F7FA"
-    COR_ZEBRADO_IMPAR = "#B2EBF2"
+    COR_FUNDO = "#fce3e9"  # cor base rosa clara
+    COR_TEXTO = "#4a223f"  # texto legível em contraste
+    COR_BOTAO_SALVAR = "#f8b0d1"  # rosa médio
+    COR_BOTAO_ATUALIZAR = "#f4a8c9"  # rosa suave
+    COR_BOTAO_DELETAR = "#e26a99"  # rosa forte
+    COR_BOTAO_LIMPAR = "#f9cee8"  # rosa bem claro
+    COR_BOTAO_ATIVAR = "#f6a3ca"  # rosa vibrante
+    COR_BOTAO_BLOQUEAR = "#e45c96"  # rosa pronunciado
+    COR_ZEBRADO_PAR = "#ffe6f1"  # linha par leve
+    COR_ZEBRADO_IMPAR = "#ffd4ea"  # linha ímpar leve
+    COR_BOTAO_HOVER = "#f4a8c9" # rosa suave para hover
 
     #Cores para o menu
-    COR_BOTAO_MENU = "#ddbef1"
+    COR_BOTAO_MENU = "#f7b9de"  # rosa pastel
+    COR_FUNDO_MENU = "#3F1A44"
+    COR_BOTAO_MENU_ATIVO = "#f8b0d1"  # rosa médio para ativo
+    COR_BOTAO_MENU_HOVER = "#f4a8c9"  # rosa suave para hover
+    COR_TEXTO_MENU = "#ffffff"  # branco para texto do menu
+    COR_TEXTO_MENU_ESCURO = "#000000"  # preto para texto do menu escuro
+    COR_TEXTO_ERROR = "#e45c96"  # rosa pronunciado para mensagens de erro
