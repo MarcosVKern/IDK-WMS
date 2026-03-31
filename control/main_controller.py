@@ -13,6 +13,7 @@ from view.armazem_view import Armazem_View
 from view.funcionarios_view import Funcionario_View
 from view.unidade_armazenamento_view import UnidadeArmazenamento_View
 from view.movimento_estoque_view import MovimentoEstoque_View
+from view.estoque_view import Estoque_View
 from view.cargos_view import Cargo_View
 from control.produto_controller import Produto_Controller
 from control.armazem_controller import Armazem_Controller
@@ -20,6 +21,7 @@ from control.funcionarios_controller import Funcionario_Controller
 from control.unidade_armazenamento_controller import UnidadeArmazenamento_Controller
 from control.movimento_estoque_controller import MovimentoEstoque_Controller
 from control.cargos_controller import Cargo_Controller
+from control.estoque_controller import Estoque_Controller
 
 class Main_Controller:
     def __init__(self, main_view, db_config):
@@ -93,6 +95,15 @@ class Main_Controller:
             produto_movimento_dao=produto_movimento_dao,
             funcionario_logado=funcionario_logado
         )
+        if parent_frame:
+            view.display()
+        else:
+            view.run()
+
+    def exibir_estoque(self, parent_frame=None):
+        dao = Estoque_DAO(self.db_config)
+        view = Estoque_View(parent=parent_frame)
+        control = Estoque_Controller(dao, view)
         if parent_frame:
             view.display()
         else:

@@ -105,25 +105,127 @@ class Estoque_DAO(Base_DAO):
         sql = """select
             e.quantidade,
             p.nome,
-            e.UNarmazenamento,
-            a.nome
+            p.ID_produto,
+            ua.unidade,
+            ua.ID_unidade,
+            a.nome as nome_armazem,
+            a.ID_armazem
         from 
             estoque e
                 inner join produto p on e.produto = p.ID_produto
-                inner join unidade_armazenamento ua on e.UNarmazenamento = ID_unidade
+                inner join unidade_armazenamento ua on e.UNarmazenamento = ua.ID_unidade
                 inner join armazem a on ua.armazem = a.ID_armazem
-        where e.quantidade > 0;"""
+        where e.quantidade > 0
+        order by p.nome"""
 
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql)
         estoque = []
-        for (quantidade, nome, UNarmazenamento, armazem) in cursor:
+        for row in cursor:
+            quantidade, nome_produto, id_produto, unidade, id_unidade, nome_armazem, id_armazem = row
             estoque.append({
                 'quantidade': quantidade,
-                'nome': nome,
-                'UNarmazenamento': UNarmazenamento,
-                'armazem': armazem
+                'nome_produto': nome_produto,
+                'id_produto': id_produto,
+                'unidade': unidade,
+                'id_unidade': id_unidade,
+                'nome_armazem': nome_armazem,
+                'id_armazem': id_armazem
+            })
+        cursor.close()
+        conn.close()
+        return estoque
+
+    def get_produtos(self):
+        """Retorna lista de produtos para dropdown"""
+        sql = """select ID_produto, nome from produto order by nome"""
+
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        produtos = []
+        for (id_produto, nome) in cursor:
+            produtos.append({'id': id_produto, 'nome': nome})
+        cursor.close()
+        conn.close()
+        return produtos
+
+    def get_armazens(self):
+        """Retorna lista de armazéns para dropdown"""
+        sql = """select ID_armazem, nome from armazem order by nome"""
+
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        armazens = []
+        for (id_armazem, nome) in cursor:
+            armazens.append({'id': id_armazem, 'nome': nome})
+        cursor.close()
+        conn.close()
+        return armazens
+
+    def get_unidades_by_armazem(self, id_armazem):
+        """Retorna unidades de um armazém específico"""
+        sql = """select ID_unidade, unidade from unidade_armazenamento where armazem = %s order by unidade"""
+
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(sql, (id_armazem,))
+        unidades = []
+        for (id_unidade, unidade) in cursor:
+            unidades.append({'id': id_unidade, 'unidade': unidade})
+        cursor.close()
+        conn.close()
+        return unidades
+
+    def get_estoque_filtrado(self, id_produto=None, id_armazem=None, id_unidade=None):
+        """Retorna estoque com filtros opcionais"""
+        sql = """select
+            e.quantidade,
+            p.nome as nome_produto,
+            p.ID_produto,
+            ua.unidade,
+            ua.ID_unidade,
+            a.nome as nome_armazem,
+            a.ID_armazem
+        from 
+            estoque e
+                inner join produto p on e.produto = p.ID_produto
+                inner join unidade_armazenamento ua on e.UNarmazenamento = ua.ID_unidade
+                inner join armazem a on ua.armazem = a.ID_armazem
+        where e.quantidade > 0"""
+
+        params = []
+        
+        if id_produto:
+            sql += " and p.ID_produto = %s"
+            params.append(id_produto)
+        
+        if id_armazem:
+            sql += " and a.ID_armazem = %s"
+            params.append(id_armazem)
+        
+        if id_unidade:
+            sql += " and ua.ID_unidade = %s"
+            params.append(id_unidade)
+        
+        sql += " order by p.nome"
+
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(sql, params if params else None)
+        estoque = []
+        for row in cursor:
+            quantidade, nome_produto, id_produto, unidade, id_unidade, nome_armazem, id_armazem = row
+            estoque.append({
+                'quantidade': quantidade,
+                'nome_produto': nome_produto,
+                'id_produto': id_produto,
+                'unidade': unidade,
+                'id_unidade': id_unidade,
+                'nome_armazem': nome_armazem,
+                'id_armazem': id_armazem
             })
         cursor.close()
         conn.close()
