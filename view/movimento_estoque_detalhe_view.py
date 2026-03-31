@@ -26,6 +26,7 @@ class MovimentoEstoque_Detalhe_View:
             self.root = tk.Toplevel()
             self.root.title(f"Detalhes do Movimento #{movimento._id_movimento}")
             self.root.geometry("700x800")
+            self.root.configure(bg=Cores_Padrao.COR_FUNDO)
             self.root.grab_set()
         else:
             self.root = tk.Frame(parent, bg=Cores_Padrao.COR_FUNDO)
