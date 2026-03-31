@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
+import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
 
 
@@ -83,20 +84,22 @@ class Estoque_View:
         frame_botoes = tk.Frame(self.root, pady=10, bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None)
         frame_botoes.pack()
 
-        tk.Button(
+        ctk.CTkButton(
             frame_botoes,
             text="Aplicar Filtros",
             command=self._acao_aplicar_filtros,
-            bg=Cores_Padrao.COR_BOTAO_SALVAR,
-            width=15
+            fg_color=Cores_Padrao.COR_BOTAO_SALVAR,
+            text_color=Cores_Padrao.COR_TEXTO,
+            width=150
         ).pack(side=tk.LEFT, padx=5)
 
-        tk.Button(
+        ctk.CTkButton(
             frame_botoes,
             text="Limpar Filtros",
             command=self._acao_limpar_filtros,
-            bg=Cores_Padrao.COR_BOTAO_LIMPAR,
-            width=15
+            fg_color=Cores_Padrao.COR_BOTAO_LIMPAR,
+            text_color=Cores_Padrao.COR_TEXTO,
+            width=150
         ).pack(side=tk.LEFT, padx=5)
 
         # Frame da tabela
