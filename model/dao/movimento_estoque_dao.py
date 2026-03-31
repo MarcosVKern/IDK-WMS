@@ -1,30 +1,39 @@
+from datetime import date
+
 from model.movimento_estoque import MovimentoEstoque
 from model.dao.base_dao import Base_DAO
 
 class MovimentoEstoque_DAO(Base_DAO):
     def save(self, movimento: MovimentoEstoque):
-        sql = """insert into movimento_estoque (origem, destino, dataSaida, dataEntrada, dataAlteracao, status, tipoMovimento, responsavel) 
-                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
+        sql = """call sp_criar_movimento(%s, %s, %s, %s)"""
 
-        values = (movimento._origem, movimento._destino, movimento._dataSaida, movimento._dataEntrada,
-                  movimento._dataAlteracao, movimento._status, movimento._tipoMovimento, movimento._responsavel)
-
+        values = (movimento._origem, movimento._destino, movimento._tipoMovimento, movimento._responsavel)
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql, values)
-        movimento._id_movimento = cursor.lastrowid
+
+        cursor.execute("SELECT LAST_INSERT_ID()")
+        row = cursor.fetchone()
+        if row:
+            movimento._id_movimento = row[0]
+        else:
+            cursor.execute("SELECT MAX(ID_movimento) FROM movimento_estoque")
+            row2 = cursor.fetchone()
+            if row2:
+                movimento._id_movimento = row2[0]
+
         conn.commit()
         cursor.close()
         conn.close()
         return movimento
     
     def get_all(self):
-        sql = """select me.ID_movimento, me.origem, me.destino, me.dataSaida, me.dataEntrada, me.dataAlteracao, me.status, me.tipoMovimento, me.responsavel 
+        sql = """select me.ID_movimento, me.origem, me.destino, me.dataSaida, me.dataEntrada, me.dataAlteracao, me.status, tm.tipoMovimento as tipoMovimento, f.nome as responsavel 
                 from movimento_estoque me
-                inner join unidade_armazenamento ua on me.origem = ua.ID_unidade
-                inner join unidade_armazenamento ua2 on me.destino = ua2.ID_unidade
-                inner join tipo_movimento tm on me.tipoMovimento = tm.ID_tipo
-                inner join funcionario f on me.responsavel = f.ID_funcionario"""
+                left join unidade_armazenamento ua on me.origem = ua.ID_unidade
+                left join unidade_armazenamento ua2 on me.destino = ua2.ID_unidade
+                left join tipo_movimento tm on me.tipoMovimento = tm.ID_tipo
+                left join funcionario f on me.responsavel = f.ID_funcionario"""
 
         conn = self._get_connection()
         cursor = conn.cursor()
@@ -54,28 +63,82 @@ class MovimentoEstoque_DAO(Base_DAO):
         conn.close()
         return movimento
     
-    def delete(self, id):
-        sql = """delete from movimento_estoque where ID_movimento = %s"""
-
-        conn = self._get_connection()
-        cursor = conn.cursor()
-        cursor.execute(sql, (id,))
-        conn.commit()
-        affected_rows = cursor.rowcount
-        cursor.close()
-        conn.close()
-        return affected_rows > 0
+    def delete(self):
+        pass
     
     def update(self, movimento: MovimentoEstoque):
         sql = """update movimento_estoque set origem = %s, destino = %s, dataSaida = %s, dataEntrada = %s, 
                  dataAlteracao = %s, status = %s, tipoMovimento = %s, responsavel = %s where ID_movimento = %s"""
         
+        status = movimento._status
+        movimento._dataAlteracao = date.today()
+        
+        if movimento._tipoMovimento == 1:  # Entrada
+            status = "Efetivado"
+            # Data de entrada quando status for Efetivado
+            movimento._dataEntrada = date.today()
+        elif movimento._tipoMovimento == 2: # Saída
+            if status == "Pendente":
+                status = "Em separação"
+            elif status == "Em separação":
+                status = "Despachado"
+                # Data de saída quando status for Despachado
+                movimento._dataSaida = date.today()
+        elif movimento._tipoMovimento == 3: # Interno
+            if status == "Pendente":
+                status = "Em separação"
+            elif status == "Em separação":
+                status = "Despachado"
+                # Data de saída quando status for Despachado
+                movimento._dataSaida = date.today()
+            elif status == "Despachado":
+                status = "Efetivado"
+                # Data de entrada quando status for Efetivado
+                movimento._dataEntrada = date.today()
+
         values = (movimento._origem, movimento._destino, movimento._dataSaida, movimento._dataEntrada,
-                  movimento._dataAlteracao, movimento._status, movimento._tipoMovimento, movimento._responsavel, movimento._id_movimento)
+                  movimento._dataAlteracao, status, movimento._tipoMovimento, movimento._responsavel, movimento._id_movimento)
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql, values)
         conn.commit()
         cursor.close()
         conn.close()
+        movimento._status = status
         return movimento
+    
+    def cancela_movimento(self, id):
+        sql = """update movimento_estoque set status = 'Cancelado', dataAlteracao = %s where ID_movimento = %s"""
+
+        values = (date.today(), id)
+
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(sql, values)
+        affected_rows = cursor.rowcount
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return affected_rows > 0
+    
+    def pode_cancelar(self, id):
+        """Verifica se um movimento pode ser cancelado baseado em suas regras de negócio"""
+        sql = """select tipoMovimento, status from movimento_estoque where ID_movimento = %s"""
+        
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(sql, (id,))
+        row = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        
+        if not row:
+            return False
+        
+        tipo_movimento, status = row
+        
+        # Interno - Efetivado: NÃO PODE cancelar
+        if tipo_movimento == 3 and status == "Efetivado":
+            return False
+        
+        return True

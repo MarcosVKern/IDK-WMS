@@ -30,7 +30,7 @@ class TipoMovimento_DAO(Base_DAO):
         return tipos_movimento
     
     def get_by_id(self, id):
-        sql = "select tipoMovimento from tipo_movimento where ID_tipo = %s"
+        sql = "select ID_tipo, tipoMovimento from tipo_movimento where ID_tipo = %s"
 
         conn = self._get_connection()
         cursor = conn.cursor()
@@ -38,8 +38,8 @@ class TipoMovimento_DAO(Base_DAO):
         row = cursor.fetchone()
         tipo_movimento = None
         if row:
-            id, tipo = row
-            tipo_movimento = TipoMovimento(id, tipo)
+            tipo_id, tipo = row
+            tipo_movimento = TipoMovimento(tipo_id, tipo)
         cursor.close()
         conn.close()
         return tipo_movimento
