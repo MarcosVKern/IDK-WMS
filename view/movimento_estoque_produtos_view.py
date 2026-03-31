@@ -14,9 +14,10 @@ class MovimentoEstoqueProdutos_View:
             self.root = tk.Toplevel()
             self.root.title("Seleção de Produtos para Movimento")
             self.root.geometry("800x600")
+            self.root.configure(bg=Cores_Padrao.COR_FUNDO)
             self.root.grab_set()
         else:
-            self.root = tk.Frame(parent)
+            self.root = tk.Frame(parent, bg=Cores_Padrao.COR_FUNDO)
 
         self.var_produto = tk.StringVar()
         self.var_quantidade = tk.StringVar()
