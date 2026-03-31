@@ -100,3 +100,31 @@ class Estoque_DAO(Base_DAO):
         else:
             novo = Estoque(id_produto, id_unidade, quantidade)
             return self.save(novo)
+
+    def get_estoque(self):
+        sql = """select
+            e.quantidade,
+            p.nome,
+            e.UNarmazenamento,
+            a.nome
+        from 
+            estoque e
+                inner join produto p on e.produto = p.ID_produto
+                inner join unidade_armazenamento ua on e.UNarmazenamento = ID_unidade
+                inner join armazem a on ua.armazem = a.ID_armazem
+        where e.quantidade > 0;"""
+
+        conn = self._get_connection()
+        cursor = conn.cursor()
+        cursor.execute(sql)
+        estoque = []
+        for (quantidade, nome, UNarmazenamento, armazem) in cursor:
+            estoque.append({
+                'quantidade': quantidade,
+                'nome': nome,
+                'UNarmazenamento': UNarmazenamento,
+                'armazem': armazem
+            })
+        cursor.close()
+        conn.close()
+        return estoque
