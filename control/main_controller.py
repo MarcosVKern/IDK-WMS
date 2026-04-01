@@ -48,8 +48,9 @@ class Main_Controller:
 
     def exibir_funcionario(self, parent_frame=None):
         dao = Funcionario_DAO(self.db_config)
+        cargo_dao = Cargo_DAO(self.db_config)
         view = Funcionario_View(parent=parent_frame)
-        control = Funcionario_Controller(dao, view)
+        control = Funcionario_Controller(dao, view, cargo_dao=cargo_dao)
         if parent_frame:
             view.display()
         else:

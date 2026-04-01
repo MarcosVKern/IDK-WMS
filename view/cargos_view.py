@@ -1,7 +1,8 @@
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import ttk
 import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
+from view.notificacao import Notificacao
 
 class Cargo_View():
     def __init__(self, parent=None):
@@ -80,7 +81,7 @@ class Cargo_View():
                 "cargo": self.var_cargo.get()
             }
         except Exception as e:
-            messagebox.show_error(f"Erro ao obter dados do cargo: {e}")
+            Notificacao.erro("Erro", f"Erro ao obter dados do cargo: {e}", parent=self.root)
             return None
         
     def _acao_adicionar(self):
@@ -108,7 +109,7 @@ class Cargo_View():
         return int(val) if val else None
     
     def _acao_deletar(self):
-        if messagebox.askyesno("Confirmação", "Tem certeza que deseja deletar este cargo?"):
+        if Notificacao.confirmacao("Confirmação", "Tem certeza que deseja deletar este cargo?", parent=self.root):
             self.controller.delete_cargo()
             self._acao_listar()
             self._limpar_campos()
@@ -123,6 +124,8 @@ class Cargo_View():
             self.var_id.set(v[0])
             self.var_cargo.set(v[1])
 
-    def show_message(self, msg): messagebox.showinfo("Sucesso", msg)
+    def show_message(self, msg):
+        Notificacao.sucesso("Sucesso", msg, parent=self.root)
 
-    def show_error(self, err): messagebox.showerror("Erro", err)
+    def show_error(self, err):
+        Notificacao.erro("Erro", err, parent=self.root)

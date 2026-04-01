@@ -10,6 +10,20 @@ class UnidadeArmazenamento_Controller:
     def add_unidade_armazenamento(self):
         try:
             dados = self.view.get_unidade_armazenamento_data()
+            
+            # Validações de campos obrigatórios
+            if not dados:
+                self.view.show_error("Erro ao obter dados do formulário!")
+                return
+            
+            if not dados.get('unidade') or not str(dados['unidade']).strip():
+                self.view.show_error("Nome da unidade é obrigatório!")
+                return
+            
+            if not dados.get('armazem') or not str(dados['armazem']).strip():
+                self.view.show_error("Armazém é obrigatório!")
+                return
+            
             unidade_nova = UnidadeArmazenamento(
                 id=f"{dados['armazem'].zfill(3)}-{dados['unidade']}",
                 unidade=dados['unidade'],

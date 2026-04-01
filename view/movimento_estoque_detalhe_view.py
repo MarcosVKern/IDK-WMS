@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
+from view.notificacao import Notificacao
 from datetime import date
 
 
@@ -150,7 +151,7 @@ class MovimentoEstoque_Detalhe_View:
 
         self.btn_atualizar = ctk.CTkButton(
             frame_botoes,
-            text="Atualizar",
+            text="Confirmar",
             command=self._atualizar_movimento,
             fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR,
             text_color=Cores_Padrao.COR_TEXTO,
@@ -168,7 +169,7 @@ class MovimentoEstoque_Detalhe_View:
         )
         self.btn_cancelar.pack(side=tk.RIGHT, padx=5)
         
-        if isinstance(self.root, ctk.CTk):
+        if isinstance(self.root, tk.Toplevel):
             self.root.protocol("WM_DELETE_WINDOW", self._fechar)
     
     def _popular_produtos(self):
@@ -235,26 +236,26 @@ class MovimentoEstoque_Detalhe_View:
                 self.controller.update_movimento(self.movimento._id_movimento)
                 self._fechar()
             except Exception as e:
-                messagebox.showerror("Erro", f"Erro ao atualizar movimento: {str(e)}")
+                Notificacao.erro("Erro", f"Erro ao atualizar movimento: {str(e)}", parent=self.root)
     
     def _cancelar_movimento(self):
         """Cancela o movimento"""
         if self.controller:
             try:
-                if messagebox.askyesno("Confirmação", "Tem certeza que deseja cancelar este movimento?"):
+                if Notificacao.confirmacao("Confirmação", "Tem certeza que deseja cancelar este movimento?", parent=self.root):
                     self.controller.cancela_movimento(self.movimento._id_movimento)
                     self._fechar()
             except Exception as e:
-                messagebox.showerror("Erro", f"Erro ao cancelar movimento: {str(e)}")
+                Notificacao.erro("Erro", f"Erro ao cancelar movimento: {str(e)}", parent=self.root)
     
     def _fechar(self):
         """Fecha a janela de detalhes"""
-        if isinstance(self.root, ctk.CTk):
+        if isinstance(self.root, tk.Toplevel):
             self.root.destroy()
     
     def show(self):
         """Exibe a janela de forma modal (bloqueante)"""
-        if isinstance(self.root, ctk.CTk):
+        if isinstance(self.root, tk.Toplevel):
             self.root.wait_window(self.root)
     
     def display(self):
