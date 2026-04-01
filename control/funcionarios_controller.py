@@ -2,15 +2,38 @@ from model.funcionario import Funcionario
 import mysql.connector
 
 class Funcionario_Controller:
-    def __init__(self, dao, view):
+    def __init__(self, dao, view, cargo_dao=None):
         self.dao = dao
         self.view = view
+        self.cargo_dao = cargo_dao
         self.view.controller = self
+        
+        # Carrega os cargos na inicialização se o cargo_dao foi fornecido
+        if cargo_dao:
+            self._carregar_cargos()
 
 
     def add_funcionario(self):
         try:
             dados = self.view.get_funcionario_data()
+            
+            # Validações de campos obrigatórios
+            if not dados:
+                self.view.show_error("Erro ao obter dados do formulário!")
+                return
+            
+            if not dados.get('nome') or not str(dados['nome']).strip():
+                self.view.show_error("Nome é obrigatório!")
+                return
+            
+            if not dados.get('email') or not str(dados['email']).strip():
+                self.view.show_error("Email é obrigatório!")
+                return
+            
+            if not dados.get('cargo'):
+                self.view.show_error("Cargo é obrigatório!")
+                return
+            
             funcionario_novo = Funcionario(
                 id=None,
                 cep=dados['cep'],
@@ -21,7 +44,7 @@ class Funcionario_Controller:
                 nome=dados['nome'],
                 cargo=dados['cargo'],
                 email=dados['email'],
-                senha=dados['senha'],
+                senha="123456",
                 situacao=dados['situacao']
             )
             funcionario_salvo = self.dao.save(funcionario_novo)
@@ -37,6 +60,24 @@ class Funcionario_Controller:
                 self.view.show_error(f"Funcionário com id {id_funcionario} não encontrado!")
                 return
             dados_funcionario = self.view.get_funcionario_data(funcionario_existente)
+            
+            # Validações de campos obrigatórios
+            if not dados_funcionario:
+                self.view.show_error("Erro ao obter dados do formulário!")
+                return
+            
+            if not dados_funcionario.get('nome') or not str(dados_funcionario['nome']).strip():
+                self.view.show_error("Nome é obrigatório!")
+                return
+            
+            if not dados_funcionario.get('email') or not str(dados_funcionario['email']).strip():
+                self.view.show_error("Email é obrigatório!")
+                return
+            
+            if not dados_funcionario.get('cargo'):
+                self.view.show_error("Cargo é obrigatório!")
+                return
+            
             funcionario_atualizado = Funcionario(
                 id=id_funcionario,
                 cep=dados_funcionario['cep'],
@@ -47,7 +88,7 @@ class Funcionario_Controller:
                 nome=dados_funcionario['nome'],
                 cargo=dados_funcionario['cargo'],
                 email=dados_funcionario['email'],
-                senha=dados_funcionario['senha'],
+                senha=funcionario_existente._senha,
                 situacao=dados_funcionario['situacao']
             )
             if self.dao.update(funcionario_atualizado):
@@ -73,6 +114,15 @@ class Funcionario_Controller:
             self.view.show_funcionarios(funcionarios)
         except Exception as e:
             self.view.show_error(f"Erro ao listar funcionários: {str(e)}")
+
+    def _carregar_cargos(self):
+        """Carrega os cargos disponíveis na view"""
+        try:
+            if self.cargo_dao:
+                cargos = self.cargo_dao.get_all()
+                self.view.set_cargos_disponiveis(cargos)
+        except Exception as e:
+            self.view.show_error(f"Erro ao carregar cargos: {str(e)}")
 
     def get_funcionario(self):
         try:

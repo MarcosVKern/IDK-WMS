@@ -11,6 +11,16 @@ class Armazem_Controller:
     def add_armazem(self):
         try:
             dados = self.view.get_armazem_data()
+            
+            # Validações de campos obrigatórios
+            if not dados:
+                self.view.show_error("Erro ao obter dados do formulário!")
+                return
+            
+            if not dados.get('nome') or not str(dados['nome']).strip():
+                self.view.show_error("Nome do armazém é obrigatório!")
+                return
+            
             armazem_novo = Armazem(
                 id=None,
                 cep=dados['cep'],
@@ -33,6 +43,16 @@ class Armazem_Controller:
                 self.view.show_error(f"Armazém com id {id_armazem} não encontrado!")
                 return
             dados_armazem = self.view.get_armazem_data(armazem_existente)
+            
+            # Validações de campos obrigatórios
+            if not dados_armazem:
+                self.view.show_error("Erro ao obter dados do formulário!")
+                return
+            
+            if not dados_armazem.get('nome') or not str(dados_armazem['nome']).strip():
+                self.view.show_error("Nome do armazém é obrigatório!")
+                return
+            
             armazem_atualizado = Armazem(
                 id=id_armazem,
                 cep=dados_armazem['cep'],
