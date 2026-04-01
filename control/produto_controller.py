@@ -10,6 +10,12 @@ class Produto_Controller:
     def add_produto(self):
         try:
             dados = self.view.get_produto_data()
+            
+            # Validações de campos obrigatórios
+            if not dados or not dados.get('nome') or not str(dados['nome']).strip():
+                self.view.show_error("Nome do produto é obrigatório!")
+                return
+            
             produto_novo = Produto(
                 id=None,
                 nome=dados['nome'],
@@ -29,6 +35,12 @@ class Produto_Controller:
                 self.view.show_error(f"Produto com id {id_produto} não encontrado!")
                 return
             dados_produto = self.view.get_produto_data(produto_existente)
+            
+            # Validações de campos obrigatórios
+            if not dados_produto or not dados_produto.get('nome') or not str(dados_produto['nome']).strip():
+                self.view.show_error("Nome do produto é obrigatório!")
+                return
+            
             produto_atualizado = Produto(
                 id=id_produto,
                 nome=dados_produto['nome'],

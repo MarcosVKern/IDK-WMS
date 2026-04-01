@@ -1,7 +1,8 @@
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import ttk
 import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
+from view.notificacao import Notificacao
 from datetime import date
 
 class MovimentoEstoque_View():
@@ -156,7 +157,7 @@ class MovimentoEstoque_View():
                 "status": self.var_status.get()
             }
         except Exception as e:
-            messagebox.showerror("Erro", f"Erro ao obter dados do movimento: {e}")
+            Notificacao.erro("Erro", f"Erro ao obter dados do movimento: {e}", parent=self.root)
             return None
 
     def _acao_adicionar(self):
@@ -260,8 +261,8 @@ class MovimentoEstoque_View():
         self.btn_adicionar.configure(state=state)
         self.combo_tipo.config(state="readonly" if habilitado else "disabled")
 
-    def show_message(self, msg): 
-        messagebox.showinfo("Sucesso", msg)
+    def show_message(self, msg):
+        Notificacao.sucesso("Sucesso", msg, parent=self.root)
 
-    def show_error(self, err): 
-        messagebox.showerror("Erro", err)
+    def show_error(self, err):
+        Notificacao.erro("Erro", err, parent=self.root)

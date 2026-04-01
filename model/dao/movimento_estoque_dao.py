@@ -73,27 +73,17 @@ class MovimentoEstoque_DAO(Base_DAO):
         status = movimento._status
         movimento._dataAlteracao = date.today()
         
+        # Atualizar datas baseado no novo status (sem alterar o status, pois o controller já faz isso)
         if movimento._tipoMovimento == 1:  # Entrada
-            status = "Efetivado"
-            # Data de entrada quando status for Efetivado
-            movimento._dataEntrada = date.today()
+            if status == "Efetivado":
+                movimento._dataEntrada = date.today()
         elif movimento._tipoMovimento == 2: # Saída
-            if status == "Pendente":
-                status = "Em separação"
-            elif status == "Em separação":
-                status = "Despachado"
-                # Data de saída quando status for Despachado
+            if status == "Despachado":
                 movimento._dataSaida = date.today()
         elif movimento._tipoMovimento == 3: # Interno
-            if status == "Pendente":
-                status = "Em separação"
-            elif status == "Em separação":
-                status = "Despachado"
-                # Data de saída quando status for Despachado
+            if status == "Despachado":
                 movimento._dataSaida = date.today()
-            elif status == "Despachado":
-                status = "Efetivado"
-                # Data de entrada quando status for Efetivado
+            elif status == "Efetivado":
                 movimento._dataEntrada = date.today()
 
         values = (movimento._origem, movimento._destino, movimento._dataSaida, movimento._dataEntrada,

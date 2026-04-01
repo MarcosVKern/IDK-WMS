@@ -1,7 +1,8 @@
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import ttk
 import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
+from view.notificacao import Notificacao
 
 
 class Estoque_View:
@@ -237,8 +238,8 @@ class Estoque_View:
 
     def show_message(self, mensagem):
         """Exibe mensagem de sucesso"""
-        messagebox.showinfo("Sucesso", mensagem)
+        Notificacao.sucesso("Sucesso", mensagem, parent=self.root)
 
     def show_error(self, mensagem):
         """Exibe mensagem de erro"""
-        messagebox.showerror("Erro", mensagem)
+        Notificacao.erro("Erro", mensagem, parent=self.root)
