@@ -41,37 +41,37 @@ class Funcionario_View():
         frame_form.configure(width=900)
 
         tk.Label(frame_form, text="ID:", bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10).grid(row=1, column=0, padx=5, pady=5,sticky="w")
+        tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10, bg=Cores_Padrao.COR_INPUT_BG, readonlybackground=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=1, column=0, padx=5, pady=5,sticky="w")
 
         tk.Label(frame_form, text="CEP:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_cep, width=30).grid(row=3, column=0, pady=5)
+        tk.Entry(frame_form, textvariable=self.var_cep, width=30, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=3, column=0, pady=5)
 
         tk.Label(frame_form, text="Bairro:", bg=Cores_Padrao.COR_FUNDO).grid(row=4, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_bairro, width=30).grid(row=5, column=0, pady=5)
+        tk.Entry(frame_form, textvariable=self.var_bairro, width=30, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=5, column=0, pady=5)
 
         tk.Label(frame_form, text="Cidade:", bg=Cores_Padrao.COR_FUNDO).grid(row=6, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_cidade, width=30).grid(row=7, column=0, pady=5)
+        tk.Entry(frame_form, textvariable=self.var_cidade, width=30, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=7, column=0, pady=5)
 
         tk.Label(frame_form, text="UF:", bg=Cores_Padrao.COR_FUNDO).grid(row=8, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_uf, width=30).grid(row=9, column=0, pady=5)
+        tk.Entry(frame_form, textvariable=self.var_uf, width=30, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=9, column=0, pady=5)
 
         tk.Label(frame_form, text="País:", bg=Cores_Padrao.COR_FUNDO).grid(row=10, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_pais, width=30).grid(row=11, column=0, pady=5)
+        tk.Entry(frame_form, textvariable=self.var_pais, width=30, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=11, column=0, pady=5)
 
         tk.Label(frame_form, text="Nome:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=1, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_nome, width=30).grid(row=3, column=1, pady=5)
+        tk.Entry(frame_form, textvariable=self.var_nome, width=30, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=3, column=1, pady=5)
 
         tk.Label(frame_form, text="Cargo:", bg=Cores_Padrao.COR_FUNDO).grid(row=4, column=1, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_cargo, width=30).grid(row=5, column=1, pady=5)
+        tk.Entry(frame_form, textvariable=self.var_cargo, width=30, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=5, column=1, pady=5)
 
         tk.Label(frame_form, text="Email:", bg=Cores_Padrao.COR_FUNDO).grid(row=6, column=1, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_email, width=30).grid(row=7, column=1, pady=5)
+        tk.Entry(frame_form, textvariable=self.var_email, width=30, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=7, column=1, pady=5)
 
         tk.Label(frame_form, text="Senha:", bg=Cores_Padrao.COR_FUNDO).grid(row=8, column=1, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_senha, state="readonly", width=30, show="*").grid(row=9, column=1, pady=5)
+        tk.Entry(frame_form, textvariable=self.var_senha, state="readonly", width=30, show="*", bg=Cores_Padrao.COR_INPUT_BG, readonlybackground=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=9, column=1, pady=5)
 
         tk.Label(frame_form, text="Situação:", bg=Cores_Padrao.COR_FUNDO).grid(row=10, column=1, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_situacao, state="readonly", width=30).grid(row=11, column=1, pady=5)
+        tk.Entry(frame_form, textvariable=self.var_situacao, state="readonly", width=30, bg=Cores_Padrao.COR_INPUT_BG, readonlybackground=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=11, column=1, pady=5)
 
         ctk.CTkButton(frame_form, text="Ativar/Inativar", command=self._acao_ativar, fg_color=Cores_Padrao.COR_BOTAO_ATIVAR, text_color=Cores_Padrao.COR_TEXTO, width=150).grid(row=11, column=2, pady=5, sticky="w")
         ctk.CTkButton(frame_form, text="Bloquear/Desbloquear", command=self._acao_bloquear, fg_color=Cores_Padrao.COR_BOTAO_BLOQUEAR, text_color=Cores_Padrao.COR_TEXTO, width=150).grid(row=11, column=4, pady=5, sticky="w")
@@ -88,7 +88,9 @@ class Funcionario_View():
         frame_tabela.pack(expand=True, fill="both")
 
         self.colunas = ("id", "cep", "bairro", "cidade", "uf", "pais", "nome", "cargo", "email", "senha", "situacao")
-        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings")
+        style = ttk.Style()
+        style.configure("Pink.Treeview", background=Cores_Padrao.COR_TABLE_BG, fieldbackground=Cores_Padrao.COR_TABLE_BG, foreground=Cores_Padrao.COR_TEXTO)
+        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings", style="Pink.Treeview")
 
         vsb = ttk.Scrollbar(frame_tabela, orient="vertical", command=self.tree.yview)
         hsb = ttk.Scrollbar(frame_tabela, orient="horizontal", command=self.tree.xview)

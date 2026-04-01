@@ -24,21 +24,21 @@ class Cargo_View():
         self._setup_ui()
 
     def _setup_ui(self):
-        tk.Label(self.root, text="GERENCIAMENTO DE CARGOS", font=("Arial", 16, "bold"), pady=10).pack()
+        tk.Label(self.root, text="GERENCIAMENTO DE CARGOS", font=("Arial", 16, "bold"), pady=10, bg=Cores_Padrao.COR_FUNDO).pack()
 
-        frame_form = tk.LabelFrame(self.root, text="Detalhes do Cargo", padx=10, pady=10)
+        frame_form = tk.LabelFrame(self.root, text="Detalhes do Cargo", padx=10, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_form.pack(padx=20, pady=5, fill='x')
         frame_form.pack_propagate(False)
         frame_form.configure(width=900)
 
-        tk.Label(frame_form, text="ID:").grid(row=0, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10, bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=1, padx=5, pady=5,sticky="w")
+        tk.Label(frame_form, text="ID:", bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=0, sticky="w")
+        tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10, bg=Cores_Padrao.COR_INPUT_BG, readonlybackground=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=0, column=1, padx=5, pady=5,sticky="w")
 
         tk.Label(frame_form, text="Cargo:").grid(row=0, column=2, sticky="w")
         self.combo_cargo = ttk.Combobox(frame_form, textvariable=self.var_cargo, width=50, state="readonly")
         self.combo_cargo.grid(row=0, column=3, padx=5, pady=5)
 
-        frame_botoes = tk.Frame(self.root, pady=10)
+        frame_botoes = tk.Frame(self.root, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_botoes.pack()
 
         #tk.Button(frame_botoes, text="Adicionar Cargo", command=self._acao_adicionar, bg=Cores_Padrao.COR_BOTAO_SALVAR, width=15).pack(side=tk.LEFT, padx=5)
@@ -46,11 +46,13 @@ class Cargo_View():
         #tk.Button(frame_botoes, text="Deletar Cargo", command=self._acao_deletar, bg=Cores_Padrao.COR_BOTAO_DELETAR, width=15).pack(side=tk.LEFT, padx=5)
         #tk.Button(frame_botoes, text="Limpar", command=self._limpar_campos, bg=Cores_Padrao.COR_BOTAO_LIMPAR, width=15).pack(side=tk.LEFT, padx=5)
 
-        frame_tabela = tk.Frame(self.root, padx=20, pady=10)
+        frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_tabela.pack(expand=True, fill="both")
 
         self.colunas = ("id", "cargo")
-        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings")
+        style = ttk.Style()
+        style.configure("Pink.Treeview", background=Cores_Padrao.COR_TABLE_BG, fieldbackground=Cores_Padrao.COR_TABLE_BG, foreground=Cores_Padrao.COR_TEXTO)
+        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings", style="Pink.Treeview")
 
         self.tree.heading("id", text="ID")
         self.tree.heading("cargo", text="Cargo")

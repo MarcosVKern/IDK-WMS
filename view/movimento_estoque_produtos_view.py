@@ -39,12 +39,14 @@ class MovimentoEstoqueProdutos_View:
         self.combo_produto.grid(row=0, column=1, padx=5, pady=5)
 
         tk.Label(frame_form, text="Quantidade:", bg=Cores_Padrao.COR_FUNDO).grid(row=1, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_quantidade, width=20).grid(row=1, column=1, padx=5, pady=5, sticky="w")
+        tk.Entry(frame_form, textvariable=self.var_quantidade, width=20, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=1, column=1, padx=5, pady=5, sticky="w")
 
         ctk.CTkButton(frame_form, text="Incluir/Atualizar", command=self._incluir_produto, fg_color=Cores_Padrao.COR_BOTAO_SALVAR, text_color=Cores_Padrao.COR_TEXTO, width=150).grid(row=0, column=2, rowspan=2, padx=5)
 
         cols = ("id", "nome", "qtd_disponivel", "qtd_selecionada")
-        self.tree = ttk.Treeview(self.root, columns=cols, show="headings")
+        style = ttk.Style()
+        style.configure("Pink.Treeview", background=Cores_Padrao.COR_TABLE_BG, fieldbackground=Cores_Padrao.COR_TABLE_BG, foreground=Cores_Padrao.COR_TEXTO)
+        self.tree = ttk.Treeview(self.root, columns=cols, show="headings", style="Pink.Treeview")
         for c in cols:
             self.tree.heading(c, text=c.capitalize())
             self.tree.column(c, anchor="center", width=150)

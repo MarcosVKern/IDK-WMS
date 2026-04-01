@@ -39,7 +39,7 @@ class Estoque_View:
             text="CONSULTAR ESTOQUE",
             font=("Arial", 16, "bold"),
             pady=10,
-            bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None
+            bg=Cores_Padrao.COR_FUNDO
         )
         titulo.pack()
 
@@ -49,20 +49,20 @@ class Estoque_View:
             text="Filtros",
             padx=10,
             pady=10,
-            bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None
+            bg=Cores_Padrao.COR_FUNDO
         )
         frame_filtros.pack(padx=20, pady=5, fill='x')
 
         # Linha 1 - Filtros
         # Produto
-        tk.Label(frame_filtros, text="Produto:", bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None).grid(
+        tk.Label(frame_filtros, text="Produto:", bg=Cores_Padrao.COR_FUNDO).grid(
             row=0, column=0, sticky="w", padx=5, pady=5
         )
         self.combo_produto = ttk.Combobox(frame_filtros, textvariable=self.var_produto, state="readonly", width=25)
         self.combo_produto.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
 
         # Armazém
-        tk.Label(frame_filtros, text="Armazém:", bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None).grid(
+        tk.Label(frame_filtros, text="Armazém:", bg=Cores_Padrao.COR_FUNDO).grid(
             row=0, column=2, sticky="w", padx=5, pady=5
         )
         self.combo_armazem = ttk.Combobox(frame_filtros, textvariable=self.var_armazem, state="readonly", width=25)
@@ -70,7 +70,7 @@ class Estoque_View:
         self.combo_armazem.bind("<<ComboboxSelected>>", self._on_armazem_mudou)
 
         # Unidade de Armazenamento
-        tk.Label(frame_filtros, text="Unidade:", bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None).grid(
+        tk.Label(frame_filtros, text="Unidade:", bg=Cores_Padrao.COR_FUNDO).grid(
             row=0, column=4, sticky="w", padx=5, pady=5
         )
         self.combo_unidade = ttk.Combobox(frame_filtros, textvariable=self.var_unidade, state="readonly", width=25)
@@ -81,7 +81,7 @@ class Estoque_View:
             frame_filtros.grid_columnconfigure(i, weight=1)
 
         # Frame de botões
-        frame_botoes = tk.Frame(self.root, pady=10, bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None)
+        frame_botoes = tk.Frame(self.root, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_botoes.pack()
 
         ctk.CTkButton(
@@ -103,12 +103,14 @@ class Estoque_View:
         ).pack(side=tk.LEFT, padx=5)
 
         # Frame da tabela
-        frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None)
+        frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_tabela.pack(expand=True, fill="both")
 
         # Colunas da tabela
         self.colunas = ("produto", "quantidade", "unidade", "armazem")
-        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings", height=20)
+        style = ttk.Style()
+        style.configure("Pink.Treeview", background=Cores_Padrao.COR_TABLE_BG, fieldbackground=Cores_Padrao.COR_TABLE_BG, foreground=Cores_Padrao.COR_TEXTO)
+        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings", height=20, style="Pink.Treeview")
 
         self.tree.heading("produto", text="Produto")
         self.tree.heading("quantidade", text="Quantidade")

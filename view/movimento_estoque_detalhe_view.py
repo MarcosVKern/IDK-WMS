@@ -115,7 +115,9 @@ class MovimentoEstoque_Detalhe_View:
         frame_produtos.pack(padx=15, pady=10, fill="both", expand=True)
 
         colunas = ("id", "nome", "quantidade")
-        self.tree_produtos = ttk.Treeview(frame_produtos, columns=colunas, show="headings", height=8)
+        style = ttk.Style()
+        style.configure("Pink.Treeview", background=Cores_Padrao.COR_TABLE_BG, fieldbackground=Cores_Padrao.COR_TABLE_BG, foreground=Cores_Padrao.COR_TEXTO)
+        self.tree_produtos = ttk.Treeview(frame_produtos, columns=colunas, show="headings", height=8, style="Pink.Treeview")
         
         self.tree_produtos.heading("id", text="ID Produto")
         self.tree_produtos.heading("nome", text="Nome do Produto")

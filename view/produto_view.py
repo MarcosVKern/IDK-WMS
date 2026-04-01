@@ -28,22 +28,22 @@ class Produto_View():
     def _setup_ui(self):
         tk.Label(self.root, text="GERENCIAMENTO DE PRODUTOS", font=("Arial", 16, "bold"), pady=10, bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None).pack()
 
-        frame_form = tk.LabelFrame(self.root, text="Detalhes do Produto", padx=10, pady=10, bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None)
+        frame_form = tk.LabelFrame(self.root, text="Detalhes do Produto", padx=10, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_form.pack(padx=20, pady=5, fill='x')
         frame_form.pack_propagate(False)    
         frame_form.configure(width=900)
 
-        tk.Label(frame_form, text="ID:", bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None).grid(row=0, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10, bg=Cores_Padrao.COR_FUNDO).grid(row=1, column=0, padx=5, pady=5,sticky="w")
+        tk.Label(frame_form, text="ID:", bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=0, sticky="w")
+        tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10, bg=Cores_Padrao.COR_INPUT_BG, readonlybackground=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=1, column=0, padx=5, pady=5,sticky="w")
 
-        tk.Label(frame_form, text="Nome:", bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None).grid(row=2, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_nome, width=30).grid(row=3, column=0, pady=5)
+        tk.Label(frame_form, text="Nome:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=0, sticky="w")
+        tk.Entry(frame_form, textvariable=self.var_nome, width=30, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=3, column=0, pady=5)
 
-        tk.Label(frame_form, text="Descrição:", bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None).grid(row=4, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_descricao, width=30).grid(row=5, column=0, pady=5)
+        tk.Label(frame_form, text="Descrição:", bg=Cores_Padrao.COR_FUNDO).grid(row=4, column=0, sticky="w")
+        tk.Entry(frame_form, textvariable=self.var_descricao, width=30, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=5, column=0, pady=5)
 
-        tk.Label(frame_form, text="URL da Imagem:", bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None).grid(row=6, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_imagem, width=30).grid(row=7, column=0, pady=5)
+        tk.Label(frame_form, text="URL da Imagem:", bg=Cores_Padrao.COR_FUNDO).grid(row=6, column=0, sticky="w")
+        tk.Entry(frame_form, textvariable=self.var_imagem, width=30, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=7, column=0, pady=5)
 
         frame_botoes = tk.Frame(self.root, pady=10, bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None)
         frame_botoes.pack()
@@ -53,11 +53,13 @@ class Produto_View():
         ctk.CTkButton(frame_botoes, text="Deletar Produto", command=self._acao_deletar, fg_color=Cores_Padrao.COR_BOTAO_DELETAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
         ctk.CTkButton(frame_botoes, text="Limpar", command=self._limpar_campos, fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
 
-        frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None)
+        frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_tabela.pack(expand=True, fill="both")
 
         self.colunas = ("id", "nome", "descricao", "imagem")
-        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings")
+        style = ttk.Style()
+        style.configure("Pink.Treeview", background=Cores_Padrao.COR_TABLE_BG, fieldbackground=Cores_Padrao.COR_TABLE_BG, foreground=Cores_Padrao.COR_TEXTO)
+        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings", style="Pink.Treeview")
 
         self.tree.heading("id", text="ID")
         self.tree.heading("nome", text="Nome")

@@ -4,6 +4,9 @@ class Cores_Padrao:
     #Você pode adicionar mais cores ou categorias conforme necessário
     COR_FUNDO = "#fce3e9"  # cor base rosa clara
     COR_TEXTO = "#4a223f"  # texto legível em contraste
+    COR_INPUT_BG = "#ffe6f1"  # fundo de campos input
+    COR_TABLE_BG = "#ffd4ea"  # fundo das tabelas
+    COR_TABLE_ALT_BG = "#ffdfec"  # alternativa para linhas da tabela
     COR_BOTAO_SALVAR = "#f8b0d1"  # rosa médio
     COR_BOTAO_ATUALIZAR = "#f4a8c9"  # rosa suave
     COR_BOTAO_DELETAR = "#e26a99"  # rosa forte
