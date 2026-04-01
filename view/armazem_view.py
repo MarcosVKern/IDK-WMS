@@ -106,8 +106,6 @@ class Armazem_View():
         frame_tabela.pack(expand=True, fill="both")
 
         self.colunas = ("id", "cep", "bairro", "cidade", "uf", "pais", "nome")
-        style = ttk.Style()
-        style.configure("Pink.Treeview", background=Cores_Padrao.COR_TABLE_BG, fieldbackground=Cores_Padrao.COR_TABLE_BG, foreground=Cores_Padrao.COR_TEXTO)
         self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings", style="Pink.Treeview")
 
         self.tree.heading("id", text="ID")
@@ -124,8 +122,6 @@ class Armazem_View():
         self.tree.bind("<<TreeviewSelect>>", self._ao_selecionar_tabela)
         
         # Configurar efeito zebrado
-        self.tree.tag_configure('evenrow', background=Cores_Padrao.COR_ZEBRADO_PAR)
-        self.tree.tag_configure('oddrow', background=Cores_Padrao.COR_ZEBRADO_IMPAR)
         self.tree.tag_configure('evenrow', background=Cores_Padrao.COR_ZEBRADO_PAR)
         self.tree.tag_configure('oddrow', background=Cores_Padrao.COR_ZEBRADO_IMPAR)
 
