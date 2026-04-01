@@ -1,7 +1,8 @@
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import ttk
 import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
+from view.notificacao import Notificacao
 
 class MovimentoEstoqueProdutos_View:
     def __init__(self, tipo_movimento, origem, destino, produtos_disponiveis, parent=None):
@@ -72,14 +73,14 @@ class MovimentoEstoqueProdutos_View:
 
     def _incluir_produto(self):
         if not self.var_produto.get():
-            messagebox.showerror("Erro", "Selecione um produto")
+            Notificacao.erro("Erro", "Selecione um produto", parent=self.root)
             return
         try:
             quantidade = float(self.var_quantidade.get())
             if quantidade <= 0:
                 raise ValueError
         except Exception:
-            messagebox.showerror("Erro", "Quantidade inválida")
+            Notificacao.erro("Erro", "Quantidade inválida", parent=self.root)
             return
 
         pid = self.var_produto.get().split(' - ')[0]
@@ -87,12 +88,12 @@ class MovimentoEstoqueProdutos_View:
 
         produto_info = next((p for p in self.produtos_disponiveis if p['id'] == pid), None)
         if not produto_info:
-            messagebox.showerror("Erro", "Produto não encontrado")
+            Notificacao.erro("Erro", "Produto não encontrado", parent=self.root)
             return
 
         if self.tipo_movimento.lower().startswith("saída") or self.tipo_movimento.lower().startswith("interno"):
             if quantidade > produto_info['quantidade']:
-                messagebox.showerror("Erro", "Quantidade maior que disponível")
+                Notificacao.erro("Erro", "Quantidade maior que disponível", parent=self.root)
                 return
 
         self.selected[pid] = quantidade
@@ -128,7 +129,7 @@ class MovimentoEstoqueProdutos_View:
 
     def _confirmar(self):
         if not self.selected:
-            messagebox.showerror("Erro", "Selecione ao menos um produto")
+            Notificacao.erro("Erro", "Selecione ao menos um produto", parent=self.root)
             return
         self.result = [{'produto': pid, 'quantidade': qty} for pid, qty in self.selected.items()]
         self.root.destroy()

@@ -1,7 +1,8 @@
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import ttk
 import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
+from view.notificacao import Notificacao
 
 class Armazem_View():
     def __init__(self, parent=None):
@@ -132,7 +133,7 @@ class Armazem_View():
                 "nome": self.var_nome.get()
             }
         except Exception as e:
-            messagebox.show_error(f"Erro ao obter dados do armazém: {e}")
+            Notificacao.erro("Erro", f"Erro ao obter dados do armazém: {e}", parent=self.root)
             return None
         
     def _acao_adicionar(self):
@@ -157,7 +158,7 @@ class Armazem_View():
         return int(val) if val else None
     
     def _acao_deletar(self):
-        if messagebox.askyesno("Confirmação", "Tem certeza que deseja deletar este armazém?"):
+        if Notificacao.confirmacao("Confirmação", "Tem certeza que deseja deletar este armazém?", parent=self.root):
             self.controller.delete_armazem()
             self._acao_listar()
             self._limpar_campos()
@@ -182,11 +183,11 @@ class Armazem_View():
         cep = self.var_cep.get().replace("-", "").replace(" ", "")
         
         if not cep:
-            messagebox.showwarning("Aviso", "Por favor, digite um CEP!")
+            Notificacao.aviso("Aviso", "Por favor, digite um CEP!", parent=self.root)
             return
         
         if len(cep) != 8:
-            messagebox.showerror("Erro", "CEP deve ter 8 dígitos!")
+            Notificacao.erro("Erro", "CEP deve ter 8 dígitos!", parent=self.root)
             return
         
         try:
@@ -197,7 +198,7 @@ class Armazem_View():
                 dados = response.json()
                 
                 if "erro" in dados:
-                    messagebox.showerror("Erro", "CEP não encontrado!")
+                    Notificacao.erro("Erro", "CEP não encontrado!", parent=self.root)
                     return
                 
                 self.var_bairro.set(dados.get("bairro", ""))
@@ -205,12 +206,14 @@ class Armazem_View():
                 self.var_uf.set(dados.get("uf", ""))
                 self.var_pais.set("Brasil")
                 
-                messagebox.showinfo("Sucesso", "Endereço preenchido com sucesso!")
+                Notificacao.sucesso("Sucesso", "Endereço preenchido com sucesso!", parent=self.root)
             else:
-                messagebox.showerror("Erro", "Erro ao conectar com o serviço de CEP!")
+                Notificacao.erro("Erro", "Erro ao conectar com o serviço de CEP!", parent=self.root)
         except Exception as e:
-            messagebox.showerror("Erro", f"Erro ao buscar endereço: {str(e)}")
+            Notificacao.erro("Erro", f"Erro ao buscar endereço: {str(e)}", parent=self.root)
 
-    def show_message(self, msg): messagebox.showinfo("Sucesso", msg)
+    def show_message(self, msg):
+        Notificacao.sucesso("Sucesso", msg, parent=self.root)
 
-    def show_error(self, err): messagebox.showerror("Erro", err)
+    def show_error(self, err):
+        Notificacao.erro("Erro", err, parent=self.root)

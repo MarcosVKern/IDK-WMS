@@ -1,7 +1,8 @@
 import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import ttk
 import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
+from view.notificacao import Notificacao
 
 class UnidadeArmazenamento_View():
     def __init__(self, parent=None):
@@ -93,7 +94,7 @@ class UnidadeArmazenamento_View():
                 "armazem": armazem_id
             }
         except Exception as e:
-            messagebox.showerror("Erro", f"Erro ao obter dados da unidade de armazenamento: {e}")
+            Notificacao.erro("Erro", f"Erro ao obter dados da unidade de armazenamento: {e}", parent=self.root)
             return None
         
     def _acao_adicionar(self):
@@ -116,7 +117,7 @@ class UnidadeArmazenamento_View():
         return val if val else None
     
     def _acao_deletar(self):
-        if messagebox.askyesno("Confirmação", "Tem certeza que deseja deletar esta unidade de armazenamento?"):
+        if Notificacao.confirmacao("Confirmação", "Tem certeza que deseja deletar esta unidade de armazenamento?", parent=self.root):
             self.controller.delete_unidade_armazenamento()
             self._acao_listar()
             self._limpar_campos()
@@ -135,11 +136,11 @@ class UnidadeArmazenamento_View():
             self.var_unidade.set(v[1])
             self.var_armazem.set(v[2])
 
-    def show_message(self, msg): 
-        messagebox.showinfo("Sucesso", msg)
+    def show_message(self, msg):
+        Notificacao.sucesso("Sucesso", msg, parent=self.root)
 
-    def show_error(self, err): 
-        messagebox.showerror("Erro", err)
+    def show_error(self, err):
+        Notificacao.erro("Erro", err, parent=self.root)
 
     def set_armazens_disponiveis(self, armazens):
         self.armazens = armazens

@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
+from view.notificacao import Notificacao
 from datetime import date
 
 
@@ -235,17 +236,17 @@ class MovimentoEstoque_Detalhe_View:
                 self.controller.update_movimento(self.movimento._id_movimento)
                 self._fechar()
             except Exception as e:
-                messagebox.showerror("Erro", f"Erro ao atualizar movimento: {str(e)}")
+                Notificacao.erro("Erro", f"Erro ao atualizar movimento: {str(e)}", parent=self.root)
     
     def _cancelar_movimento(self):
         """Cancela o movimento"""
         if self.controller:
             try:
-                if messagebox.askyesno("Confirmação", "Tem certeza que deseja cancelar este movimento?"):
+                if Notificacao.confirmacao("Confirmação", "Tem certeza que deseja cancelar este movimento?", parent=self.root):
                     self.controller.cancela_movimento(self.movimento._id_movimento)
                     self._fechar()
             except Exception as e:
-                messagebox.showerror("Erro", f"Erro ao cancelar movimento: {str(e)}")
+                Notificacao.erro("Erro", f"Erro ao cancelar movimento: {str(e)}", parent=self.root)
     
     def _fechar(self):
         """Fecha a janela de detalhes"""
