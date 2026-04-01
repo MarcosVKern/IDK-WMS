@@ -109,7 +109,9 @@ class Estoque_View:
 
         # Colunas da tabela
         self.colunas = ("produto", "quantidade", "unidade", "armazem")
-        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings", height=20)
+        style = ttk.Style()
+        style.configure("Pink.Treeview", background=Cores_Padrao.COR_TABLE_BG, fieldbackground=Cores_Padrao.COR_TABLE_BG, foreground=Cores_Padrao.COR_TEXTO)
+        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings", height=20, style="Pink.Treeview")
 
         self.tree.heading("produto", text="Produto")
         self.tree.heading("quantidade", text="Quantidade")

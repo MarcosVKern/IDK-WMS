@@ -113,8 +113,12 @@ class Funcionario_View():
         frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_tabela.pack(expand=True, fill="both")
 
+
         self.colunas = ("id", "cep", "bairro", "cidade", "uf", "pais", "nome", "cargo", "email", "situacao")
-        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings")
+        style = ttk.Style()
+        style.configure("Pink.Treeview", background=Cores_Padrao.COR_TABLE_BG, fieldbackground=Cores_Padrao.COR_TABLE_BG, foreground=Cores_Padrao.COR_TEXTO)
+        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings", style="Pink.Treeview")
+
 
         vsb = ttk.Scrollbar(frame_tabela, orient="vertical", command=self.tree.yview)
         hsb = ttk.Scrollbar(frame_tabela, orient="horizontal", command=self.tree.xview)

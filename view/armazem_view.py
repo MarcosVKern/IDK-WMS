@@ -82,16 +82,33 @@ class Armazem_View():
         frame_botoes = tk.Frame(self.root, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_botoes.pack()
 
-        ctk.CTkButton(frame_botoes, text="Adicionar Armazém", command=self._acao_adicionar, fg_color=Cores_Padrao.COR_BOTAO_SALVAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Atualizar Armazém", command=self._acao_atualizar, fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Deletar Armazém", command=self._acao_deletar, fg_color=Cores_Padrao.COR_BOTAO_DELETAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Limpar", command=self._limpar_campos, fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(frame_botoes, text="Adicionar Armazém", command=self._acao_adicionar, 
+                        fg_color=Cores_Padrao.COR_BOTAO_SALVAR, 
+                        text_color=Cores_Padrao.COR_TEXTO, 
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
+        
+        ctk.CTkButton(frame_botoes, text="Atualizar Armazém", command=self._acao_atualizar, 
+                        fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR, 
+                        text_color=Cores_Padrao.COR_TEXTO, 
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
+        
+        ctk.CTkButton(frame_botoes, text="Deletar Armazém", command=self._acao_deletar, 
+                        fg_color=Cores_Padrao.COR_BOTAO_DELETAR, 
+                        text_color=Cores_Padrao.COR_TEXTO, 
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
+        
+        ctk.CTkButton(frame_botoes, text="Limpar", command=self._limpar_campos, 
+                        fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, 
+                        text_color=Cores_Padrao.COR_TEXTO, 
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
 
         frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_tabela.pack(expand=True, fill="both")
 
         self.colunas = ("id", "cep", "bairro", "cidade", "uf", "pais", "nome")
-        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings")
+        style = ttk.Style()
+        style.configure("Pink.Treeview", background=Cores_Padrao.COR_TABLE_BG, fieldbackground=Cores_Padrao.COR_TABLE_BG, foreground=Cores_Padrao.COR_TEXTO)
+        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings", style="Pink.Treeview")
 
         self.tree.heading("id", text="ID")
         self.tree.heading("cep", text="CEP")

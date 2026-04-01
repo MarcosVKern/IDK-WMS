@@ -43,7 +43,7 @@ class MovimentoEstoque_View():
         frame_form.configure(width=900)
 
         tk.Label(frame_form, text="ID:", bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10, bg=Cores_Padrao.COR_FUNDO).grid(row=1, column=0, padx=5, pady=5, sticky="w")
+        tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10, bg=Cores_Padrao.COR_INPUT_BG, readonlybackground=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=1, column=0, padx=5, pady=5, sticky="w")
 
         tk.Label(frame_form, text="Tipo de Movimento:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=0, sticky="w")
         self.combo_tipo = ttk.Combobox(frame_form, textvariable=self.var_tipo_movimento, width=27, state="readonly")
@@ -74,7 +74,9 @@ class MovimentoEstoque_View():
         frame_tabela.pack(expand=True, fill="both")
 
         self.colunas = ("id", "tipo", "origem", "destino", "responsavel", "status", "dataSaida")
-        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings")
+        style = ttk.Style()
+        style.configure("Pink.Treeview", background=Cores_Padrao.COR_TABLE_BG, fieldbackground=Cores_Padrao.COR_TABLE_BG, foreground=Cores_Padrao.COR_TEXTO)
+        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings", style="Pink.Treeview")
 
         self.tree.heading("id", text="ID")
         self.tree.heading("tipo", text="Tipo")

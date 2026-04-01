@@ -16,7 +16,7 @@ class Main_View:
         # Maximizar a janela após criar
         self.root.after(100, self._maximize_window)
         
-        self.main_container = ctk.CTkFrame(self.root, fg_color="#1A2B44")
+        self.main_container = ctk.CTkFrame(self.root, fg_color=Cores_Padrao.COR_FUNDO_MENU)
         self.main_container.pack(fill="both", expand=True)
         
         self.right_panel = ctk.CTkFrame(
@@ -29,7 +29,7 @@ class Main_View:
             self.right_panel,
             text="",
             font=("Arial", 14, "bold"),
-            text_color="#000000",
+            text_color=Cores_Padrao.COR_TEXTO_MENU_ESCURO,
             anchor="w"
         )
         self.right_panel_label.pack(fill="x", padx=10, pady=(10, 0))
@@ -49,7 +49,7 @@ class Main_View:
             self.left_panel,
             text="Menu Principal",
             font=("Arial", 16, "bold"),
-            text_color="#FFFFFF"
+            text_color=Cores_Padrao.COR_TEXTO_MENU
         )
         titulo.pack(pady=20)
 
@@ -87,9 +87,9 @@ class Main_View:
                 text=texto,
                 font=("Arial", 12, "bold"),
                 height=45,
-                fg_color="#D9E7FF",
-                text_color="#000000",
-                hover_color="#A2C6FF",
+                fg_color=Cores_Padrao.COR_BOTAO_MENU,
+                text_color=Cores_Padrao.COR_TEXTO_MENU_ESCURO,
+                hover_color=Cores_Padrao.COR_BOTAO_MENU_HOVER,
                 corner_radius=0,
                 command=lambda t=texto, f=func: self._menu_command(t, f)
             )
@@ -107,26 +107,26 @@ class Main_View:
         self._show_login()
 
     def _show_login(self):
-        self.right_panel.configure(fg_color="#1A2B44")
-        self.right_panel_content.configure(fg_color="#1A2B44")
+        self.right_panel.configure(fg_color=Cores_Padrao.COR_FUNDO_MENU)
+        self.right_panel_content.configure(fg_color=Cores_Padrao.COR_FUNDO_MENU)
         
         self._clear_right_panel()
         self._set_active_menu("Login")
 
-        frame = ctk.CTkFrame(self.right_panel_content, fg_color="#1A2B44")
+        frame = ctk.CTkFrame(self.right_panel_content, fg_color=Cores_Padrao.COR_FUNDO_MENU)
         frame.pack(expand=True, fill="both")
 
         ctk.CTkLabel(
             frame,
             text="Login",
             font=("Arial", 24, "bold"),
-            text_color="#FFFFFF"
+            text_color=Cores_Padrao.COR_TEXTO_MENU
         ).pack(pady=20)
 
         self.login_email_var = ctk.StringVar()
         self.login_password_var = ctk.StringVar()
 
-        ctk.CTkLabel(frame, text="Email", font=("Arial", 12), text_color="#FFFFFF").pack(anchor="center", pady=(5, 0))
+        ctk.CTkLabel(frame, text="Email", font=("Arial", 12), text_color=Cores_Padrao.COR_TEXTO_MENU).pack(anchor="center", pady=(5, 0))
         ctk.CTkEntry(
             frame,
             textvariable=self.login_email_var,
@@ -136,7 +136,7 @@ class Main_View:
             placeholder_text="Digite seu email"
         ).pack(pady=5)
 
-        ctk.CTkLabel(frame, text="Senha", font=("Arial", 12), text_color="#FFFFFF").pack(anchor="center", pady=(10, 0))
+        ctk.CTkLabel(frame, text="Senha", font=("Arial", 12), text_color=Cores_Padrao.COR_TEXTO_MENU).pack(anchor="center", pady=(10, 0))
         ctk.CTkEntry(
             frame,
             textvariable=self.login_password_var,
@@ -150,15 +150,21 @@ class Main_View:
         ctk.CTkButton(
             frame,
             text="Entrar",
+            text_color=Cores_Padrao.COR_TEXTO_MENU_ESCURO,
+            fg_color=Cores_Padrao.COR_BOTAO_MENU_ATIVO,
+            hover_color=Cores_Padrao.COR_BOTAO_MENU_HOVER,
             command=self._attempt_login,
             width=360,
             height=50,
             corner_radius=0
         ).pack(pady=20)
 
-        self.login_error_label = ctk.CTkLabel(frame, text="", font=("Arial", 12, "bold"), text_color="#FF5555")
+        self.login_error_label = ctk.CTkLabel(frame, text="", font=("Arial", 12, "bold"), text_color=Cores_Padrao.COR_TEXTO_ERROR)
         self.login_error_label.pack(pady=(5, 0))
-        self.login_error_ok_button = ctk.CTkButton(frame, text="OK", command=self._hide_login_error, width=80)
+        self.login_error_ok_button = ctk.CTkButton(frame, text="OK", command=self._hide_login_error, width=80, 
+                                                    fg_color=Cores_Padrao.COR_BOTAO_MENU_ATIVO,
+                                                    hover_color=Cores_Padrao.COR_BOTAO_MENU_HOVER,
+                                                    text_color=Cores_Padrao.COR_TEXTO_MENU_ESCURO)
         self.login_error_ok_button.pack(pady=(5, 0))
         self.login_error_label.pack_forget()
         self.login_error_ok_button.pack_forget()
@@ -170,9 +176,13 @@ class Main_View:
         if hasattr(self, 'menu_buttons'):
             for name, btn in self.menu_buttons.items():
                 if name == menu_name:
-                    btn.configure(fg_color="#2D7FB6", text_color="#FFFFFF", hover_color="#1C5C94")
+                    btn.configure(fg_color=Cores_Padrao.COR_BOTAO_MENU_ATIVO, 
+                                  text_color=Cores_Padrao.COR_TEXTO_MENU_ESCURO, 
+                                  hover_color=Cores_Padrao.COR_BOTAO_MENU_HOVER)
                 else:
-                    btn.configure(fg_color="#F0F0F0", text_color="#000000", hover_color="#E0E0E0")
+                    btn.configure(fg_color=Cores_Padrao.COR_BOTAO_MENU, 
+                                  text_color=Cores_Padrao.COR_TEXTO_MENU_ESCURO, 
+                                  hover_color=Cores_Padrao.COR_BOTAO_MENU_HOVER)
 
         self.right_panel_label.configure(text=menu_name)
 
@@ -223,7 +233,7 @@ class Main_View:
     def _show_welcome_content(self):
         self.right_panel.pack_forget()
         
-        self.left_panel = ctk.CTkFrame(self.main_container, fg_color="#1A2B44", width=250)
+        self.left_panel = ctk.CTkFrame(self.main_container, fg_color=Cores_Padrao.COR_FUNDO_MENU, width=250)
         self.left_panel.pack(side="left", fill="y", padx=10, pady=10)
         self.left_panel.pack_propagate(False)
         
