@@ -67,7 +67,10 @@ class MovimentoEstoque_View():
         self.combo_status.grid(row=3, column=1, pady=5)
 
         # Botão Criar Movimento dentro do frame_form
-        self.btn_adicionar = ctk.CTkButton(frame_form, text="Criar Movimento", command=self._acao_adicionar, fg_color=Cores_Padrao.COR_BOTAO_SALVAR, text_color=Cores_Padrao.COR_TEXTO, width=150)
+        self.btn_adicionar = ctk.CTkButton(frame_form, text="Criar Movimento", command=self._acao_adicionar, 
+                                            fg_color=Cores_Padrao.COR_BOTAO_SALVAR, 
+                                            text_color=Cores_Padrao.COR_TEXTO_MENU,
+                                            hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150)
         self.btn_adicionar.grid(row=8, column=0, columnspan=2, pady=20)
 
         frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO)

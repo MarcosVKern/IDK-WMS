@@ -42,7 +42,10 @@ class MovimentoEstoqueProdutos_View:
         tk.Label(frame_form, text="Quantidade:", bg=Cores_Padrao.COR_FUNDO).grid(row=1, column=0, sticky="w")
         tk.Entry(frame_form, textvariable=self.var_quantidade, width=20, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=1, column=1, padx=5, pady=5, sticky="w")
 
-        ctk.CTkButton(frame_form, text="Incluir/Atualizar", command=self._incluir_produto, fg_color=Cores_Padrao.COR_BOTAO_SALVAR, text_color=Cores_Padrao.COR_TEXTO, width=150).grid(row=0, column=2, rowspan=2, padx=5)
+        ctk.CTkButton(frame_form, text="Incluir/Atualizar", command=self._incluir_produto, 
+                        fg_color=Cores_Padrao.COR_BOTAO_SALVAR, 
+                        text_color=Cores_Padrao.COR_TEXTO_MENU, 
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).grid(row=0, column=2, rowspan=2, padx=5)
 
         cols = ("id", "nome", "qtd_disponivel", "qtd_selecionada")
         style = ttk.Style()
@@ -56,9 +59,20 @@ class MovimentoEstoqueProdutos_View:
 
         bot_frame = tk.Frame(self.root, bg=Cores_Padrao.COR_FUNDO)
         bot_frame.pack(pady=10)
-        ctk.CTkButton(bot_frame, text="Remover Selecionado", command=self._remover_produto, fg_color=Cores_Padrao.COR_BOTAO_DELETAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(bot_frame, text="Confirmar", command=self._confirmar, fg_color=Cores_Padrao.COR_BOTAO_SALVAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(bot_frame, text="Cancelar", command=self._cancelar, fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(bot_frame, text="Remover Selecionado", command=self._remover_produto, 
+                        fg_color=Cores_Padrao.COR_BOTAO_DELETAR, 
+                        text_color=Cores_Padrao.COR_TEXTO_MENU, 
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
+        
+        ctk.CTkButton(bot_frame, text="Confirmar", command=self._confirmar, 
+                        fg_color=Cores_Padrao.COR_BOTAO_SALVAR, 
+                        text_color=Cores_Padrao.COR_TEXTO_MENU, 
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
+        
+        ctk.CTkButton(bot_frame, text="Cancelar", command=self._cancelar, 
+                        fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, 
+                        text_color=Cores_Padrao.COR_TEXTO_MENU, 
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
 
         self._atualizar_combo_produtos()
         self._refresh_tree()
