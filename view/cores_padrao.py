@@ -2,26 +2,27 @@
 
 class Cores_Padrao:
     #Você pode adicionar mais cores ou categorias conforme necessário
-    COR_FUNDO = "#fce3e9"  # cor base rosa clara
-    COR_TEXTO = "#4a223f"  # texto legível em contraste
-    COR_INPUT_BG = "#ffe6f1"  # fundo de campos input
-    COR_TABLE_BG = "#ffd4ea"  # fundo das tabelas
-    COR_TABLE_ALT_BG = "#ffdfec"  # alternativa para linhas da tabela
-    COR_BOTAO_SALVAR = "#f8b0d1"  # rosa médio
-    COR_BOTAO_ATUALIZAR = "#f4a8c9"  # rosa suave
-    COR_BOTAO_DELETAR = "#e26a99"  # rosa forte
-    COR_BOTAO_LIMPAR = "#f9cee8"  # rosa bem claro
-    COR_BOTAO_ATIVAR = "#f6a3ca"  # rosa vibrante
-    COR_BOTAO_BLOQUEAR = "#e45c96"  # rosa pronunciado
-    COR_ZEBRADO_PAR = "#ffe6f1"  # linha par leve
-    COR_ZEBRADO_IMPAR = "#ffd4ea"  # linha ímpar leve
-    COR_BOTAO_HOVER = "#f4a8c9" # rosa suave para hover
+    COR_FUNDO = "#fff5f8"  # branco com toque de rosa - estilo Hello Kitty
+    COR_TEXTO = "#333333"  # cinza escuro para contraste
+    COR_INPUT_BG = "#ffe4f0"  # rosa pastel muito claro
+    COR_INPUT_FG = "#333333"  # cinza escuro para texto
+    COR_TABLE_BG = "#ffc9e3"  # rosa pastel suave
+    COR_TABLE_FG = "#ffe4f0"  # rosa muito claro para alternância
+    COR_BOTAO_SALVAR = "#ff69b4"  # hot pink - cor Hello Kitty
+    COR_BOTAO_ATUALIZAR = "#ffb6d9"  # rosa pastel
+    COR_BOTAO_DELETAR = "#ff1493"  # deep pink vibrante
+    COR_BOTAO_LIMPAR = "#fff0f6"  # quase branco com rosa
+    COR_BOTAO_ATIVAR = "#ff6ec7"  # rosa vibrante Hello Kitty
+    COR_BOTAO_BLOQUEAR = "#ff4d94"  # rosa forte
+    COR_ZEBRADO_PAR = "#ffe4f0"  # linha par
+    COR_ZEBRADO_IMPAR = "#ffc9e3"  # linha ímpar
+    COR_BOTAO_HOVER = "#ff69b4" # hot pink para hover
 
     #Cores para o menu
-    COR_BOTAO_MENU = "#f7b9de"  # rosa pastel
-    COR_FUNDO_MENU = "#3F1A44"
-    COR_BOTAO_MENU_ATIVO = "#f8b0d1"  # rosa médio para ativo
-    COR_BOTAO_MENU_HOVER = "#f4a8c9"  # rosa suave para hover
+    COR_BOTAO_MENU = "#ff69b4"  # hot pink - Hello Kitty
+    COR_FUNDO_MENU = "#2a2a2a"  # cinza escuro elegante
+    COR_BOTAO_MENU_ATIVO = "#ff1493"  # deep pink para ativo
+    COR_BOTAO_MENU_HOVER = "#ffb6d9"  # rosa pastel para hover
     COR_TEXTO_MENU = "#ffffff"  # branco para texto do menu
-    COR_TEXTO_MENU_ESCURO = "#000000"  # preto para texto do menu escuro
-    COR_TEXTO_ERROR = "#e45c96"  # rosa pronunciado para mensagens de erro
+    COR_TEXTO_MENU_ESCURO = "#333333"  # cinza escuro
+    COR_TEXTO_ERROR = "#ff1493"  # deep pink para erro

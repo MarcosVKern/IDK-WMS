@@ -1,5 +1,9 @@
+from logging import root
+
 import customtkinter as ctk
 from view.cores_padrao import Cores_Padrao
+import tkinter as tk
+from tkinter import ttk
 
 ctk.set_appearance_mode("system")
 ctk.set_default_color_theme("blue")
@@ -41,6 +45,41 @@ class Main_View:
         self.usuario = None
 
         self._setup_initial_content()
+
+        #Pink treeview style
+        root = self.root
+        root.title("Pink.TreeView")
+        
+        style = ttk.Style()
+        style.theme_use("default")
+
+        style.configure("Pink.Treeview", 
+            background=Cores_Padrao.COR_TABLE_BG, 
+            fieldbackground=Cores_Padrao.COR_TABLE_BG, 
+            foreground=Cores_Padrao.COR_TABLE_FG,
+            rowheight=25
+        )
+
+        style.configure("TCombobox", 
+                fieldbackground=Cores_Padrao.COR_FUNDO,    # Cor de fundo do campo
+                background=Cores_Padrao.COR_INPUT_BG,    # Cor da área da seta
+                foreground=Cores_Padrao.COR_TEXTO   # Cor texto
+        )
+
+        style.map('TCombobox',
+          fieldbackground=[('readonly', Cores_Padrao.COR_FUNDO)],
+          selectbackground=[('readonly', Cores_Padrao.COR_BOTAO_HOVER)],
+          selectforeground=[('readonly', Cores_Padrao.COR_FUNDO)]
+        )
+
+        style.map('Pink.Treeview', background=[('selected', Cores_Padrao.COR_BOTAO_HOVER)])
+
+        style.configure("Pink.Treeview.Heading",
+            background=Cores_Padrao.COR_INPUT_BG,
+            foreground=Cores_Padrao.COR_TEXTO,
+            relief="flat"
+        )
+
 
     def _setup_menu(self):
         self.menu_buttons = {}
