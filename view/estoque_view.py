@@ -9,12 +9,12 @@ class Estoque_View:
     def __init__(self, parent=None):
         self.controller = None
         self.parent = parent
-        
+
         if parent is None:
             self.root = tk.Toplevel()
             self.root.title("Consultar Estoque")
             self.root.geometry("1280x720")
-            self.root.state('zoomed')
+            self.root.state("zoomed")
             self.is_embedded = False
         else:
             self.root = tk.Frame(parent, bg=Cores_Padrao.COR_FUNDO)
@@ -29,6 +29,9 @@ class Estoque_View:
         self.produtos_dict = {}
         self.armazens_dict = {}
         self.unidades_dict = {}
+        
+        # Armazenar dados completos do estoque
+        self.estoque_data = []
 
         self._setup_ui()
 
@@ -40,7 +43,7 @@ class Estoque_View:
             text="CONSULTAR ESTOQUE",
             font=("Arial", 16, "bold"),
             pady=10,
-            bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None
+            bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None,
         )
         titulo.pack()
 
@@ -50,31 +53,43 @@ class Estoque_View:
             text="Filtros",
             padx=10,
             pady=10,
-            bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None
+            bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None,
         )
-        frame_filtros.pack(padx=20, pady=5, fill='x')
+        frame_filtros.pack(padx=20, pady=5, fill="x")
 
         # Linha 1 - Filtros
         # Produto
-        tk.Label(frame_filtros, text="Produto:", bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None).grid(
-            row=0, column=0, sticky="w", padx=5, pady=5
+        tk.Label(
+            frame_filtros,
+            text="Produto:",
+            bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None,
+        ).grid(row=0, column=0, sticky="w", padx=5, pady=5)
+        self.combo_produto = ttk.Combobox(
+            frame_filtros, textvariable=self.var_produto, state="readonly", width=25
         )
-        self.combo_produto = ttk.Combobox(frame_filtros, textvariable=self.var_produto, state="readonly", width=25)
         self.combo_produto.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
 
         # Armazém
-        tk.Label(frame_filtros, text="Armazém:", bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None).grid(
-            row=0, column=2, sticky="w", padx=5, pady=5
+        tk.Label(
+            frame_filtros,
+            text="Armazém:",
+            bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None,
+        ).grid(row=0, column=2, sticky="w", padx=5, pady=5)
+        self.combo_armazem = ttk.Combobox(
+            frame_filtros, textvariable=self.var_armazem, state="readonly", width=25
         )
-        self.combo_armazem = ttk.Combobox(frame_filtros, textvariable=self.var_armazem, state="readonly", width=25)
         self.combo_armazem.grid(row=0, column=3, padx=5, pady=5, sticky="ew")
         self.combo_armazem.bind("<<ComboboxSelected>>", self._on_armazem_mudou)
 
         # Unidade de Armazenamento
-        tk.Label(frame_filtros, text="Unidade:", bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None).grid(
-            row=0, column=4, sticky="w", padx=5, pady=5
+        tk.Label(
+            frame_filtros,
+            text="Unidade:",
+            bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None,
+        ).grid(row=0, column=4, sticky="w", padx=5, pady=5)
+        self.combo_unidade = ttk.Combobox(
+            frame_filtros, textvariable=self.var_unidade, state="readonly", width=25
         )
-        self.combo_unidade = ttk.Combobox(frame_filtros, textvariable=self.var_unidade, state="readonly", width=25)
         self.combo_unidade.grid(row=0, column=5, padx=5, pady=5, sticky="ew")
 
         # Configurar peso das colunas
@@ -82,7 +97,9 @@ class Estoque_View:
             frame_filtros.grid_columnconfigure(i, weight=1)
 
         # Frame de botões
-        frame_botoes = tk.Frame(self.root, pady=10, bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None)
+        frame_botoes = tk.Frame(
+            self.root, pady=10, bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None
+        )
         frame_botoes.pack()
 
         ctk.CTkButton(
@@ -90,8 +107,9 @@ class Estoque_View:
             text="Aplicar Filtros",
             command=self._acao_aplicar_filtros,
             fg_color=Cores_Padrao.COR_BOTAO_SALVAR,
-            text_color=Cores_Padrao.COR_TEXTO,
-            width=150
+            hover_color=Cores_Padrao.COR_BOTAO_SALVAR_HOVER,
+            text_color=Cores_Padrao.COR_TEXTO_BOTAO,
+            width=150,
         ).pack(side=tk.LEFT, padx=5)
 
         ctk.CTkButton(
@@ -99,19 +117,36 @@ class Estoque_View:
             text="Limpar Filtros",
             command=self._acao_limpar_filtros,
             fg_color=Cores_Padrao.COR_BOTAO_LIMPAR,
+            hover_color=Cores_Padrao.COR_BOTAO_LIMPAR_HOVER,
             text_color=Cores_Padrao.COR_TEXTO,
-            width=150
+            width=150,
         ).pack(side=tk.LEFT, padx=5)
 
         # Frame da tabela
-        frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None)
+        frame_tabela = tk.Frame(
+            self.root,
+            padx=20,
+            pady=10,
+            bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None,
+        )
         frame_tabela.pack(expand=True, fill="both")
 
         # Colunas da tabela
         self.colunas = ("produto", "quantidade", "unidade", "armazem")
         style = ttk.Style()
-        style.configure("Pink.Treeview", background=Cores_Padrao.COR_TABLE_BG, fieldbackground=Cores_Padrao.COR_TABLE_BG, foreground=Cores_Padrao.COR_TEXTO)
-        self.tree = ttk.Treeview(frame_tabela, columns=self.colunas, show="headings", height=20, style="Pink.Treeview")
+        style.configure(
+            "Pink.Treeview",
+            background=Cores_Padrao.COR_TABLE_BG,
+            fieldbackground=Cores_Padrao.COR_TABLE_BG,
+            foreground=Cores_Padrao.COR_TEXTO,
+        )
+        self.tree = ttk.Treeview(
+            frame_tabela,
+            columns=self.colunas,
+            show="headings",
+            height=20,
+            style="Pink.Treeview",
+        )
 
         self.tree.heading("produto", text="Produto")
         self.tree.heading("quantidade", text="Quantidade")
@@ -124,15 +159,20 @@ class Estoque_View:
         self.tree.column("armazem", anchor="w", width=250)
 
         # Configurar efeito zebrado
-        self.tree.tag_configure('evenrow', background=Cores_Padrao.COR_ZEBRADO_PAR)
-        self.tree.tag_configure('oddrow', background=Cores_Padrao.COR_ZEBRADO_IMPAR)
+        self.tree.tag_configure("evenrow", background=Cores_Padrao.COR_ZEBRADO_PAR)
+        self.tree.tag_configure("oddrow", background=Cores_Padrao.COR_ZEBRADO_IMPAR)
 
         # Scrollbar
-        scrollbar = ttk.Scrollbar(frame_tabela, orient="vertical", command=self.tree.yview)
+        scrollbar = ttk.Scrollbar(
+            frame_tabela, orient="vertical", command=self.tree.yview
+        )
         self.tree.configure(yscroll=scrollbar.set)
 
         self.tree.pack(side="left", expand=True, fill="both")
         scrollbar.pack(side="right", fill="y")
+        
+        # Bind para seleção de item
+        self.tree.bind("<<TreeviewSelect>>", self._ao_selecionar_item)
 
     def display(self):
         """Exibir quando embutido em um frame"""
@@ -152,42 +192,42 @@ class Estoque_View:
 
     def set_produtos(self, produtos):
         """Popula o dropdown de produtos"""
-        self.produtos_dict = {'': None}  # Opção em branco
-        valores = ['']
+        self.produtos_dict = {"": None}  # Opção em branco
+        valores = [""]
         for produto in produtos:
-            self.produtos_dict[produto['nome']] = produto['id']
-            valores.append(produto['nome'])
-        self.combo_produto['values'] = valores
+            self.produtos_dict[produto["nome"]] = produto["id"]
+            valores.append(produto["nome"])
+        self.combo_produto["values"] = valores
         self.combo_produto.current(0)
 
     def set_armazens(self, armazens):
         """Popula o dropdown de armazéns"""
-        self.armazens_dict = {'': None}  # Opção em branco
-        valores = ['']
+        self.armazens_dict = {"": None}  # Opção em branco
+        valores = [""]
         for armazem in armazens:
-            self.armazens_dict[armazem['nome']] = armazem['id']
-            valores.append(armazem['nome'])
-        self.combo_armazem['values'] = valores
+            self.armazens_dict[armazem["nome"]] = armazem["id"]
+            valores.append(armazem["nome"])
+        self.combo_armazem["values"] = valores
         self.combo_armazem.current(0)
         # Limpar unidades
-        self.combo_unidade['values'] = ['']
+        self.combo_unidade["values"] = [""]
         self.combo_unidade.current(0)
 
     def set_unidades(self, unidades):
         """Popula o dropdown de unidades"""
-        self.unidades_dict = {'': None}  # Opção em branco
-        valores = ['']
+        self.unidades_dict = {"": None}  # Opção em branco
+        valores = [""]
         for unidade in unidades:
-            self.unidades_dict[unidade['unidade']] = unidade['id']
-            valores.append(unidade['unidade'])
-        self.combo_unidade['values'] = valores
+            self.unidades_dict[unidade["unidade"]] = unidade["id"]
+            valores.append(unidade["unidade"])
+        self.combo_unidade["values"] = valores
         self.combo_unidade.current(0)
 
     def _on_armazem_mudou(self, event=None):
         """Atualiza unidades quando armazém é selecionado"""
         armazem_selecionado = self.var_armazem.get()
         id_armazem = self.armazens_dict.get(armazem_selecionado)
-        
+
         if self.controller:
             self.controller.on_armazem_selecionado(id_armazem)
 
@@ -198,9 +238,9 @@ class Estoque_View:
         unidade_selecionada = self.var_unidade.get()
 
         return {
-            'id_produto': self.produtos_dict.get(produto_selecionado),
-            'id_armazem': self.armazens_dict.get(armazem_selecionado),
-            'id_unidade': self.unidades_dict.get(unidade_selecionada)
+            "id_produto": self.produtos_dict.get(produto_selecionado),
+            "id_armazem": self.armazens_dict.get(armazem_selecionado),
+            "id_unidade": self.unidades_dict.get(unidade_selecionada),
         }
 
     def popular_tabela(self, estoque):
@@ -208,17 +248,34 @@ class Estoque_View:
         # Limpar dados existentes
         for item in self.tree.get_children():
             self.tree.delete(item)
+        
+        # Armazenar dados completos
+        self.estoque_data = estoque
 
         # Adicionar dados com alternância de cores
         for i, item_estoque in enumerate(estoque):
             valores = (
-                item_estoque['nome_produto'],
-                item_estoque['quantidade'],
-                item_estoque['unidade'],
-                item_estoque['nome_armazem']
+                item_estoque["nome_produto"],
+                item_estoque["quantidade"],
+                item_estoque["unidade"],
+                item_estoque["nome_armazem"],
             )
-            tag = 'evenrow' if i % 2 == 0 else 'oddrow'
-            self.tree.insert('', 'end', values=valores, tags=(tag,))
+            tag = "evenrow" if i % 2 == 0 else "oddrow"
+            self.tree.insert("", "end", values=valores, tags=(tag,))
+
+    def _ao_selecionar_item(self, event):
+        """Chamado quando um item da tabela é selecionado"""
+        try:
+            selecionado = self.tree.selection()
+            if selecionado and self.controller:
+                # Obter índice do item selecionado
+                indice = self.tree.index(selecionado[0])
+                # Recuperar dados completos do estoque
+                if indice < len(self.estoque_data):
+                    estoque_info = self.estoque_data[indice]
+                    self.controller.exibir_detalhes_estoque(estoque_info)
+        except Exception as e:
+            pass
 
     def limpar_campos_filtro(self):
         """Limpa todos os campos de filtro"""

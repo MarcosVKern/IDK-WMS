@@ -3,11 +3,17 @@ from datetime import date
 from model.movimento_estoque import MovimentoEstoque
 from model.dao.base_dao import Base_DAO
 
+
 class MovimentoEstoque_DAO(Base_DAO):
     def save(self, movimento: MovimentoEstoque):
         sql = """call sp_criar_movimento(%s, %s, %s, %s)"""
 
-        values = (movimento._origem, movimento._destino, movimento._tipoMovimento, movimento._responsavel)
+        values = (
+            movimento._origem,
+            movimento._destino,
+            movimento._tipoMovimento,
+            movimento._responsavel,
+        )
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql, values)
@@ -26,7 +32,7 @@ class MovimentoEstoque_DAO(Base_DAO):
         cursor.close()
         conn.close()
         return movimento
-    
+
     def get_all(self):
         sql = """select me.ID_movimento, me.origem, me.destino, me.dataSaida, me.dataEntrada, me.dataAlteracao, me.status, tm.tipoMovimento as tipoMovimento, f.nome as responsavel 
                 from movimento_estoque me
@@ -39,13 +45,34 @@ class MovimentoEstoque_DAO(Base_DAO):
         cursor = conn.cursor()
         cursor.execute(sql)
         movimentos = []
-        for (ID_movimento, origem, destino, dataSaida, dataEntrada, dataAlteracao, status, tipoMovimento, responsavel) in cursor:
-            movimentos.append(MovimentoEstoque(ID_movimento, origem, destino, dataSaida, dataEntrada,
-                                              dataAlteracao, status, tipoMovimento, responsavel))
+        for (
+            ID_movimento,
+            origem,
+            destino,
+            dataSaida,
+            dataEntrada,
+            dataAlteracao,
+            status,
+            tipoMovimento,
+            responsavel,
+        ) in cursor:
+            movimentos.append(
+                MovimentoEstoque(
+                    ID_movimento,
+                    origem,
+                    destino,
+                    dataSaida,
+                    dataEntrada,
+                    dataAlteracao,
+                    status,
+                    tipoMovimento,
+                    responsavel,
+                )
+            )
         cursor.close()
         conn.close()
         return movimentos
-    
+
     def get_by_id(self, id):
         sql = """select origem, destino, dataSaida, dataEntrada, dataAlteracao, status, tipoMovimento, responsavel 
                  from movimento_estoque where ID_movimento = %s"""
@@ -56,38 +83,65 @@ class MovimentoEstoque_DAO(Base_DAO):
         row = cursor.fetchone()
         movimento = None
         if row:
-            origem, destino, dataSaida, dataEntrada, dataAlteracao, status, tipoMovimento, responsavel = row
-            movimento = MovimentoEstoque(id, origem, destino, dataSaida, dataEntrada,
-                                         dataAlteracao, status, tipoMovimento, responsavel)
+            (
+                origem,
+                destino,
+                dataSaida,
+                dataEntrada,
+                dataAlteracao,
+                status,
+                tipoMovimento,
+                responsavel,
+            ) = row
+            movimento = MovimentoEstoque(
+                id,
+                origem,
+                destino,
+                dataSaida,
+                dataEntrada,
+                dataAlteracao,
+                status,
+                tipoMovimento,
+                responsavel,
+            )
         cursor.close()
         conn.close()
         return movimento
-    
+
     def delete(self):
         pass
-    
+
     def update(self, movimento: MovimentoEstoque):
         sql = """update movimento_estoque set origem = %s, destino = %s, dataSaida = %s, dataEntrada = %s, 
                  dataAlteracao = %s, status = %s, tipoMovimento = %s, responsavel = %s where ID_movimento = %s"""
-        
+
         status = movimento._status
         movimento._dataAlteracao = date.today()
-        
+
         # Atualizar datas baseado no novo status (sem alterar o status, pois o controller já faz isso)
         if movimento._tipoMovimento == 1:  # Entrada
             if status == "Efetivado":
                 movimento._dataEntrada = date.today()
-        elif movimento._tipoMovimento == 2: # Saída
+        elif movimento._tipoMovimento == 2:  # Saída
             if status == "Despachado":
                 movimento._dataSaida = date.today()
-        elif movimento._tipoMovimento == 3: # Interno
+        elif movimento._tipoMovimento == 3:  # Interno
             if status == "Despachado":
                 movimento._dataSaida = date.today()
             elif status == "Efetivado":
                 movimento._dataEntrada = date.today()
 
-        values = (movimento._origem, movimento._destino, movimento._dataSaida, movimento._dataEntrada,
-                  movimento._dataAlteracao, status, movimento._tipoMovimento, movimento._responsavel, movimento._id_movimento)
+        values = (
+            movimento._origem,
+            movimento._destino,
+            movimento._dataSaida,
+            movimento._dataEntrada,
+            movimento._dataAlteracao,
+            status,
+            movimento._tipoMovimento,
+            movimento._responsavel,
+            movimento._id_movimento,
+        )
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql, values)
@@ -96,7 +150,7 @@ class MovimentoEstoque_DAO(Base_DAO):
         conn.close()
         movimento._status = status
         return movimento
-    
+
     def cancela_movimento(self, id):
         sql = """update movimento_estoque set status = 'Cancelado', dataAlteracao = %s where ID_movimento = %s"""
 
@@ -110,25 +164,25 @@ class MovimentoEstoque_DAO(Base_DAO):
         cursor.close()
         conn.close()
         return affected_rows > 0
-    
+
     def pode_cancelar(self, id):
         """Verifica se um movimento pode ser cancelado baseado em suas regras de negócio"""
         sql = """select tipoMovimento, status from movimento_estoque where ID_movimento = %s"""
-        
+
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql, (id,))
         row = cursor.fetchone()
         cursor.close()
         conn.close()
-        
+
         if not row:
             return False
-        
+
         tipo_movimento, status = row
-        
+
         # Interno - Efetivado: NÃO PODE cancelar
         if tipo_movimento == 3 and status == "Efetivado":
             return False
-        
+
         return True
