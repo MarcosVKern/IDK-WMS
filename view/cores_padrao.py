@@ -29,7 +29,7 @@ class Cores_Padrao:
     # Cores para o menu
     COR_BOTAO_MENU = "#c97bb8"  # rosa mauve vibrante
     COR_BOTAO_MENU_HOVER = "#b96aaa"  # rosa mauve mais escura ao hover
-    COR_FUNDO_MENU = "#4a4a4a"  # cinza escuro sofisticado
+    COR_FUNDO_MENU = "#1a1a1a"  # cinza escuro sofisticado
     COR_BOTAO_MENU_ATIVO = "#b8a1b8"  # mauve para ativo
     COR_BOTAO_MENU_ATIVO_HOVER = "#a590ab"  # mauve mais escuro ao hover
     COR_TEXTO_MENU = "#f5f5f5"  # branco suave para texto do menu

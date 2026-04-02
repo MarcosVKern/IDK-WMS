@@ -85,7 +85,10 @@ class Main_View:
             fieldbackground=Cores_Padrao.COR_INPUT_BG,
             background=Cores_Padrao.COR_INPUT_BG,
             padding=6,
-            relief="flat",
+            foreground=Cores_Padrao.COR_TEXTO,
+            bordercolor=Cores_Padrao.COR_TEXTO,
+            borderwidth=1,
+            relief="solid",
         )
 
         style.map(
@@ -226,7 +229,7 @@ class Main_View:
             frame,
             text="Entrar",
             text_color=Cores_Padrao.COR_TEXTO_MENU_ESCURO,
-            fg_color=Cores_Padrao.COR_BOTAO_MENU_ATIVO,
+            fg_color=Cores_Padrao.COR_BOTAO_MENU,
             hover_color=Cores_Padrao.COR_BOTAO_MENU_HOVER,
             command=self._attempt_login,
             width=360,

@@ -105,7 +105,7 @@ class Estoque_View:
             command=self._acao_aplicar_filtros,
             fg_color=Cores_Padrao.COR_BOTAO_SALVAR,
             hover=Cores_Padrao.COR_BOTAO_SALVAR_HOVER,
-            text_color=Cores_Padrao.COR_TEXTO,
+            text_color=Cores_Padrao.COR_TEXTO_BOTAO,
             width=150,
         ).pack(side=tk.LEFT, padx=5)
 
@@ -115,7 +115,7 @@ class Estoque_View:
             command=self._acao_limpar_filtros,
             fg_color=Cores_Padrao.COR_BOTAO_LIMPAR,
             hover_color=Cores_Padrao.COR_BOTAO_LIMPAR_HOVER,
-            text_color=Cores_Padrao.COR_TEXTO_BOTAO,
+            text_color=Cores_Padrao.COR_TEXTO,
             width=150,
         ).pack(side=tk.LEFT, padx=5)
 
