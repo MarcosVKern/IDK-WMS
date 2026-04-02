@@ -1,5 +1,6 @@
 from model.cargo import Cargo
 
+
 class Cargo_Controller:
     def __init__(self, dao, view):
         self.dao = dao
@@ -9,22 +10,21 @@ class Cargo_Controller:
     def add_cargo(self):
         try:
             dados = self.view.get_cargo_data()
-            
+
             # Validações de campos obrigatórios
             if not dados:
                 self.view.show_error("Erro ao obter dados do formulário!")
                 return
-            
-            if not dados.get('cargo') or not str(dados['cargo']).strip():
+
+            if not dados.get("cargo") or not str(dados["cargo"]).strip():
                 self.view.show_error("Nome do cargo é obrigatório!")
                 return
-            
-            cargo_novo = Cargo(
-                id=None,
-                cargo=dados['cargo']
-            )
+
+            cargo_novo = Cargo(id=None, cargo=dados["cargo"])
             cargo_salvo = self.dao.save(cargo_novo)
-            self.view.show_message(f"Cargo '{cargo_salvo._nome}' adicionado com id {cargo_salvo._id}!")
+            self.view.show_message(
+                f"Cargo '{cargo_salvo._nome}' adicionado com id {cargo_salvo._id}!"
+            )
         except Exception as e:
             self.view.show_error(f"Erro ao adicionar cargo: {str(e)}")
 
@@ -36,22 +36,21 @@ class Cargo_Controller:
                 self.view.show_error(f"Cargo com id {id_cargo} não encontrado!")
                 return
             dados_cargo = self.view.get_cargo_data(cargo_existente)
-            
+
             # Validações de campos obrigatórios
             if not dados_cargo:
                 self.view.show_error("Erro ao obter dados do formulário!")
                 return
-            
-            if not dados_cargo.get('cargo') or not str(dados_cargo['cargo']).strip():
+
+            if not dados_cargo.get("cargo") or not str(dados_cargo["cargo"]).strip():
                 self.view.show_error("Nome do cargo é obrigatório!")
                 return
-            
-            cargo_atualizado = Cargo(
-                id=id_cargo,
-                cargo=dados_cargo['cargo']
-            )
+
+            cargo_atualizado = Cargo(id=id_cargo, cargo=dados_cargo["cargo"])
             if self.dao.update(cargo_atualizado):
-                self.view.show_message(f"Cargo '{cargo_atualizado._nome}' atualizado com sucesso!")
+                self.view.show_message(
+                    f"Cargo '{cargo_atualizado._nome}' atualizado com sucesso!"
+                )
         except Exception as e:
             self.view.show_error(f"Erro ao atualizar cargo: {str(e)}")
 

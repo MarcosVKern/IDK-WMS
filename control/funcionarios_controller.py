@@ -1,54 +1,56 @@
 from model.funcionario import Funcionario
 import mysql.connector
 
+
 class Funcionario_Controller:
     def __init__(self, dao, view, cargo_dao=None):
         self.dao = dao
         self.view = view
         self.cargo_dao = cargo_dao
         self.view.controller = self
-        
+
         # Carrega os cargos na inicialização se o cargo_dao foi fornecido
         if cargo_dao:
             self._carregar_cargos()
 
-
     def add_funcionario(self):
         try:
             dados = self.view.get_funcionario_data()
-            
+
             # Validações de campos obrigatórios
             if not dados:
                 self.view.show_error("Erro ao obter dados do formulário!")
                 return
-            
-            if not dados.get('nome') or not str(dados['nome']).strip():
+
+            if not dados.get("nome") or not str(dados["nome"]).strip():
                 self.view.show_error("Nome é obrigatório!")
                 return
-            
-            if not dados.get('email') or not str(dados['email']).strip():
+
+            if not dados.get("email") or not str(dados["email"]).strip():
                 self.view.show_error("Email é obrigatório!")
                 return
-            
-            if not dados.get('cargo'):
+
+            if not dados.get("cargo"):
                 self.view.show_error("Cargo é obrigatório!")
                 return
-            
+
             funcionario_novo = Funcionario(
                 id=None,
-                cep=dados['cep'],
-                bairro=dados['bairro'],
-                cidade=dados['cidade'],
-                uf=dados['uf'],
-                pais=dados['pais'],
-                nome=dados['nome'],
-                cargo=dados['cargo'],
-                email=dados['email'],
+                cep=dados["cep"],
+                bairro=dados["bairro"],
+                cidade=dados["cidade"],
+                uf=dados["uf"],
+                pais=dados["pais"],
+                nome=dados["nome"],
+                cargo=dados["cargo"],
+                email=dados["email"],
                 senha="123456",
-                situacao=dados['situacao']
+                situacao=dados["situacao"],
             )
             funcionario_salvo = self.dao.save(funcionario_novo)
-            self.view.show_message(f"Funcionário '{funcionario_salvo._nome}' adicionado com id {funcionario_salvo._id}!")
+            self.view.show_message(
+                f"Funcionário '{funcionario_salvo._nome}' adicionado com id {funcionario_salvo._id}!"
+            )
         except Exception as e:
             self.view.show_error(f"Erro ao adicionar funcionário: {str(e)}")
 
@@ -57,42 +59,52 @@ class Funcionario_Controller:
             id_funcionario = self.view.get_id()
             funcionario_existente = self.dao.get_by_id(id_funcionario)
             if not funcionario_existente:
-                self.view.show_error(f"Funcionário com id {id_funcionario} não encontrado!")
+                self.view.show_error(
+                    f"Funcionário com id {id_funcionario} não encontrado!"
+                )
                 return
             dados_funcionario = self.view.get_funcionario_data(funcionario_existente)
-            
+
             # Validações de campos obrigatórios
             if not dados_funcionario:
                 self.view.show_error("Erro ao obter dados do formulário!")
                 return
-            
-            if not dados_funcionario.get('nome') or not str(dados_funcionario['nome']).strip():
+
+            if (
+                not dados_funcionario.get("nome")
+                or not str(dados_funcionario["nome"]).strip()
+            ):
                 self.view.show_error("Nome é obrigatório!")
                 return
-            
-            if not dados_funcionario.get('email') or not str(dados_funcionario['email']).strip():
+
+            if (
+                not dados_funcionario.get("email")
+                or not str(dados_funcionario["email"]).strip()
+            ):
                 self.view.show_error("Email é obrigatório!")
                 return
-            
-            if not dados_funcionario.get('cargo'):
+
+            if not dados_funcionario.get("cargo"):
                 self.view.show_error("Cargo é obrigatório!")
                 return
-            
+
             funcionario_atualizado = Funcionario(
                 id=id_funcionario,
-                cep=dados_funcionario['cep'],
-                bairro=dados_funcionario['bairro'],
-                cidade=dados_funcionario['cidade'],
-                uf=dados_funcionario['uf'],
-                pais=dados_funcionario['pais'],
-                nome=dados_funcionario['nome'],
-                cargo=dados_funcionario['cargo'],
-                email=dados_funcionario['email'],
+                cep=dados_funcionario["cep"],
+                bairro=dados_funcionario["bairro"],
+                cidade=dados_funcionario["cidade"],
+                uf=dados_funcionario["uf"],
+                pais=dados_funcionario["pais"],
+                nome=dados_funcionario["nome"],
+                cargo=dados_funcionario["cargo"],
+                email=dados_funcionario["email"],
                 senha=funcionario_existente._senha,
-                situacao=dados_funcionario['situacao']
+                situacao=dados_funcionario["situacao"],
             )
             if self.dao.update(funcionario_atualizado):
-                self.view.show_message(f"Funcionário '{funcionario_atualizado._nome}' atualizado com sucesso!")
+                self.view.show_message(
+                    f"Funcionário '{funcionario_atualizado._nome}' atualizado com sucesso!"
+                )
         except Exception as e:
             self.view.show_error(f"Erro ao atualizar funcionário: {str(e)}")
 
@@ -100,11 +112,17 @@ class Funcionario_Controller:
         try:
             id_funcionario = self.view.get_id()
             if self.dao.delete(id_funcionario):
-                self.view.show_message(f"Funcionário com id {id_funcionario} deletado com sucesso!")
+                self.view.show_message(
+                    f"Funcionário com id {id_funcionario} deletado com sucesso!"
+                )
             else:
-                self.view.show_message(f"Funcionário com id {id_funcionario} não encontrado!")
+                self.view.show_message(
+                    f"Funcionário com id {id_funcionario} não encontrado!"
+                )
         except mysql.connector.IntegrityError:
-            self.view.show_error("Não é possível excluir este funcionário pois ele possui vínculos com outros dados!")
+            self.view.show_error(
+                "Não é possível excluir este funcionário pois ele possui vínculos com outros dados!"
+            )
         except Exception as e:
             self.view.show_error(f"Erro ao deletar funcionário: {str(e)}")
 
@@ -129,7 +147,9 @@ class Funcionario_Controller:
             id_funcionario = self.view.get_id()
             funcionario = self.dao.get_by_id(id_funcionario)
             if not funcionario:
-                self.view.show_message(f"Funcionário com id {id_funcionario} não encontrado!")
+                self.view.show_message(
+                    f"Funcionário com id {id_funcionario} não encontrado!"
+                )
                 return
             self.view.show_funcionario_details(funcionario)
         except Exception as e:

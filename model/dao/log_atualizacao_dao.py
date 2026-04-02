@@ -1,6 +1,7 @@
 from model.log_atualizacao import LogAtualizacao
 from model.dao.base_dao import Base_DAO
 
+
 class LogAtualizacao_DAO(Base_DAO):
     def get_all(self):
         sql = """select data from log"""
@@ -14,7 +15,7 @@ class LogAtualizacao_DAO(Base_DAO):
         cursor.close()
         conn.close()
         return logs
-    
+
     def save(self):
         pass
 

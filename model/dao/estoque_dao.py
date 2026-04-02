@@ -1,12 +1,13 @@
 from model.estoque import Estoque
 from model.dao.base_dao import Base_DAO
 
+
 class Estoque_DAO(Base_DAO):
     def save(self, estoque: Estoque):
         sql = """insert into estoque (produto, UNarmazenamento, quantidade) VALUES (%s, %s, %s)"""
 
         values = (estoque._produto, estoque._UNarmazenamento, estoque._quantidade)
-        
+
         conn = self._get_connection()
         cursor = conn.cursor()
         cursor.execute(sql, values)
@@ -15,7 +16,7 @@ class Estoque_DAO(Base_DAO):
         cursor.close()
         conn.close()
         return estoque
-    
+
     def get_all(self):
         sql = """select e.produto, e.UNarmazenamento, e.quantidade
                 from estoque e
@@ -26,12 +27,12 @@ class Estoque_DAO(Base_DAO):
         cursor = conn.cursor()
         cursor.execute(sql)
         estoques = []
-        for (produto, UNarmazenamento, quantidade) in cursor:
+        for produto, UNarmazenamento, quantidade in cursor:
             estoques.append(Estoque(produto, UNarmazenamento, quantidade))
         cursor.close()
         conn.close()
         return estoques
-    
+
     def get_by_id(self, id_produto, id_unidade):
         sql = """select e.produto, e.UNarmazenamento, e.quantidade 
                 from estoque e
@@ -86,8 +87,8 @@ class Estoque_DAO(Base_DAO):
         cursor = conn.cursor()
         cursor.execute(sql, (id_unidade,))
         produtos = []
-        for (produto, nome, quantidade) in cursor:
-            produtos.append({'id': produto, 'nome': nome, 'quantidade': quantidade})
+        for produto, nome, quantidade in cursor:
+            produtos.append({"id": produto, "nome": nome, "quantidade": quantidade})
         cursor.close()
         conn.close()
         return produtos
@@ -123,16 +124,26 @@ class Estoque_DAO(Base_DAO):
         cursor.execute(sql)
         estoque = []
         for row in cursor:
-            quantidade, nome_produto, id_produto, unidade, id_unidade, nome_armazem, id_armazem = row
-            estoque.append({
-                'quantidade': quantidade,
-                'nome_produto': nome_produto,
-                'id_produto': id_produto,
-                'unidade': unidade,
-                'id_unidade': id_unidade,
-                'nome_armazem': nome_armazem,
-                'id_armazem': id_armazem
-            })
+            (
+                quantidade,
+                nome_produto,
+                id_produto,
+                unidade,
+                id_unidade,
+                nome_armazem,
+                id_armazem,
+            ) = row
+            estoque.append(
+                {
+                    "quantidade": quantidade,
+                    "nome_produto": nome_produto,
+                    "id_produto": id_produto,
+                    "unidade": unidade,
+                    "id_unidade": id_unidade,
+                    "nome_armazem": nome_armazem,
+                    "id_armazem": id_armazem,
+                }
+            )
         cursor.close()
         conn.close()
         return estoque
@@ -145,8 +156,8 @@ class Estoque_DAO(Base_DAO):
         cursor = conn.cursor()
         cursor.execute(sql)
         produtos = []
-        for (id_produto, nome) in cursor:
-            produtos.append({'id': id_produto, 'nome': nome})
+        for id_produto, nome in cursor:
+            produtos.append({"id": id_produto, "nome": nome})
         cursor.close()
         conn.close()
         return produtos
@@ -159,8 +170,8 @@ class Estoque_DAO(Base_DAO):
         cursor = conn.cursor()
         cursor.execute(sql)
         armazens = []
-        for (id_armazem, nome) in cursor:
-            armazens.append({'id': id_armazem, 'nome': nome})
+        for id_armazem, nome in cursor:
+            armazens.append({"id": id_armazem, "nome": nome})
         cursor.close()
         conn.close()
         return armazens
@@ -173,8 +184,8 @@ class Estoque_DAO(Base_DAO):
         cursor = conn.cursor()
         cursor.execute(sql, (id_armazem,))
         unidades = []
-        for (id_unidade, unidade) in cursor:
-            unidades.append({'id': id_unidade, 'unidade': unidade})
+        for id_unidade, unidade in cursor:
+            unidades.append({"id": id_unidade, "unidade": unidade})
         cursor.close()
         conn.close()
         return unidades
@@ -197,19 +208,19 @@ class Estoque_DAO(Base_DAO):
         where e.quantidade > 0"""
 
         params = []
-        
+
         if id_produto:
             sql += " and p.ID_produto = %s"
             params.append(id_produto)
-        
+
         if id_armazem:
             sql += " and a.ID_armazem = %s"
             params.append(id_armazem)
-        
+
         if id_unidade:
             sql += " and ua.ID_unidade = %s"
             params.append(id_unidade)
-        
+
         sql += " order by p.nome"
 
         conn = self._get_connection()
@@ -217,16 +228,26 @@ class Estoque_DAO(Base_DAO):
         cursor.execute(sql, params if params else None)
         estoque = []
         for row in cursor:
-            quantidade, nome_produto, id_produto, unidade, id_unidade, nome_armazem, id_armazem = row
-            estoque.append({
-                'quantidade': quantidade,
-                'nome_produto': nome_produto,
-                'id_produto': id_produto,
-                'unidade': unidade,
-                'id_unidade': id_unidade,
-                'nome_armazem': nome_armazem,
-                'id_armazem': id_armazem
-            })
+            (
+                quantidade,
+                nome_produto,
+                id_produto,
+                unidade,
+                id_unidade,
+                nome_armazem,
+                id_armazem,
+            ) = row
+            estoque.append(
+                {
+                    "quantidade": quantidade,
+                    "nome_produto": nome_produto,
+                    "id_produto": id_produto,
+                    "unidade": unidade,
+                    "id_unidade": id_unidade,
+                    "nome_armazem": nome_armazem,
+                    "id_armazem": id_armazem,
+                }
+            )
         cursor.close()
         conn.close()
         return estoque
