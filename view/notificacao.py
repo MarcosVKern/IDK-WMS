@@ -16,28 +16,28 @@ class Notificacao:
             janela.transient(parent)
             janela.grab_set()
 
-        janela.configure(fg_color="#2d2d2d")
+        janela.configure(fg_color=Cores_Padrao.COR_FUNDO)
 
         frame_principal = ctk.CTkFrame(
-            janela, fg_color="#3a1a1a", border_width=2, border_color="#ff4444"
+            janela, fg_color="#f5e8e8", border_width=2, border_color="#d97ca1"
         )
         frame_principal.pack(fill="both", expand=True, padx=5, pady=5)
 
-        frame_titulo = ctk.CTkFrame(frame_principal, fg_color="#3a1a1a")
+        frame_titulo = ctk.CTkFrame(frame_principal, fg_color="#f5e8e8")
         frame_titulo.pack(fill="x", padx=15, pady=(15, 5))
 
         ctk.CTkLabel(
             frame_titulo,
             text="⚠ ERRO",
             font=("Arial", 14, "bold"),
-            text_color="#ff6666",
+            text_color="#d97ca1",
         ).pack(anchor="w")
 
         ctk.CTkLabel(
             frame_principal,
             text=mensagem,
             font=("Arial", 11),
-            text_color="#ffffff",
+            text_color=Cores_Padrao.COR_TEXTO,
             wraplength=350,
             justify="left",
         ).pack(padx=15, pady=10, fill="both", expand=True)
@@ -45,8 +45,8 @@ class Notificacao:
         ctk.CTkButton(
             frame_principal,
             text="OK",
-            fg_color="#ff4444",
-            hover_color="#cc0000",
+            fg_color="#d97ca1",
+            hover_color="#c97bb8",
             text_color="white",
             command=janela.destroy,
         ).pack(pady=10, padx=15, fill="x")
@@ -65,28 +65,28 @@ class Notificacao:
             janela.transient(parent)
             janela.grab_set()
 
-        janela.configure(fg_color="#2d2d2d")
+        janela.configure(fg_color=Cores_Padrao.COR_FUNDO)
 
         frame_principal = ctk.CTkFrame(
-            janela, fg_color="#3a2a1a", border_width=2, border_color="#ffaa44"
+            janela, fg_color="#f5f0e8", border_width=2, border_color="#d9a47c"
         )
         frame_principal.pack(fill="both", expand=True, padx=5, pady=5)
 
-        frame_titulo = ctk.CTkFrame(frame_principal, fg_color="#3a2a1a")
+        frame_titulo = ctk.CTkFrame(frame_principal, fg_color="#f5f0e8")
         frame_titulo.pack(fill="x", padx=15, pady=(15, 5))
 
         ctk.CTkLabel(
             frame_titulo,
             text="⚠ AVISO",
             font=("Arial", 14, "bold"),
-            text_color="#ffbb66",
+            text_color="#d9a47c",
         ).pack(anchor="w")
 
         ctk.CTkLabel(
             frame_principal,
             text=mensagem,
             font=("Arial", 11),
-            text_color="#ffffff",
+            text_color=Cores_Padrao.COR_TEXTO,
             wraplength=350,
             justify="left",
         ).pack(padx=15, pady=10, fill="both", expand=True)
@@ -94,8 +94,8 @@ class Notificacao:
         ctk.CTkButton(
             frame_principal,
             text="OK",
-            fg_color="#ffaa44",
-            hover_color="#ff8800",
+            fg_color="#d9a47c",
+            hover_color="#c99470",
             text_color="white",
             command=janela.destroy,
         ).pack(pady=10, padx=15, fill="x")
@@ -115,28 +115,28 @@ class Notificacao:
             janela.transient(parent)
             janela.grab_set()
 
-        janela.configure(fg_color="#2d2d2d")
+        janela.configure(fg_color=Cores_Padrao.COR_FUNDO)
 
         frame_principal = ctk.CTkFrame(
-            janela, fg_color="#1a3a1a", border_width=2, border_color="#44aa44"
+            janela, fg_color="#e8f5e8", border_width=2, border_color="#7cd97c"
         )
         frame_principal.pack(fill="both", expand=True, padx=5, pady=5)
 
-        frame_titulo = ctk.CTkFrame(frame_principal, fg_color="#1a3a1a")
+        frame_titulo = ctk.CTkFrame(frame_principal, fg_color="#e8f5e8")
         frame_titulo.pack(fill="x", padx=15, pady=(15, 5))
 
         ctk.CTkLabel(
             frame_titulo,
             text="✓ SUCESSO",
             font=("Arial", 14, "bold"),
-            text_color="#66ff66",
+            text_color="#7cd97c",
         ).pack(anchor="w")
 
         ctk.CTkLabel(
             frame_principal,
             text=mensagem,
             font=("Arial", 11),
-            text_color="#ffffff",
+            text_color=Cores_Padrao.COR_TEXTO,
             wraplength=350,
             justify="left",
         ).pack(padx=15, pady=10, fill="both", expand=True)
@@ -144,8 +144,8 @@ class Notificacao:
         ctk.CTkButton(
             frame_principal,
             text="OK",
-            fg_color="#44aa44",
-            hover_color="#00cc00",
+            fg_color="#7cd97c",
+            hover_color="#6cc96c",
             text_color="white",
             command=janela.destroy,
         ).pack(pady=10, padx=15, fill="x")
@@ -165,28 +165,28 @@ class Notificacao:
             janela.transient(parent)
             janela.grab_set()
 
-        janela.configure(fg_color="#2d2d2d")
+        janela.configure(fg_color=Cores_Padrao.COR_FUNDO)
 
         frame_principal = ctk.CTkFrame(
-            janela, fg_color="#1a2a3a", border_width=2, border_color="#4488ff"
+            janela, fg_color="#e8f0f5", border_width=2, border_color="#7ca1d9"
         )
         frame_principal.pack(fill="both", expand=True, padx=5, pady=5)
 
-        frame_titulo = ctk.CTkFrame(frame_principal, fg_color="#1a2a3a")
+        frame_titulo = ctk.CTkFrame(frame_principal, fg_color="#e8f0f5")
         frame_titulo.pack(fill="x", padx=15, pady=(15, 5))
 
         ctk.CTkLabel(
             frame_titulo,
             text="? CONFIRMAÇÃO",
             font=("Arial", 14, "bold"),
-            text_color="#66aaff",
+            text_color="#7ca1d9",
         ).pack(anchor="w")
 
         ctk.CTkLabel(
             frame_principal,
             text=mensagem,
             font=("Arial", 11),
-            text_color="#ffffff",
+            text_color=Cores_Padrao.COR_TEXTO,
             wraplength=350,
             justify="left",
         ).pack(padx=15, pady=10, fill="both", expand=True)
@@ -201,14 +201,14 @@ class Notificacao:
             resultado["resposta"] = False
             janela.destroy()
 
-        frame_botoes = ctk.CTkFrame(frame_principal, fg_color="#1a2a3a")
+        frame_botoes = ctk.CTkFrame(frame_principal, fg_color="#e8f0f5")
         frame_botoes.pack(pady=10, padx=15, fill="x")
 
         ctk.CTkButton(
             frame_botoes,
             text="Sim",
-            fg_color="#44aa44",
-            hover_color="#00cc00",
+            fg_color="#7cd97c",
+            hover_color="#6cc96c",
             text_color="white",
             command=confirmar,
         ).pack(side="left", padx=5, fill="x", expand=True)
@@ -216,8 +216,8 @@ class Notificacao:
         ctk.CTkButton(
             frame_botoes,
             text="Não",
-            fg_color="#ff4444",
-            hover_color="#cc0000",
+            fg_color="#d97ca1",
+            hover_color="#c97bb8",
             text_color="white",
             command=cancelar,
         ).pack(side="left", padx=5, fill="x", expand=True)
@@ -239,28 +239,28 @@ class Notificacao:
             janela.transient(parent)
             janela.grab_set()
 
-        janela.configure(fg_color="#2d2d2d")
+        janela.configure(fg_color=Cores_Padrao.COR_FUNDO)
 
         frame_principal = ctk.CTkFrame(
-            janela, fg_color="#1a2a3a", border_width=2, border_color="#4488ff"
+            janela, fg_color="#e8f0f5", border_width=2, border_color="#7ca1d9"
         )
         frame_principal.pack(fill="both", expand=True, padx=5, pady=5)
 
-        frame_titulo = ctk.CTkFrame(frame_principal, fg_color="#1a2a3a")
+        frame_titulo = ctk.CTkFrame(frame_principal, fg_color="#e8f0f5")
         frame_titulo.pack(fill="x", padx=15, pady=(15, 5))
 
         ctk.CTkLabel(
             frame_titulo,
             text="ℹ INFORMAÇÃO",
             font=("Arial", 14, "bold"),
-            text_color="#66aaff",
+            text_color="#7ca1d9",
         ).pack(anchor="w")
 
         ctk.CTkLabel(
             frame_principal,
             text=mensagem,
             font=("Arial", 11),
-            text_color="#ffffff",
+            text_color=Cores_Padrao.COR_TEXTO,
             wraplength=350,
             justify="left",
         ).pack(padx=15, pady=10, fill="both", expand=True)
@@ -268,8 +268,8 @@ class Notificacao:
         ctk.CTkButton(
             frame_principal,
             text="OK",
-            fg_color="#4488ff",
-            hover_color="#0055ff",
+            fg_color="#7ca1d9",
+            hover_color="#6c91c9",
             text_color="white",
             command=janela.destroy,
         ).pack(pady=10, padx=15, fill="x")
