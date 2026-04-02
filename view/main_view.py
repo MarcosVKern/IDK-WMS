@@ -190,7 +190,7 @@ class Main_View:
         ctk.CTkButton(
             frame,
             text="Entrar",
-            text_color=Cores_Padrao.COR_TEXTO_MENU_ESCURO,
+            text_color=Cores_Padrao.COR_TEXTO_MENU,
             fg_color=Cores_Padrao.COR_BOTAO_MENU_ATIVO,
             hover_color=Cores_Padrao.COR_BOTAO_MENU_HOVER,
             command=self._attempt_login,
@@ -204,7 +204,7 @@ class Main_View:
         self.login_error_ok_button = ctk.CTkButton(frame, text="OK", command=self._hide_login_error, width=80, 
                                                     fg_color=Cores_Padrao.COR_BOTAO_MENU_ATIVO,
                                                     hover_color=Cores_Padrao.COR_BOTAO_MENU_HOVER,
-                                                    text_color=Cores_Padrao.COR_TEXTO_MENU_ESCURO)
+                                                    text_color=Cores_Padrao.COR_TEXTO_MENU)
         self.login_error_ok_button.pack(pady=(5, 0))
         self.login_error_label.pack_forget()
         self.login_error_ok_button.pack_forget()
@@ -217,11 +217,11 @@ class Main_View:
             for name, btn in self.menu_buttons.items():
                 if name == menu_name:
                     btn.configure(fg_color=Cores_Padrao.COR_BOTAO_MENU_ATIVO, 
-                                  text_color=Cores_Padrao.COR_TEXTO_MENU_ESCURO, 
+                                  text_color=Cores_Padrao.COR_TEXTO_MENU, 
                                   hover_color=Cores_Padrao.COR_BOTAO_MENU_HOVER)
                 else:
                     btn.configure(fg_color=Cores_Padrao.COR_BOTAO_MENU, 
-                                  text_color=Cores_Padrao.COR_TEXTO_MENU_ESCURO, 
+                                  text_color=Cores_Padrao.COR_TEXTO_MENU, 
                                   hover_color=Cores_Padrao.COR_BOTAO_MENU_HOVER)
 
         self.right_panel_label.configure(text=menu_name)
