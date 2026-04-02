@@ -1,7 +1,8 @@
-#isso aqui é só para criar cores padrões que o sistema vai usar nas views
+# isso aqui é só para criar cores padrões que o sistema vai usar nas views
+
 
 class Cores_Padrao:
-    #Você pode adicionar mais cores ou categorias conforme necessário
+    # Você pode adicionar mais cores ou categorias conforme necessário
     COR_FUNDO = "#f8f4f8"  # bege acinzentado muito suave com warmth
     COR_TEXTO = "#3e3e3e"  # cinza escuro para excelente contraste
     COR_TEXTO_BOTAO = "#f5f5f5"  # branco suave para texto de botões
@@ -25,7 +26,7 @@ class Cores_Padrao:
     COR_ZEBRADO_PAR = "#ede0ed"  # linha par bege rosado
     COR_ZEBRADO_IMPAR = "#e2d1e2"  # linha ímpar cinza rosado
 
-    #Cores para o menu
+    # Cores para o menu
     COR_BOTAO_MENU = "#c97bb8"  # rosa mauve vibrante
     COR_BOTAO_MENU_HOVER = "#b96aaa"  # rosa mauve mais escura ao hover
     COR_FUNDO_MENU = "#4a4a4a"  # cinza escuro sofisticado

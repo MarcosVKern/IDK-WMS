@@ -23,6 +23,7 @@ from control.movimento_estoque_controller import MovimentoEstoque_Controller
 from control.cargos_controller import Cargo_Controller
 from control.estoque_controller import Estoque_Controller
 
+
 class Main_Controller:
     def __init__(self, main_view, db_config):
         self.main_view = main_view
@@ -36,7 +37,7 @@ class Main_Controller:
             view.display()
         else:
             view.run()
-    
+
     def exibir_armazem(self, parent_frame=None):
         dao = Armazem_DAO(self.db_config)
         view = Armazem_View(parent=parent_frame)
@@ -83,7 +84,9 @@ class Main_Controller:
         funcionario_dao = Funcionario_DAO(self.db_config)
         produto_dao = Produto_DAO(self.db_config)
         estoque_dao = Estoque_DAO(self.db_config)
-        view = MovimentoEstoque_View(parent=parent_frame, funcionario_logado=funcionario_logado)
+        view = MovimentoEstoque_View(
+            parent=parent_frame, funcionario_logado=funcionario_logado
+        )
         produto_movimento_dao = ProdutoMovimento_DAO(self.db_config)
         control = MovimentoEstoque_Controller(
             movimento_dao,
@@ -94,7 +97,7 @@ class Main_Controller:
             produto_dao=produto_dao,
             estoque_dao=estoque_dao,
             produto_movimento_dao=produto_movimento_dao,
-            funcionario_logado=funcionario_logado
+            funcionario_logado=funcionario_logado,
         )
         if parent_frame:
             view.display()

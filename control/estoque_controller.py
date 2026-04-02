@@ -38,15 +38,15 @@ class Estoque_Controller:
         try:
             filtros = self.view.get_filtros()
             estoque = self.dao.get_estoque_filtrado(
-                filtros['id_produto'],
-                filtros['id_armazem'],
-                filtros['id_unidade']
+                filtros["id_produto"], filtros["id_armazem"], filtros["id_unidade"]
             )
             self.view.popular_tabela(estoque)
             if estoque:
                 self.view.show_message(f"Encontrados {len(estoque)} itens")
             else:
-                self.view.show_message("Nenhum item encontrado com os filtros selecionados")
+                self.view.show_message(
+                    "Nenhum item encontrado com os filtros selecionados"
+                )
         except Exception as e:
             self.view.show_error(f"Erro ao aplicar filtros: {str(e)}")
 

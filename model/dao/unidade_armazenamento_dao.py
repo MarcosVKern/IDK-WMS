@@ -1,6 +1,7 @@
 from model.unidade_armazenamento import UnidadeArmazenamento
 from model.dao.base_dao import Base_DAO
 
+
 class UnidadeArmazenamento_DAO(Base_DAO):
     def save(self, unidade: UnidadeArmazenamento):
         sql = """insert into unidade_armazenamento (ID_unidade, unidade, armazem) VALUES (%s, %s, %s)"""
@@ -14,7 +15,7 @@ class UnidadeArmazenamento_DAO(Base_DAO):
         cursor.close()
         conn.close()
         return unidade
-    
+
     def get_all(self):
         sql = """select u.ID_unidade, u.unidade, u.armazem 
                 from unidade_armazenamento u
@@ -24,12 +25,12 @@ class UnidadeArmazenamento_DAO(Base_DAO):
         cursor = conn.cursor()
         cursor.execute(sql)
         unidades = []
-        for (ID_unidade, unidade, armazem) in cursor:
+        for ID_unidade, unidade, armazem in cursor:
             unidades.append(UnidadeArmazenamento(ID_unidade, unidade, armazem))
         cursor.close()
         conn.close()
         return unidades
-    
+
     def get_by_id(self, id):
         sql = """select unidade, armazem from unidade_armazenamento where ID_unidade = %s"""
 
@@ -44,7 +45,7 @@ class UnidadeArmazenamento_DAO(Base_DAO):
         cursor.close()
         conn.close()
         return unidade
-    
+
     def delete(self, id):
         sql = """delete from unidade_armazenamento where ID_unidade = %s"""
 
@@ -56,6 +57,6 @@ class UnidadeArmazenamento_DAO(Base_DAO):
         cursor.close()
         conn.close()
         return affected_rows > 0
-    
+
     def update(self, unidade: UnidadeArmazenamento):
         pass
