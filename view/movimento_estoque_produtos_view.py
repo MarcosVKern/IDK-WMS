@@ -9,8 +9,8 @@ class MovimentoEstoqueProdutos_View:
         self.tipo_movimento = tipo_movimento
         self.origem = origem
         self.destino = destino
-        self.produtos_disponiveis = produtos_disponiveis  # lista dict {id,nome,quantidade}
-        self.selected = {}  # produto_id -> quantidade
+        self.produtos_disponiveis = produtos_disponiveis
+        self.selected = {}
 
         if parent is None:
             self.root = tk.Toplevel()
@@ -56,9 +56,9 @@ class MovimentoEstoqueProdutos_View:
 
         bot_frame = tk.Frame(self.root, bg=Cores_Padrao.COR_FUNDO)
         bot_frame.pack(pady=10)
-        ctk.CTkButton(bot_frame, text="Remover Selecionado", command=self._remover_produto, fg_color=Cores_Padrao.COR_BOTAO_DELETAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(bot_frame, text="Confirmar", command=self._confirmar, fg_color=Cores_Padrao.COR_BOTAO_SALVAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(bot_frame, text="Cancelar", command=self._cancelar, fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(bot_frame, text="Remover Selecionado", command=self._remover_produto, fg_color=Cores_Padrao.COR_BOTAO_DELETAR, hover_color=Cores_Padrao.COR_BOTAO_DELETAR_HOVER, text_color=Cores_Padrao.COR_TEXTO_BOTAO, width=150).pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(bot_frame, text="Confirmar", command=self._confirmar, fg_color=Cores_Padrao.COR_BOTAO_SALVAR, hover_color=Cores_Padrao.COR_BOTAO_SALVAR_HOVER, text_color=Cores_Padrao.COR_TEXTO_BOTAO, width=150).pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(bot_frame, text="Cancelar", command=self._cancelar, fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, hover_color=Cores_Padrao.COR_BOTAO_LIMPAR_HOVER, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
 
         self._atualizar_combo_produtos()
         self._refresh_tree()

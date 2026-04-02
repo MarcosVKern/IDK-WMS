@@ -51,28 +51,39 @@ class Main_View:
         root.title("Pink.TreeView")
         
         style = ttk.Style()
-        style.theme_use("default")
+        style.theme_use("clam")
 
         style.configure("Pink.Treeview", 
             background=Cores_Padrao.COR_TABLE_BG, 
-            fieldbackground=Cores_Padrao.COR_TABLE_BG, 
+            fieldbackground=Cores_Padrao.COR_TABLE_BG,
             foreground=Cores_Padrao.COR_TABLE_FG,
             rowheight=25
         )
 
         style.configure("TCombobox", 
-                fieldbackground=Cores_Padrao.COR_FUNDO,    # Cor de fundo do campo
-                background=Cores_Padrao.COR_INPUT_BG,    # Cor da área da seta
-                foreground=Cores_Padrao.COR_TEXTO   # Cor texto
+            fieldbackground=Cores_Padrao.COR_FUNDO,    # Cor de fundo do campo
+            background=Cores_Padrao.COR_INPUT_BG,    # Cor da área da seta
+            foreground=Cores_Padrao.COR_TEXTO,   # Cor texto
         )
 
         style.map('TCombobox',
-          fieldbackground=[('readonly', Cores_Padrao.COR_FUNDO)],
-          selectbackground=[('readonly', Cores_Padrao.COR_BOTAO_HOVER)],
-          selectforeground=[('readonly', Cores_Padrao.COR_FUNDO)]
+            fieldbackground=[('readonly', Cores_Padrao.COR_FUNDO)],
+            selectbackground=[('readonly', Cores_Padrao.COR_FUNDO)],
+            selectforeground=[('readonly', Cores_Padrao.COR_TEXTO)],
+            background=[('readonly', Cores_Padrao.COR_INPUT_BG)],
         )
 
-        style.map('Pink.Treeview', background=[('selected', Cores_Padrao.COR_BOTAO_HOVER)])
+        style.configure('TEntry',
+            fieldbackground=Cores_Padrao.COR_INPUT_BG,
+            background=Cores_Padrao.COR_INPUT_BG,
+            padding=6,
+            relief="flat",
+            bordercolor="#cccccc",
+            font=("Arial", 12)
+        )
+
+
+        style.map('Pink.Treeview', background=[('selected', Cores_Padrao.COR_TABLE_BG_SELECTED)])
 
         style.configure("Pink.Treeview.Heading",
             background=Cores_Padrao.COR_INPUT_BG,

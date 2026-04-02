@@ -84,23 +84,23 @@ class Armazem_View():
 
         ctk.CTkButton(frame_botoes, text="Adicionar Armazém", command=self._acao_adicionar, 
                         fg_color=Cores_Padrao.COR_BOTAO_SALVAR, 
-                        text_color=Cores_Padrao.COR_TEXTO, 
-                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
+                        text_color=Cores_Padrao.COR_TEXTO_BOTAO,
+                        hover_color=Cores_Padrao.COR_BOTAO_SALVAR_HOVER, width=150).pack(side=tk.LEFT, padx=5)
         
         ctk.CTkButton(frame_botoes, text="Atualizar Armazém", command=self._acao_atualizar, 
                         fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR, 
-                        text_color=Cores_Padrao.COR_TEXTO, 
-                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
+                        text_color=Cores_Padrao.COR_TEXTO_BOTAO, 
+                        hover_color=Cores_Padrao.COR_BOTAO_ATUALIZAR_HOVER, width=150).pack(side=tk.LEFT, padx=5)
         
         ctk.CTkButton(frame_botoes, text="Deletar Armazém", command=self._acao_deletar, 
                         fg_color=Cores_Padrao.COR_BOTAO_DELETAR, 
-                        text_color=Cores_Padrao.COR_TEXTO, 
-                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
+                        text_color=Cores_Padrao.COR_TEXTO_BOTAO, 
+                        hover_color=Cores_Padrao.COR_BOTAO_DELETAR_HOVER, width=150).pack(side=tk.LEFT, padx=5)
         
         ctk.CTkButton(frame_botoes, text="Limpar", command=self._limpar_campos, 
-                        fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, 
-                        text_color=Cores_Padrao.COR_TEXTO, 
-                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
+                        fg_color=Cores_Padrao.COR_BOTAO_LIMPAR,
+                        text_color=Cores_Padrao.COR_TEXTO_BOTAO,
+                        hover_color=Cores_Padrao.COR_BOTAO_LIMPAR_HOVER, width=150).pack(side=tk.LEFT, padx=5)
 
         frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_tabela.pack(expand=True, fill="both")

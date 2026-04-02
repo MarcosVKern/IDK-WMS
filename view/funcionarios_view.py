@@ -105,10 +105,10 @@ class Funcionario_View():
         frame_botoes = tk.Frame(self.root, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_botoes.pack()
 
-        ctk.CTkButton(frame_botoes, text="Adicionar Funcionário", command=self._acao_adicionar, fg_color=Cores_Padrao.COR_BOTAO_SALVAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Atualizar Funcionário", command=self._acao_atualizar, fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Deletar Funcionário", command=self._acao_deletar, fg_color=Cores_Padrao.COR_BOTAO_DELETAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Limpar", command=self._limpar_campos, fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(frame_botoes, text="Adicionar Funcionário", command=self._acao_adicionar, fg_color=Cores_Padrao.COR_BOTAO_SALVAR, hover_color=Cores_Padrao.COR_BOTAO_SALVAR_HOVER, text_color=Cores_Padrao.COR_TEXTO_BOTAO, width=150).pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(frame_botoes, text="Atualizar Funcionário", command=self._acao_atualizar, fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR, hover_color=Cores_Padrao.COR_BOTAO_ATUALIZAR_HOVER, text_color=Cores_Padrao.COR_TEXTO_BOTAO, width=150).pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(frame_botoes, text="Deletar Funcionário", command=self._acao_deletar, fg_color=Cores_Padrao.COR_BOTAO_DELETAR, hover_color=Cores_Padrao.COR_BOTAO_DELETAR_HOVER, text_color=Cores_Padrao.COR_TEXTO_BOTAO, width=150).pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(frame_botoes, text="Limpar", command=self._limpar_campos, fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, hover_color=Cores_Padrao.COR_BOTAO_LIMPAR_HOVER, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
 
         frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_tabela.pack(expand=True, fill="both")
