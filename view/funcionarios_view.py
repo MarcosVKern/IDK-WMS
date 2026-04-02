@@ -46,20 +46,20 @@ class Funcionario_View():
         frame_form.pack(side="left", fill="both", expand=True, padx=5)
 
         tk.Label(frame_form, text="ID:", bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=0, sticky="w", pady=5)
-        tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=15).grid(row=1, column=0, pady=5, sticky="w")
+        tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=15, readonlybackground=Cores_Padrao.COR_TABLE_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=1, column=0, pady=5, sticky="w")
 
         tk.Label(frame_form, text="Nome:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=0, sticky="w", pady=5)
-        tk.Entry(frame_form, textvariable=self.var_nome, width=20).grid(row=3, column=0, pady=5, sticky="ew", padx=(0, 5))
+        tk.Entry(frame_form, textvariable=self.var_nome, width=20, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=3, column=0, pady=5, sticky="ew", padx=(0, 5))
 
         tk.Label(frame_form, text="Cargo:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=1, sticky="w", pady=5, padx=(5, 0))
         self.combo_cargo = ttk.Combobox(frame_form, textvariable=self.var_cargo, width=17, state="readonly")
         self.combo_cargo.grid(row=3, column=1, pady=5, sticky="ew", padx=(5, 0))
 
         tk.Label(frame_form, text="Email:", bg=Cores_Padrao.COR_FUNDO).grid(row=4, column=0, sticky="w", pady=5)
-        tk.Entry(frame_form, textvariable=self.var_email, width=20).grid(row=5, column=0, pady=5, sticky="ew", padx=(0, 5))
+        tk.Entry(frame_form, textvariable=self.var_email, width=20, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=5, column=0, pady=5, sticky="ew", padx=(0, 5))
 
         tk.Label(frame_form, text="Situação:", bg=Cores_Padrao.COR_FUNDO).grid(row=4, column=1, sticky="w", pady=5, padx=(5, 0))
-        tk.Entry(frame_form, textvariable=self.var_situacao, state="readonly", width=20).grid(row=5, column=1, pady=5, sticky="ew", padx=(5, 0))
+        tk.Entry(frame_form, textvariable=self.var_situacao, state="readonly", width=20, readonlybackground=Cores_Padrao.COR_TABLE_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=5, column=1, pady=5, sticky="ew", padx=(5, 0))
 
         frame_form.grid_columnconfigure(0, weight=1)
         frame_form.grid_columnconfigure(1, weight=1)
@@ -68,8 +68,15 @@ class Funcionario_View():
         frame_form_botoes = tk.Frame(frame_form, bg=Cores_Padrao.COR_FUNDO)
         frame_form_botoes.grid(row=6, column=0, columnspan=2, pady=10, sticky="ew")
         
-        ctk.CTkButton(frame_form_botoes, text="Ativar/Inativar", command=self._acao_ativar, fg_color=Cores_Padrao.COR_BOTAO_ATIVAR, text_color=Cores_Padrao.COR_TEXTO, width=140).pack(side=tk.LEFT, padx=2, pady=5)
-        ctk.CTkButton(frame_form_botoes, text="Bloquear/Desbloquear", command=self._acao_bloquear, fg_color=Cores_Padrao.COR_BOTAO_BLOQUEAR, text_color=Cores_Padrao.COR_TEXTO, width=140).pack(side=tk.LEFT, padx=2, pady=5)
+        ctk.CTkButton(frame_form_botoes, text="Ativar/Inativar", command=self._acao_ativar, 
+                        fg_color=Cores_Padrao.COR_BOTAO_ATIVAR, 
+                        text_color=Cores_Padrao.COR_TEXTO_MENU, 
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=140).pack(side=tk.LEFT, padx=2, pady=5)
+        
+        ctk.CTkButton(frame_form_botoes, text="Bloquear/Desbloquear", command=self._acao_bloquear, 
+                        fg_color=Cores_Padrao.COR_BOTAO_BLOQUEAR, 
+                        text_color=Cores_Padrao.COR_TEXTO_MENU, 
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=140).pack(side=tk.LEFT, padx=2, pady=5)
 
         # Frame direito - Endereço
         frame_endereco = tk.LabelFrame(frame_formularios, text="Endereço", padx=10, pady=10, bg=Cores_Padrao.COR_FUNDO)
@@ -80,7 +87,7 @@ class Funcionario_View():
         frame_cep.grid(row=0, column=0, columnspan=2, sticky="w", pady=5)
 
         tk.Label(frame_cep, text="CEP:", bg=Cores_Padrao.COR_FUNDO).pack(side="left", padx=(0, 5))
-        tk.Entry(frame_cep, textvariable=self.var_cep, width=15).pack(side="left")
+        tk.Entry(frame_cep, textvariable=self.var_cep, width=15, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).pack(side="left")
 
         # Link "Buscar endereço"
         link_buscar = tk.Label(frame_cep, text="Buscar endereço", fg="blue", bg=Cores_Padrao.COR_FUNDO, cursor="hand2", font=("Arial", 9, "underline"))
@@ -88,16 +95,16 @@ class Funcionario_View():
         link_buscar.bind("<Button-1>", lambda e: self._buscar_endereco_cep())
 
         tk.Label(frame_endereco, text="Bairro:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=0, sticky="w", pady=5)
-        tk.Entry(frame_endereco, textvariable=self.var_bairro, width=20).grid(row=3, column=0, pady=5, sticky="ew", padx=(0, 5))
+        tk.Entry(frame_endereco, textvariable=self.var_bairro, width=20, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=3, column=0, pady=5, sticky="ew", padx=(0, 5))
 
         tk.Label(frame_endereco, text="Cidade:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=1, sticky="w", pady=5, padx=(5, 0))
-        tk.Entry(frame_endereco, textvariable=self.var_cidade, width=20).grid(row=3, column=1, pady=5, sticky="ew", padx=(5, 0))
+        tk.Entry(frame_endereco, textvariable=self.var_cidade, width=20, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=3, column=1, pady=5, sticky="ew", padx=(5, 0))
 
         tk.Label(frame_endereco, text="UF:", bg=Cores_Padrao.COR_FUNDO).grid(row=4, column=0, sticky="w", pady=5)
-        tk.Entry(frame_endereco, textvariable=self.var_uf, width=20).grid(row=5, column=0, pady=5, sticky="ew", padx=(0, 5))
+        tk.Entry(frame_endereco, textvariable=self.var_uf, width=20, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=5, column=0, pady=5, sticky="ew", padx=(0, 5))
 
         tk.Label(frame_endereco, text="País:", bg=Cores_Padrao.COR_FUNDO).grid(row=4, column=1, sticky="w", pady=5, padx=(5, 0))
-        tk.Entry(frame_endereco, textvariable=self.var_pais, width=20).grid(row=5, column=1, pady=5, sticky="ew", padx=(5, 0))
+        tk.Entry(frame_endereco, textvariable=self.var_pais, width=20, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=5, column=1, pady=5, sticky="ew", padx=(5, 0))
 
         frame_endereco.grid_columnconfigure(0, weight=1)
         frame_endereco.grid_columnconfigure(1, weight=1)
@@ -105,10 +112,25 @@ class Funcionario_View():
         frame_botoes = tk.Frame(self.root, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_botoes.pack()
 
-        ctk.CTkButton(frame_botoes, text="Adicionar Funcionário", command=self._acao_adicionar, fg_color=Cores_Padrao.COR_BOTAO_SALVAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Atualizar Funcionário", command=self._acao_atualizar, fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Deletar Funcionário", command=self._acao_deletar, fg_color=Cores_Padrao.COR_BOTAO_DELETAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Limpar", command=self._limpar_campos, fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(frame_botoes, text="Adicionar Funcionário", command=self._acao_adicionar, 
+                        fg_color=Cores_Padrao.COR_BOTAO_SALVAR, 
+                        text_color=Cores_Padrao.COR_TEXTO_MENU, 
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
+        
+        ctk.CTkButton(frame_botoes, text="Atualizar Funcionário", command=self._acao_atualizar, 
+                        fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR, 
+                        text_color=Cores_Padrao.COR_TEXTO_MENU, 
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
+        
+        ctk.CTkButton(frame_botoes, text="Deletar Funcionário", command=self._acao_deletar, 
+                        fg_color=Cores_Padrao.COR_BOTAO_DELETAR, 
+                        text_color=Cores_Padrao.COR_TEXTO_MENU, 
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
+        
+        ctk.CTkButton(frame_botoes, text="Limpar", command=self._limpar_campos, 
+                        fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, 
+                        text_color=Cores_Padrao.COR_TEXTO_MENU, 
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
 
         frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_tabela.pack(expand=True, fill="both")

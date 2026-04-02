@@ -90,7 +90,8 @@ class Estoque_View:
             text="Aplicar Filtros",
             command=self._acao_aplicar_filtros,
             fg_color=Cores_Padrao.COR_BOTAO_SALVAR,
-            text_color=Cores_Padrao.COR_TEXTO,
+            text_color=Cores_Padrao.COR_TEXTO_MENU,
+            hover_color=Cores_Padrao.COR_BOTAO_HOVER,
             width=150
         ).pack(side=tk.LEFT, padx=5)
 
@@ -99,7 +100,8 @@ class Estoque_View:
             text="Limpar Filtros",
             command=self._acao_limpar_filtros,
             fg_color=Cores_Padrao.COR_BOTAO_LIMPAR,
-            text_color=Cores_Padrao.COR_TEXTO,
+            text_color=Cores_Padrao.COR_TEXTO_MENU,
+            hover_color=Cores_Padrao.COR_BOTAO_HOVER,
             width=150
         ).pack(side=tk.LEFT, padx=5)
 

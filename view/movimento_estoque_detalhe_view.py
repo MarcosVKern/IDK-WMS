@@ -147,7 +147,8 @@ class MovimentoEstoque_Detalhe_View:
             text="Fechar",
             command=self._fechar,
             fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR,
-            text_color=Cores_Padrao.COR_TEXTO,
+            text_color=Cores_Padrao.COR_TEXTO_MENU,
+            hover_color=Cores_Padrao.COR_BOTAO_HOVER,
             width=150
         ).pack(side=tk.LEFT, padx=5)
 
@@ -156,7 +157,8 @@ class MovimentoEstoque_Detalhe_View:
             text="Confirmar",
             command=self._atualizar_movimento,
             fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR,
-            text_color=Cores_Padrao.COR_TEXTO,
+            text_color=Cores_Padrao.COR_TEXTO_MENU,
+            hover_color=Cores_Padrao.COR_BOTAO_HOVER,
             width=150
         )
         self.btn_atualizar.pack(side=tk.RIGHT, padx=5)
@@ -166,7 +168,8 @@ class MovimentoEstoque_Detalhe_View:
             text="Cancelar",
             command=self._cancelar_movimento,
             fg_color=Cores_Padrao.COR_BOTAO_DELETAR,
-            text_color=Cores_Padrao.COR_TEXTO,
+            text_color=Cores_Padrao.COR_TEXTO_MENU,
+            hover_color=Cores_Padrao.COR_BOTAO_HOVER,
             width=150
         )
         self.btn_cancelar.pack(side=tk.RIGHT, padx=5)
