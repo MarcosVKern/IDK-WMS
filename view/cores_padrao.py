@@ -8,10 +8,10 @@ class Cores_Padrao:
     COR_INPUT_FG = "#333333"  # cinza escuro para texto
     COR_TABLE_BG = "#ffc9e3"  # rosa pastel suave
     COR_TABLE_FG = "#ffe4f0"  # rosa muito claro para alternância
-    COR_BOTAO_SALVAR = "#ff69b4"  # hot pink - cor Hello Kitty
+    COR_BOTAO_SALVAR = "#ff1493"  # hot pink - cor Hello Kitty
     COR_BOTAO_ATUALIZAR = "#ffb6d9"  # rosa pastel
     COR_BOTAO_DELETAR = "#ff1493"  # deep pink vibrante
-    COR_BOTAO_LIMPAR = "#fff0f6"  # quase branco com rosa
+    COR_BOTAO_LIMPAR = "#ffb6d9"  # quase branco com rosa
     COR_BOTAO_ATIVAR = "#ff6ec7"  # rosa vibrante Hello Kitty
     COR_BOTAO_BLOQUEAR = "#ff4d94"  # rosa forte
     COR_ZEBRADO_PAR = "#ffe4f0"  # linha par

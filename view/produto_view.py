@@ -35,7 +35,7 @@ class Produto_View():
         frame_form.configure(width=900)
 
         tk.Label(frame_form, text="ID:", bg=Cores_Padrao.COR_FUNDO).grid(row=0, column=0, sticky="w")
-        tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10, bg=Cores_Padrao.COR_INPUT_BG, readonlybackground=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=1, column=0, padx=5, pady=5,sticky="w")
+        tk.Entry(frame_form, textvariable=self.var_id, state="readonly", width=10, bg=Cores_Padrao.COR_INPUT_BG, readonlybackground=Cores_Padrao.COR_TABLE_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=1, column=0, padx=5, pady=5,sticky="w")
 
         tk.Label(frame_form, text="Nome:", bg=Cores_Padrao.COR_FUNDO).grid(row=2, column=0, sticky="w")
         tk.Entry(frame_form, textvariable=self.var_nome, width=30, bg=Cores_Padrao.COR_INPUT_BG, fg=Cores_Padrao.COR_TEXTO).grid(row=3, column=0, pady=5)
@@ -49,10 +49,25 @@ class Produto_View():
         frame_botoes = tk.Frame(self.root, pady=10, bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None)
         frame_botoes.pack()
 
-        ctk.CTkButton(frame_botoes, text="Adicionar Produto", command=self._acao_adicionar, fg_color=Cores_Padrao.COR_BOTAO_SALVAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Atualizar Produto", command=self._acao_atualizar, fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Deletar Produto", command=self._acao_deletar, fg_color=Cores_Padrao.COR_BOTAO_DELETAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
-        ctk.CTkButton(frame_botoes, text="Limpar", command=self._limpar_campos, fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, text_color=Cores_Padrao.COR_TEXTO, width=150).pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(frame_botoes, text="Adicionar Produto", command=self._acao_adicionar, 
+                        fg_color=Cores_Padrao.COR_BOTAO_SALVAR, 
+                        text_color=Cores_Padrao.COR_TEXTO_MENU,
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
+        
+        ctk.CTkButton(frame_botoes, text="Atualizar Produto", command=self._acao_atualizar, 
+                        fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR, 
+                        text_color=Cores_Padrao.COR_TEXTO_MENU,
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
+        
+        ctk.CTkButton(frame_botoes, text="Deletar Produto", command=self._acao_deletar, 
+                        fg_color=Cores_Padrao.COR_BOTAO_DELETAR, 
+                        text_color=Cores_Padrao.COR_TEXTO_MENU,
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
+        
+        ctk.CTkButton(frame_botoes, text="Limpar", command=self._limpar_campos, 
+                        fg_color=Cores_Padrao.COR_BOTAO_LIMPAR, 
+                        text_color=Cores_Padrao.COR_TEXTO_MENU,
+                        hover_color=Cores_Padrao.COR_BOTAO_HOVER, width=150).pack(side=tk.LEFT, padx=5)
 
         frame_tabela = tk.Frame(self.root, padx=20, pady=10, bg=Cores_Padrao.COR_FUNDO)
         frame_tabela.pack(expand=True, fill="both")

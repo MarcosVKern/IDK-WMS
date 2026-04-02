@@ -61,15 +61,16 @@ class Main_View:
         )
 
         style.configure("TCombobox", 
-                fieldbackground=Cores_Padrao.COR_FUNDO,    # Cor de fundo do campo
-                background=Cores_Padrao.COR_INPUT_BG,    # Cor da área da seta
-                foreground=Cores_Padrao.COR_TEXTO   # Cor texto
+            fieldbackground=Cores_Padrao.COR_TABLE_BG,    # Cor de fundo do campo
+            background=Cores_Padrao.COR_INPUT_BG,    # Cor da área da seta
+            foreground=Cores_Padrao.COR_TEXTO   # Cor texto
         )
 
         style.map('TCombobox',
-          fieldbackground=[('readonly', Cores_Padrao.COR_FUNDO)],
+          fieldbackground=[('readonly', Cores_Padrao.COR_INPUT_BG)],
           selectbackground=[('readonly', Cores_Padrao.COR_BOTAO_HOVER)],
-          selectforeground=[('readonly', Cores_Padrao.COR_FUNDO)]
+          selectforeground=[('readonly', Cores_Padrao.COR_FUNDO)],
+          background=[('readonly', Cores_Padrao.COR_INPUT_BG)]
         )
 
         style.map('Pink.Treeview', background=[('selected', Cores_Padrao.COR_BOTAO_HOVER)])
