@@ -7,12 +7,15 @@ class Produto_Controller:
         self.view = view
         self.view.controller = self
 
+    def _validar_nome(self, nome):
+        """Valida se o nome do produto está preenchido"""
+        return nome and str(nome).strip()
+
     def add_produto(self):
         try:
             dados = self.view.get_produto_data()
 
-            # Validações de campos obrigatórios
-            if not dados or not dados.get("nome") or not str(dados["nome"]).strip():
+            if not dados or not self._validar_nome(dados.get("nome")):
                 self.view.show_error("Nome do produto é obrigatório!")
                 return
 
@@ -36,14 +39,10 @@ class Produto_Controller:
             if not produto_existente:
                 self.view.show_error(f"Produto com id {id_produto} não encontrado!")
                 return
+            
             dados_produto = self.view.get_produto_data(produto_existente)
 
-            # Validações de campos obrigatórios
-            if (
-                not dados_produto
-                or not dados_produto.get("nome")
-                or not str(dados_produto["nome"]).strip()
-            ):
+            if not dados_produto or not self._validar_nome(dados_produto.get("nome")):
                 self.view.show_error("Nome do produto é obrigatório!")
                 return
 
@@ -78,14 +77,3 @@ class Produto_Controller:
             self.view.show_produtos(produtos)
         except Exception as e:
             self.view.show_error(f"Erro ao listar produtos: {str(e)}")
-
-    def get_produto(self):
-        try:
-            id_produto = self.view.get_id()
-            produto = self.dao.get_by_id(id_produto)
-            if not produto:
-                self.view.show_error(f"Produto com id {id_produto} não encontrado!")
-                return
-            self.view.show_produto_details(produto)
-        except Exception as e:
-            self.view.show_error(f"Erro ao buscar produto: {str(e)}")

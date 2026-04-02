@@ -7,7 +7,6 @@ import os
 import shutil
 from datetime import datetime
 from PIL import Image
-import io
 
 
 class Produto_View:
@@ -46,7 +45,6 @@ class Produto_View:
             bg=Cores_Padrao.COR_FUNDO if self.is_embedded else None,
         ).pack()
 
-        # Frame principal com formulário e preview de imagem
         frame_conteudo = tk.Frame(self.root, bg=Cores_Padrao.COR_FUNDO)
         frame_conteudo.pack(padx=20, pady=5, fill="x")
 
@@ -122,7 +120,6 @@ class Produto_View:
         )
         self.label_imagem_selecionada.pack(side="left", padx=10)
 
-        # Frame de visualização de imagem
         frame_preview = ctk.CTkFrame(
             frame_conteudo,
             fg_color=Cores_Padrao.COR_FUNDO,
@@ -133,7 +130,6 @@ class Produto_View:
         frame_preview.pack_propagate(False)
         frame_preview.configure(width=350, height=300)
 
-        # Título do preview
         ctk.CTkLabel(
             frame_preview,
             text="Preview da Imagem",
@@ -142,7 +138,6 @@ class Produto_View:
             bg_color=Cores_Padrao.COR_FUNDO,
         ).pack(pady=10)
 
-        # Label para exibir a imagem com CTkLabel
         self.label_preview_imagem = ctk.CTkLabel(
             frame_preview,
             text="Nenhuma imagem",
@@ -223,7 +218,6 @@ class Produto_View:
         self.tree.pack(side="left", expand=True, fill="both")
         self.tree.bind("<<TreeviewSelect>>", self._ao_selecionar_tabela)
 
-        # Configurar efeito zebrado
         self.tree.tag_configure("evenrow", background=Cores_Padrao.COR_ZEBRADO_PAR)
         self.tree.tag_configure("oddrow", background=Cores_Padrao.COR_ZEBRADO_IMPAR)
 
@@ -258,143 +252,95 @@ class Produto_View:
         return os.path.abspath(caminho_absoluto)
     
     def _get_pasta_imagens_absoluta(self):
-        """Retorna o caminho absoluto da pasta de imagens"""
         return self._get_caminho_absoluto(self.pasta_imagens)
+    
+    def _carregar_placeholder(self):
+        """Carrega e exibe a imagem placeholder"""
+        placeholder_path = os.path.join(self._get_pasta_imagens_absoluta(), "placeholder.png")
+        if os.path.exists(placeholder_path):
+            try:
+                self.imagem_pil = Image.open(placeholder_path)
+                self.imagem_pil.thumbnail((300, 250), Image.Resampling.LANCZOS)
+                self.foto = ctk.CTkImage(light_image=self.imagem_pil, size=(self.imagem_pil.width, self.imagem_pil.height))
+                self.label_preview_imagem.configure(image=self.foto, text="")
+                return True
+            except Exception as e:
+                print(f"Erro ao carregar placeholder: {str(e)}")
+        return False
 
     def _exibir_imagem(self, nome_arquivo):
-        """Exibe a imagem no preview com redimensionamento automático. Recebe apenas o NOME do arquivo"""
+        """Exibe a imagem no preview. Se não encontrada, usa placeholder"""
         try:
             if not nome_arquivo:
-                # Sem imagem, tenta carregar placeholder
-                placeholder_path = os.path.join(self._get_pasta_imagens_absoluta(), "placeholder.png")
-                
-                if os.path.exists(placeholder_path):
-                    self.imagem_pil = Image.open(placeholder_path)
-                    self.imagem_pil.thumbnail((300, 250), Image.Resampling.LANCZOS)
-                    self.foto = ctk.CTkImage(light_image=self.imagem_pil, size=(self.imagem_pil.width, self.imagem_pil.height))
-                    self.label_preview_imagem.configure(image=self.foto, text="")
-                else:
-                    # Sem placeholder, mostra mensagem
+                if not self._carregar_placeholder():
                     self.foto = None
                     self.imagem_pil = None
                     self.label_preview_imagem.configure(text="Nenhuma imagem")
                 return
             
-            # Constrói caminho absoluto: pasta_imagens + nome_arquivo
             caminho_absoluto = os.path.join(self._get_pasta_imagens_absoluta(), nome_arquivo)
             
-            # Verifica se o arquivo existe
             if not os.path.exists(caminho_absoluto):
-                # Arquivo não encontrado, usa placeholder
-                placeholder_path = os.path.join(self._get_pasta_imagens_absoluta(), "placeholder.png")
-                
-                if os.path.exists(placeholder_path):
-                    # Carrega placeholder com PIL
-                    self.imagem_pil = Image.open(placeholder_path)
-                    self.imagem_pil.thumbnail((300, 250), Image.Resampling.LANCZOS)
-                    self.foto = ctk.CTkImage(light_image=self.imagem_pil, size=(self.imagem_pil.width, self.imagem_pil.height))
-                    self.label_preview_imagem.configure(image=self.foto, text="")
-                    return
-                else:
-                    # Sem placeholder, mostra mensagem
+                if not self._carregar_placeholder():
                     self.foto = None
                     self.imagem_pil = None
                     self.label_preview_imagem.configure(text="Arquivo não encontrado")
-                    return
+                return
             
-            # Carrega a imagem com PIL e mantém referência
             self.imagem_pil = Image.open(caminho_absoluto)
-            
-            # Redimensiona mantendo proporção
             self.imagem_pil.thumbnail((300, 250), Image.Resampling.LANCZOS)
-            
-            # Cria CTkImage e armazena a referência para evitar garbage collection
             self.foto = ctk.CTkImage(light_image=self.imagem_pil, size=(self.imagem_pil.width, self.imagem_pil.height))
-            
-            # Configura o label com a imagem (sem texto quando há imagem)
             self.label_preview_imagem.configure(image=self.foto, text="")
             
         except Exception as e:
             print(f"Erro ao carregar imagem: {str(e)}")
-            # Tenta carregar placeholder em caso de erro
-            try:
-                placeholder_path = os.path.join(self._get_pasta_imagens_absoluta(), "placeholder.png")
-                if os.path.exists(placeholder_path):
-                    self.imagem_pil = Image.open(placeholder_path)
-                    self.imagem_pil.thumbnail((300, 250), Image.Resampling.LANCZOS)
-                    self.foto = ctk.CTkImage(light_image=self.imagem_pil, size=(self.imagem_pil.width, self.imagem_pil.height))
-                    self.label_preview_imagem.configure(image=self.foto, text="")
-                    return
-            except:
-                pass
-            
-            # Limpa referências
-            self.foto = None
-            self.imagem_pil = None
-            self.label_preview_imagem.configure(text="Erro ao carregar")
+            if not self._carregar_placeholder():
+                self.foto = None
+                self.imagem_pil = None
+                self.label_preview_imagem.configure(text="Erro ao carregar")
 
     def _resetar_preview(self):
-        """Reseta o preview da imagem para estado original"""
-        # Limpa referências PRIMEIRO para evitar conflitos
         self.foto = None
         self.imagem_pil = None
         self.label_preview_imagem.configure(text="Nenhuma imagem")
 
     def _selecionar_imagem(self):
-        """Abre diálogo para selecionar imagem PNG ou JPG - NÃO copia até salvar"""
         arquivo = filedialog.askopenfilename(
             title="Selecionar Imagem",
             filetypes=[("Imagens", "*.png *.jpg *.jpeg"), ("PNG", "*.png"), ("JPG", "*.jpg *.jpeg"), ("Todos", "*.*")],
             parent=self.root
         )
         
-        if arquivo:
-            try:
-                # Verifica extensão
-                extensao = os.path.splitext(arquivo)[1].lower()
-                if extensao not in ['.png', '.jpg', '.jpeg']:
-                    Notificacao.erro("Erro", "Apenas arquivos PNG e JPG são aceitos!", parent=self.root)
-                    # Restaura preview anterior
-                    imagem_atual = self.var_imagem.get()
-                    if imagem_atual:
-                        self._exibir_imagem(imagem_atual)
-                        self.label_imagem_selecionada.config(text=f"Atual: {os.path.basename(imagem_atual)}")
-                    else:
-                        self._resetar_preview()
-                        self.label_imagem_selecionada.config(text="Nenhuma imagem")
-                    self.imagem_selecionada = None
-                    return
-                
-                # APENAS armazena o caminho do arquivo selecionado (NÃO copia)
-                self.imagem_selecionada = arquivo
-                nome_selecionado = os.path.basename(arquivo)
-                self.label_imagem_selecionada.config(text=f"📋 {nome_selecionado} (salve p/ confirmar)")
-                
-                # Exibe preview da imagem selecionada
-                self._exibir_imagem_temporaria(arquivo)
-                
-                Notificacao.sucesso("Sucesso", "Imagem selecionada. Clique em 'Adicionar' ou 'Atualizar' para salvar!", parent=self.root)
-            except Exception as e:
-                Notificacao.erro("Erro", f"Erro ao processar imagem: {str(e)}", parent=self.root)
-                # Restaura preview anterior
-                imagem_atual = self.var_imagem.get()
-                if imagem_atual:
-                    self._exibir_imagem(imagem_atual)
-                    self.label_imagem_selecionada.config(text=f"Atual: {os.path.basename(imagem_atual)}")
-                else:
-                    self._resetar_preview()
-                    self.label_imagem_selecionada.config(text="Nenhuma imagem")
-                self.imagem_selecionada = None
+        if not arquivo:
+            self._restaurar_imagem_anterior()
+            return
+        
+        try:
+            extensao = os.path.splitext(arquivo)[1].lower()
+            if extensao not in ['.png', '.jpg', '.jpeg']:
+                Notificacao.erro("Erro", "Apenas arquivos PNG e JPG são aceitos!", parent=self.root)
+                self._restaurar_imagem_anterior()
+                return
+            
+            self.imagem_selecionada = arquivo
+            nome_selecionado = os.path.basename(arquivo)
+            self.label_imagem_selecionada.config(text=f"📋 {nome_selecionado} (salve p/ confirmar)")
+            self._exibir_imagem_temporaria(arquivo)
+            
+            Notificacao.sucesso("Sucesso", "Imagem selecionada. Clique em 'Adicionar' ou 'Atualizar' para salvar!", parent=self.root)
+        except Exception as e:
+            Notificacao.erro("Erro", f"Erro ao processar imagem: {str(e)}", parent=self.root)
+            self._restaurar_imagem_anterior()
+    
+    def _restaurar_imagem_anterior(self):
+        imagem_atual = self.var_imagem.get()
+        self.imagem_selecionada = None
+        if imagem_atual:
+            self._exibir_imagem(imagem_atual)
+            self.label_imagem_selecionada.config(text=f"Atual: {os.path.basename(imagem_atual)}")
         else:
-            # Usuário cancelou
-            imagem_atual = self.var_imagem.get()
-            if imagem_atual:
-                self._exibir_imagem(imagem_atual)
-                self.label_imagem_selecionada.config(text=f"Atual: {os.path.basename(imagem_atual)}")
-            else:
-                self._resetar_preview()
-                self.label_imagem_selecionada.config(text="Nenhuma imagem")
-            self.imagem_selecionada = None
+            self._resetar_preview()
+            self.label_imagem_selecionada.config(text="Nenhuma imagem")
 
     def display(self):
         """Exibir quando embutido em um frame"""
@@ -408,26 +354,18 @@ class Produto_View:
         self.root.mainloop()
 
     def _copiar_imagem_selecionada(self):
-        """Copia a imagem selecionada para a pasta de produtos. Salva APENAS o NOME no banco"""
         if not self.imagem_selecionada:
-            return  # Sem nova imagem, mantém a anterior
+            return
         
         try:
-            # Cria nome único com timestamp
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_")
             nome_arquivo = timestamp + os.path.basename(self.imagem_selecionada)
             
-            # Caminho absoluto de destino na pasta de imagens
             pasta_destino = self._get_pasta_imagens_absoluta()
             caminho_absoluto = os.path.join(pasta_destino, nome_arquivo)
             
-            # Copia o arquivo
             shutil.copy2(self.imagem_selecionada, caminho_absoluto)
-            
-            # Salva APENAS o NOME do arquivo (não o caminho) no var_imagem
             self.var_imagem.set(nome_arquivo)
-            
-            # Reseta indicador
             self.imagem_selecionada = None
             
             return nome_arquivo
@@ -436,21 +374,17 @@ class Produto_View:
             raise
     
     def _validar_e_usar_placeholder(self):
-        """Valida a imagem salva. Se não existir, usa placeholder. Trabalha apenas com NOMES de arquivo"""
         nome_arquivo = self.var_imagem.get()
         
         if not nome_arquivo:
-            return  # Sem imagem
+            return
         
-        # Constrói caminho absoluto: pasta + nome
         caminho_arquivo = os.path.join(self._get_pasta_imagens_absoluta(), nome_arquivo)
         
-        # Se arquivo não existe, usa placeholder
         if not os.path.exists(caminho_arquivo):
             self.var_imagem.set("placeholder.png")
     
     def _exibir_imagem_temporaria(self, caminho_arquivo):
-        """Exibe preview de um arquivo que ainda não foi copiado"""
         try:
             if not os.path.exists(caminho_arquivo):
                 self.foto = None
@@ -482,12 +416,11 @@ class Produto_View:
             return None
 
     def _acao_adicionar(self):
-        # Copia imagem selecionada antes de adicionar
         try:
             self._copiar_imagem_selecionada()
             self._validar_e_usar_placeholder()
         except:
-            return  # Erro ao salvar imagem
+            return
         
         self.controller.add_produto()
         self._acao_listar()
@@ -506,12 +439,11 @@ class Produto_View:
             )
 
     def _acao_atualizar(self):
-        # Copia imagem selecionada antes de atualizar
         try:
             self._copiar_imagem_selecionada()
             self._validar_e_usar_placeholder()
         except:
-            return  # Erro ao salvar imagem
+            return
         
         self.controller.update_produto()
         self._acao_listar()
@@ -546,14 +478,11 @@ class Produto_View:
             self.var_descricao.set(v[2])
             self.var_imagem.set(v[3])
             
-            # Reseta o indicador de nova seleção
             self.imagem_selecionada = None
             
-            # Atualiza label com imagem atual
-            if v[3]:  # Se houver imagem (apenas NOME do arquivo)
-                nome_arquivo = v[3]  # v[3] já é apenas o nome
-                self.label_imagem_selecionada.config(text=f"Atual: {nome_arquivo}")
-                self._exibir_imagem(nome_arquivo)  # Passa apenas o nome
+            if v[3]:
+                self.label_imagem_selecionada.config(text=f"Atual: {v[3]}")
+                self._exibir_imagem(v[3])
             else:
                 self.label_imagem_selecionada.config(text="Nenhuma imagem")
                 self._resetar_preview()

@@ -1,7 +1,8 @@
 class Estoque_Controller:
-    def __init__(self, dao, view):
+    def __init__(self, dao, view, produto_dao=None):
         self.dao = dao
         self.view = view
+        self.produto_dao = produto_dao
         self.view.controller = self
 
     def listar_estoque(self):
@@ -58,3 +59,27 @@ class Estoque_Controller:
             self.view.show_message("Filtros limpos")
         except Exception as e:
             self.view.show_error(f"Erro ao limpar filtros: {str(e)}")
+
+    def exibir_detalhes_estoque(self, estoque_info):
+        """Exibe detalhes de um item de estoque com informações do produto"""
+        try:
+            from view.estoque_detalhe_view import EstoqueDetalhe_View
+            
+            produto_info = {}
+            if self.produto_dao and estoque_info.get("id_produto"):
+                produto = self.produto_dao.get_by_id(estoque_info["id_produto"])
+                if produto:
+                    produto_info = {
+                        "nome": produto._nome,
+                        "descricao": produto._descricao,
+                        "imagem": produto._imagem,
+                    }
+            
+            view_detalhes = EstoqueDetalhe_View(
+                estoque_info=estoque_info,
+                produto_info=produto_info,
+                parent=None,
+            )
+            view_detalhes.run()
+        except Exception as e:
+            self.view.show_error(f"Erro ao exibir detalhes: {str(e)}")

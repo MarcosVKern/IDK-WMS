@@ -106,6 +106,7 @@ class Funcionario_View:
             text="Ativar/Inativar",
             command=self._acao_ativar,
             fg_color=Cores_Padrao.COR_BOTAO_ATIVAR,
+            hover_color=Cores_Padrao.COR_BOTAO_ATIVAR_HOVER,
             text_color=Cores_Padrao.COR_TEXTO,
             width=140,
         ).pack(side=tk.LEFT, padx=2, pady=5)
@@ -114,6 +115,7 @@ class Funcionario_View:
             text="Bloquear/Desbloquear",
             command=self._acao_bloquear,
             fg_color=Cores_Padrao.COR_BOTAO_BLOQUEAR,
+            hover_color=Cores_Padrao.COR_BOTAO_BLOQUEAR_HOVER,
             text_color=Cores_Padrao.COR_TEXTO,
             width=140,
         ).pack(side=tk.LEFT, padx=2, pady=5)

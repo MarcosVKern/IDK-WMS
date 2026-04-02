@@ -272,7 +272,7 @@ class MovimentoEstoque_Detalhe_View:
             text="Fechar",
             command=self._fechar,
             fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR,
-            hover=Cores_Padrao.COR_BOTAO_ATUALIZAR_HOVER,
+            hover_color=Cores_Padrao.COR_BOTAO_ATUALIZAR_HOVER,
             text_color=Cores_Padrao.COR_TEXTO_BOTAO,
             width=150,
         ).pack(side=tk.LEFT, padx=5)
@@ -282,7 +282,7 @@ class MovimentoEstoque_Detalhe_View:
             text="Confirmar",
             command=self._atualizar_movimento,
             fg_color=Cores_Padrao.COR_BOTAO_ATUALIZAR,
-            hover=Cores_Padrao.COR_BOTAO_ATUALIZAR_HOVER,
+            hover_color=Cores_Padrao.COR_BOTAO_ATUALIZAR_HOVER,
             text_color=Cores_Padrao.COR_TEXTO_BOTAO,
             width=150,
         )

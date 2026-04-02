@@ -29,6 +29,9 @@ class Estoque_View:
         self.produtos_dict = {}
         self.armazens_dict = {}
         self.unidades_dict = {}
+        
+        # Armazenar dados completos do estoque
+        self.estoque_data = []
 
         self._setup_ui()
 
@@ -104,7 +107,7 @@ class Estoque_View:
             text="Aplicar Filtros",
             command=self._acao_aplicar_filtros,
             fg_color=Cores_Padrao.COR_BOTAO_SALVAR,
-            hover=Cores_Padrao.COR_BOTAO_SALVAR_HOVER,
+            hover_color=Cores_Padrao.COR_BOTAO_SALVAR_HOVER,
             text_color=Cores_Padrao.COR_TEXTO_BOTAO,
             width=150,
         ).pack(side=tk.LEFT, padx=5)
@@ -167,6 +170,9 @@ class Estoque_View:
 
         self.tree.pack(side="left", expand=True, fill="both")
         scrollbar.pack(side="right", fill="y")
+        
+        # Bind para seleção de item
+        self.tree.bind("<<TreeviewSelect>>", self._ao_selecionar_item)
 
     def display(self):
         """Exibir quando embutido em um frame"""
@@ -242,6 +248,9 @@ class Estoque_View:
         # Limpar dados existentes
         for item in self.tree.get_children():
             self.tree.delete(item)
+        
+        # Armazenar dados completos
+        self.estoque_data = estoque
 
         # Adicionar dados com alternância de cores
         for i, item_estoque in enumerate(estoque):
@@ -253,6 +262,20 @@ class Estoque_View:
             )
             tag = "evenrow" if i % 2 == 0 else "oddrow"
             self.tree.insert("", "end", values=valores, tags=(tag,))
+
+    def _ao_selecionar_item(self, event):
+        """Chamado quando um item da tabela é selecionado"""
+        try:
+            selecionado = self.tree.selection()
+            if selecionado and self.controller:
+                # Obter índice do item selecionado
+                indice = self.tree.index(selecionado[0])
+                # Recuperar dados completos do estoque
+                if indice < len(self.estoque_data):
+                    estoque_info = self.estoque_data[indice]
+                    self.controller.exibir_detalhes_estoque(estoque_info)
+        except Exception as e:
+            pass
 
     def limpar_campos_filtro(self):
         """Limpa todos os campos de filtro"""

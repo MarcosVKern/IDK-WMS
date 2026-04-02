@@ -106,8 +106,9 @@ class Main_Controller:
 
     def exibir_estoque(self, parent_frame=None):
         dao = Estoque_DAO(self.db_config)
+        produto_dao = Produto_DAO(self.db_config)
         view = Estoque_View(parent=parent_frame)
-        control = Estoque_Controller(dao, view)
+        control = Estoque_Controller(dao, view, produto_dao=produto_dao)
         if parent_frame:
             view.display()
         else:
